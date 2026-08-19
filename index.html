@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-en="Macro Radar · Crypto &amp; Stocks">Radar Macro · Cripto &amp; Bolsa</title>
+<style>
+  .viz-root {
+    color-scheme: light;
+    --surface-1:      #fcfcfb;
+    --page:           #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --grid:           #e1e0d9;
+    --border:         rgba(11,11,11,0.10);
+    --series-blue:    #2a78d6;
+    --series-aqua:    #1baf7a;
+    --series-orange:  #eb6834;
+    --good:           #0ca30c;
+    --warning:        #fab219;
+    --serious:        #ec835a;
+    --critical:       #d03b3b;
+    --good-bg:        #e8f6e8;
+    --warning-bg:     #fef6e3;
+    --serious-bg:     #fdece5;
+    --critical-bg:    #fbe7e7;
+    --neutral-bg:     #eeeeec;
+  }
+  @media (prefers-color-scheme: dark) {
+    .viz-root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --surface-1:      #1a1a19;
+      --page:           #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --grid:           #2c2c2a;
+      --border:         rgba(255,255,255,0.10);
+      --series-blue:    #3987e5;
+      --series-aqua:    #199e70;
+      --series-orange:  #d95926;
+      --good:           #0ca30c;
+      --warning:        #fab219;
+      --serious:        #ec835a;
+      --critical:       #e66767;
+      --good-bg:        #10230f;
+      --warning-bg:     #2a2210;
+      --serious-bg:     #2c1a12;
+      --critical-bg:    #2b1414;
+      --neutral-bg:     #232322;
+    }
+  }
+  .viz-root[data-theme="dark"] {
+    color-scheme: dark;
+    --surface-1:      #1a1a19;
+    --page:           #0d0d0d;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #898781;
+    --grid:           #2c2c2a;
+    --border:         rgba(255,255,255,0.10);
+    --series-blue:    #3987e5;
+    --series-aqua:    #199e70;
+    --series-orange:  #d95926;
+    --good:           #0ca30c;
+    --warning:        #fab219;
+    --serious:        #ec835a;
+    --critical:       #e66767;
+    --good-bg:        #10230f;
+    --warning-bg:     #2a2210;
+    --serious-bg:     #2c1a12;
+    --critical-bg:    #2b1414;
+    --neutral-bg:     #232322;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  /* --page/--text-primary are custom properties scoped to .viz-root and its
+     descendants; body is an ANCESTOR of .viz-root so it can never read them
+     (custom properties only inherit downward). The real page background and
+     ink color are applied on .viz-root itself, which also gets a min-height
+     so the color still covers the full viewport on short pages. */
+  .viz-root {
+    display: block;
+    min-height: 100vh;
+    background: var(--page);
+    color: var(--text-primary);
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 60px; }
+
+  header.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  h1 { font-size: 26px; margin: 0 0 4px; letter-spacing: -0.01em; }
+  .subtitle { color: var(--text-secondary); font-size: 14px; max-width: 640px; line-height: 1.5; margin: 0; }
+  .subtitle .hint { color: var(--text-muted); }
+  .meta {
+    text-align: right;
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .meta strong { color: var(--text-secondary); display:block; font-size: 12px; font-weight: 600; }
+
+  button#themeToggle, button#langToggle {
+    border: 1px solid var(--border);
+    background: var(--surface-1);
+    color: var(--text-secondary);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-top: 6px;
+  }
+  button#langToggle { margin-left: 6px; font-weight: 700; }
+
+  .disclaimer {
+    font-size: 12px;
+    color: var(--text-muted);
+    border-left: 3px solid var(--grid);
+    padding: 8px 12px;
+    margin: 18px 0 28px;
+    line-height: 1.5;
+  }
+
+  /* Icons */
+  .icon { width: 20px; height: 20px; flex: none; color: var(--series-blue); }
+  .icon-lg { width: 30px; height: 30px; color: var(--series-blue); opacity: 0.9; }
+
+  /* Regime summary */
+  .regime {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+  .regime-chip {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .regime-chip .rc-top { display:flex; align-items:center; gap:8px; }
+  .regime-chip .rc-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .regime-chip .rc-value { font-size: 18px; font-weight: 600; margin: 4px 0 2px; }
+  .regime-chip .rc-note { font-size: 12px; color: var(--text-secondary); line-height: 1.4; }
+
+  section.theme { margin-bottom: 34px; }
+  .theme-head { display:flex; align-items:center; gap: 10px; margin-bottom: 4px; flex-wrap: wrap; }
+  .theme-head h2 { font-size: 16px; margin: 0; }
+  .theme-num { font-size: 12px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+  .theme-why { font-size: 13px; color: var(--text-secondary); margin: 0 0 14px; max-width: 900px; line-height: 1.5; }
+
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+  }
+
+  /* Flip-card mechanics */
+  .tile {
+    perspective: 1400px;
+    cursor: pointer;
+    border-radius: 12px;
+  }
+  .tile:focus-visible { outline: 2px solid var(--series-blue); outline-offset: 3px; }
+  .tile-inner {
+    position: relative;
+    min-height: 300px;
+    transition: transform 0.6s cubic-bezier(.4,.15,.2,1);
+    transform-style: preserve-3d;
+  }
+  .tile.flipped .tile-inner { transform: rotateY(180deg); }
+  .tile:hover .tile-inner { box-shadow: 0 4px 18px rgba(11,11,11,0.06); }
+  .tile-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow: hidden;
+  }
+  .tile-back { transform: rotateY(180deg); overflow-y: auto; }
+
+  .tile-top { display:flex; align-items:flex-start; justify-content: space-between; gap: 8px; }
+  .tile .t-label { font-size: 12px; color: var(--text-muted); line-height: 1.3; }
+  .tile .t-value { font-size: 22px; font-weight: 700; line-height: 1.1; }
+  .tile .t-delta { font-size: 12px; color: var(--text-secondary); }
+
+  /* Meter component */
+  .meter { margin: 6px 0 2px; }
+  .meter-track { position: relative; height: 8px; border-radius: 4px; background: var(--grid); }
+  .meter-fill { position: absolute; top: 0; bottom: 0; border-radius: 4px; }
+  .meter-fill.good { background: var(--good); }
+  .meter-fill.warning { background: var(--warning); }
+  .meter-fill.serious { background: var(--serious); }
+  .meter-fill.critical { background: var(--critical); }
+  .meter-fill.neutral { background: var(--series-blue); }
+  .meter-tick { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--text-muted); border-radius: 1px; }
+  .meter-center { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--text-muted); opacity: 0.5; left: 50%; }
+  .meter-marker { position: absolute; top: -4px; width: 8px; height: 8px; border-radius: 50%; background: var(--surface-1); border: 2px solid var(--good); transform: translateX(-50%); }
+  .meter-labels { display: flex; justify-content: space-between; font-size: 9.5px; color: var(--text-muted); margin-top: 3px; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 999px;
+    width: fit-content;
+  }
+  .badge.good { color: var(--good); background: var(--good-bg); }
+  .badge.warning { color: #8a5a00; background: var(--warning-bg); }
+  .badge.serious { color: var(--serious); background: var(--serious-bg); }
+  .badge.critical { color: var(--critical); background: var(--critical-bg); }
+  .badge.neutral { color: var(--text-secondary); background: var(--neutral-bg); }
+  @media (prefers-color-scheme: dark) { .viz-root:not([data-theme="light"]) .badge.warning { color: var(--warning); } }
+  .viz-root[data-theme="dark"] .badge.warning { color: var(--warning); }
+
+  .flip-hint {
+    margin-top: auto;
+    padding-top: 6px;
+    font-size: 10.5px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .flip-hint svg { width: 12px; height: 12px; }
+
+  .qual-icon-row { display:flex; justify-content:center; align-items:center; padding: 10px 0; }
+  .qual-icon-row svg { width: 34px; height: 34px; color: var(--series-blue); opacity: 0.85; }
+
+  /* Back face */
+  .tb-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.03em; }
+  .tb-value { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+  .tb-body { font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin: 0; }
+  .tb-watch { font-size: 12px; color: var(--text-primary); line-height: 1.5; margin: 2px 0 0; }
+  .tb-watch b { color: var(--text-secondary); font-weight: 600; }
+  .tb-source { margin-top: auto; padding-top: 6px; border-top: 1px dashed var(--grid); font-size: 10.5px; color: var(--text-muted); }
+
+  /* Signal type dots (shared with the legend in the transmission section) */
+  .dot-adelantado { background: var(--series-blue); }
+  .dot-coincidente { background: var(--series-aqua); }
+  .dot-rezagado { background: var(--text-muted); }
+  .dot-evento { background: var(--series-orange); }
+
+  /* Horizon bar: where a signal sits between confirming the past and anticipating the future */
+  .horizon { margin: 3px 0 2px; }
+  .horizon-track { display: flex; gap: 2px; height: 7px; }
+  .horizon-seg { flex: 1; background: var(--grid); border-radius: 3px; }
+  .horizon-seg.active.rezagado { background: var(--text-muted); }
+  .horizon-seg.active.coincidente { background: var(--series-aqua); }
+  .horizon-seg.active.adelantado { background: var(--series-blue); }
+  .horizon-seg.active.evento { background: var(--series-orange); }
+  .horizon-labels { display: flex; margin-top: 3px; }
+  .hz-label { flex: 1; text-align: center; font-size: 9px; color: var(--text-muted); }
+  .hz-label.active { color: var(--text-primary); font-weight: 700; }
+  .tb-channel { font-size: 11px; color: var(--text-muted); margin: 0 0 2px; }
+  .tb-cadence { font-size: 11px; color: var(--text-muted); margin: 0 0 6px; font-style: italic; }
+
+  /* Transmission section */
+  /* Master horizon: one shared timeline bar, split into tramos relative to "ahora" */
+  .master-horizon-wrap { position: relative; margin: 26px 0 20px; }
+  .mh-now-label {
+    position: absolute; top: -11px; left: 25%; transform: translateX(-50%);
+    background: var(--text-primary); color: var(--surface-1);
+    font-size: 9.5px; font-weight: 700; letter-spacing: 0.03em;
+    padding: 3px 8px; border-radius: 999px; z-index: 3; white-space: nowrap;
+  }
+  .master-horizon { display: flex; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; position: relative; }
+  .mh-now-line { position: absolute; top: 0; bottom: 0; left: 25%; border-left: 2px dashed var(--text-primary); opacity: 0.35; z-index: 2; pointer-events: none; }
+  .mh-zone { flex: 1; padding: 14px 12px; position: relative; transition: opacity .18s ease, box-shadow .18s ease; }
+  .mh-zone + .mh-zone { border-left: 1px solid var(--border); }
+  .mh-zone.rezagado { background: color-mix(in srgb, var(--text-muted) 10%, var(--surface-1)); }
+  .mh-zone.coincidente { background: color-mix(in srgb, var(--series-aqua) 10%, var(--surface-1)); }
+  .mh-zone.adelantado { background: color-mix(in srgb, var(--series-blue) 10%, var(--surface-1)); }
+  .mh-zone.evento { background: color-mix(in srgb, var(--series-orange) 10%, var(--surface-1)); }
+  .mh-zone.zone-muted { opacity: 0.4; }
+  .mh-zone.zone-active-filter { box-shadow: inset 0 0 0 2px var(--text-primary); }
+  .mh-zone-accent { height: 4px; border-radius: 2px; margin-bottom: 9px; }
+  .mh-zone.rezagado .mh-zone-accent { background: var(--text-muted); }
+  .mh-zone.coincidente .mh-zone-accent { background: var(--series-aqua); }
+  .mh-zone.adelantado .mh-zone-accent { background: var(--series-blue); }
+  .mh-zone.evento .mh-zone-accent { background: var(--series-orange); }
+  .mh-zone-title { font-size: 12px; font-weight: 700; margin-bottom: 1px; }
+  .mh-zone-time { display: block; font-size: 10px; font-weight: 400; color: var(--text-muted); margin-bottom: 8px; }
+  .mh-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .mh-chip { font-size: 11px; color: var(--text-secondary); background: var(--surface-1); border: 1px solid var(--border); padding: 3px 8px; border-radius: 999px; white-space: nowrap; cursor: pointer; font-family: inherit; transition: opacity .18s ease, border-color .18s ease; }
+  .mh-chip:hover { border-color: var(--text-primary); }
+  .mh-chip:focus-visible { outline: 2px solid var(--series-blue); outline-offset: 2px; }
+  .mh-chip.chip-muted { opacity: 0.32; }
+  @media (max-width: 760px) {
+    .master-horizon { flex-wrap: wrap; }
+    .mh-zone { flex: 1 1 50%; }
+    .mh-zone:nth-child(3) { border-left: 1px solid var(--border); border-top: 1px solid var(--border); }
+    .mh-zone:nth-child(4) { border-top: 1px solid var(--border); }
+    .mh-now-line, .mh-now-label { display: none; }
+  }
+  @media (max-width: 460px) {
+    .mh-zone { flex: 1 1 100%; border-left: none !important; border-top: 1px solid var(--border); }
+    .mh-zone:first-child { border-top: none; }
+  }
+
+  .flow-row { display: flex; align-items: stretch; gap: 8px; flex-wrap: wrap; }
+  .flow-col { flex: 1 1 260px; display: flex; flex-direction: column; gap: 10px; }
+  .flow-arrow { display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--text-muted); flex: 0 0 auto; padding: 0 2px; }
+  @media (max-width: 860px) { .flow-arrow { transform: rotate(90deg); padding: 6px 0; } }
+
+  .flow-card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 5px; flex: 1; transition: opacity .18s ease, box-shadow .18s ease; }
+  .flow-card .fc-top { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .flow-card .fc-title { font-size: 13px; font-weight: 600; }
+  .flow-card .fc-feed-label { font-size: 11px; color: var(--text-muted); }
+  .flow-card .fc-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
+  .flow-card .fc-read { font-size: 12px; color: var(--text-secondary); line-height: 1.45; }
+  .flow-card.card-muted { opacity: 0.4; }
+  .flow-card.card-active-filter { box-shadow: 0 0 0 2px var(--text-primary); }
+  .flow-note { font-size: 11.5px; color: var(--text-muted); margin-top: 10px; line-height: 1.5; }
+
+  /* Filter toolbar */
+  .filters-bar {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin: 0 0 26px;
+    position: sticky;
+    top: 10px;
+    z-index: 10;
+  }
+  .filters-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .filters-row:last-of-type { margin-bottom: 0; }
+  .filters-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-right: 4px; flex: none; }
+  .filter-chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11.5px; color: var(--text-secondary);
+    background: var(--page); border: 1px solid var(--border);
+    padding: 5px 10px; border-radius: 999px; cursor: pointer; white-space: nowrap;
+    font-family: inherit;
+  }
+  .filter-chip .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+  .filter-chip.active { background: var(--text-primary); color: var(--surface-1); border-color: var(--text-primary); }
+  .filters-summary { font-size: 11.5px; color: var(--text-secondary); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--grid); line-height: 1.5; }
+  .filters-summary b { color: var(--text-primary); }
+  .filters-summary .fs-good { color: var(--good); font-weight: 600; }
+  .filters-summary .fs-warning { color: #8a5a00; font-weight: 600; }
+  @media (prefers-color-scheme: dark) { .viz-root:not([data-theme="light"]) .filters-summary .fs-warning { color: var(--warning); } }
+  .viz-root[data-theme="dark"] .filters-summary .fs-warning { color: var(--warning); }
+  .filters-summary .fs-serious { color: var(--serious); font-weight: 600; }
+  .filters-summary .fs-critical { color: var(--critical); font-weight: 600; }
+  .filters-summary .fs-neutral { color: var(--text-muted); font-weight: 600; }
+  .tile.hidden-by-filter { display: none; }
+  section.theme.hidden-by-filter { display: none; }
+
+  /* Resumen rápido: compact scannable table, one row per signal */
+  .rt-wrap { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--surface-1); margin-top: 4px; }
+  .rt-header-row {
+    display: grid; grid-template-columns: 1.6fr 1fr 0.95fr 1fr 1.3fr; gap: 8px;
+    padding: 8px 14px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--text-muted); border-bottom: 1px solid var(--border); background: var(--page);
+  }
+  .rt-group-title { padding: 8px 14px 5px; font-size: 11px; font-weight: 700; color: var(--text-secondary); background: var(--page); border-top: 1px solid var(--border); }
+  .rt-group:first-child .rt-group-title { border-top: none; }
+  .rt-row {
+    display: grid; grid-template-columns: 1.6fr 1fr 0.95fr 1fr 1.3fr; gap: 8px; align-items: center;
+    padding: 9px 14px; border-top: 1px solid var(--grid); cursor: pointer; font-size: 12.5px;
+  }
+  .rt-row:hover { background: color-mix(in srgb, var(--series-blue) 6%, var(--surface-1)); }
+  .rt-row:focus-visible { outline: 2px solid var(--series-blue); outline-offset: -2px; }
+  .rt-name { font-weight: 600; color: var(--text-primary); }
+  .rt-value { color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+  .rt-when { display: flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--text-secondary); }
+  .rt-when .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+  .rt-channel { font-size: 11px; color: var(--text-muted); }
+  .rt-row.hidden-by-filter { display: none; }
+  .rt-group.all-hidden { display: none; }
+  @media (max-width: 700px) {
+    .rt-header-row, .rt-row { grid-template-columns: 1.4fr 0.9fr 0.9fr 1fr; }
+    .rt-header-row span:nth-child(5), .rt-channel { display: none; }
+  }
+  @media (max-width: 480px) {
+    .rt-header-row, .rt-row { grid-template-columns: 1.5fr 0.9fr 0.8fr; }
+    .rt-header-row span:nth-child(4), .rt-when { display: none; }
+  }
+
+  footer {
+    margin-top: 40px;
+    padding-top: 18px;
+    border-top: 1px solid var(--grid);
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  footer a { color: var(--series-blue); }
+  footer h3 { font-size: 12px; color: var(--text-secondary); margin: 0 0 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .sources-list { columns: 2; column-gap: 24px; }
+  @media (max-width: 640px) { .sources-list { columns: 1; } }
+</style>
+</head>
+<body>
+<div class="viz-root" id="vizRoot">
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <h1 data-en="Macro Radar · Crypto &amp; Stocks">Radar Macro · Cripto &amp; Bolsa</h1>
+      <p class="subtitle" data-en-html="Real macro indicators with direct impact on crypto and equities, grouped by theme. <span class=&quot;hint&quot;>Tap any card to see the full analysis.</span>">Indicadores macroeconómicos reales con impacto directo en cripto y renta variable, agrupados por temática. <span class="hint">Toca cualquier tarjeta para ver el análisis completo.</span></p>
+    </div>
+    <div class="meta">
+      <strong data-en="Last updated">Última actualización</strong>
+      <span id="lastUpdated" data-en="August 19, 2026, 10:45 CEST">19 agosto 2026, 10:45 CEST</span>
+      <br><span data-en="Next update: automatic, daily (08:00 CEST)">Próxima actualización: automática, diaria (08:00 CEST)</span>
+      <br><button id="themeToggle" type="button">Modo oscuro</button><button id="langToggle" type="button" title="Switch to English" aria-label="Switch to English">EN</button>
+    </div>
+  </header>
+
+  <div class="disclaimer">
+    <span data-en="This is an informational panel, not financial or investment advice. Values are collected from public market sources and may be minutes or hours delayed. Always cross-check with the source before trading. Each card shows its own real update cadence: some signals are market data that moves in real time, others are official releases that only change when a new report comes out, even though the panel itself refreshes every day.">Esto es un panel informativo, no es asesoramiento financiero ni de inversión. Los valores se recogen de fuentes públicas de mercado y pueden tener minutos u horas de retraso. Contrasta siempre con la fuente antes de operar. Cada tarjeta indica su propia cadencia real de actualización: algunas señales son de mercado y se mueven en tiempo real, otras son publicaciones oficiales que solo cambian cuando sale un informe nuevo, aunque el panel en sí se refresque cada día.</span>
+  </div>
+
+  <div class="regime">
+    <div class="regime-chip">
+      <div class="rc-top">
+        <svg aria-hidden="true" focusable="false" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2s7 8.5 7 13a7 7 0 1 1-14 0c0-4.5 7-13 7-13z"/></svg>
+        <div class="rc-label" data-en="Liquidity">Liquidez</div>
+      </div>
+      <div class="rc-value" data-en="Expansionary">Expansiva</div>
+      <div class="rc-note" data-en="The Fed stopped draining its balance sheet in Dec. 2025 and M2 is growing at a record high, though the market is starting to price in a possible rate hike in September.">La Fed dejó de drenar balance en dic. 2025 y el M2 crece a máximo histórico, aunque el mercado empieza a descontar una posible subida de tipos en septiembre.</div>
+    </div>
+    <div class="regime-chip">
+      <div class="rc-top">
+        <svg aria-hidden="true" focusable="false" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg>
+        <div class="rc-label" data-en="Inflation">Inflación</div>
+      </div>
+      <div class="rc-value" data-en="Cooling, still high">Enfriándose, aún alta</div>
+      <div class="rc-note" data-en="CPI at 3.4% year-on-year, down for two straight months, but still above the 2% target.">CPI en 3.4% interanual, dos meses de descenso, pero todavía por encima del objetivo del 2%.</div>
+    </div>
+    <div class="regime-chip">
+      <div class="rc-top">
+        <svg aria-hidden="true" focusable="false" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <div class="rc-label" data-en="Risk / volatility">Riesgo / volatilidad</div>
+      </div>
+      <div class="rc-value" data-en="Calm">Calma</div>
+      <div class="rc-note" data-en="VIX at 15.19, near this year’s low despite the escalating Iran conflict. Little room priced in for negative surprises.">VIX en 15.19, cerca del mínimo del año pese a la escalada del conflicto con Irán. Poco descuento de sorpresas negativas.</div>
+    </div>
+    <div class="regime-chip">
+      <div class="rc-top">
+        <svg aria-hidden="true" focusable="false" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M2 13h20"/></svg>
+        <div class="rc-label" data-en="Employment">Empleo</div>
+      </div>
+      <div class="rc-value" data-en="Losing steam">Perdiendo fuelle</div>
+      <div class="rc-note" data-en="First nonfarm payrolls drop of the year. A point to watch ahead of the monetary policy turn.">Primera caída de nóminas no agrícolas del año. Punto a vigilar de cara al giro de política monetaria.</div>
+    </div>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="filters-bar" id="filtersBar">
+    <div class="filters-row">
+      <span class="filters-label" data-en="Signal type">Tipo de señal</span>
+      <button class="filter-chip active" data-filter-type="all" type="button" aria-pressed="true" data-en="All">Todas</button>
+      <button class="filter-chip" data-filter-type="adelantado" type="button" aria-pressed="false"><span class="dot dot-adelantado"></span><span data-en="Leading">Adelantado</span></button>
+      <button class="filter-chip" data-filter-type="coincidente" type="button" aria-pressed="false"><span class="dot dot-coincidente"></span><span data-en="Coincident">Coincidente</span></button>
+      <button class="filter-chip" data-filter-type="rezagado" type="button" aria-pressed="false"><span class="dot dot-rezagado"></span><span data-en="Lagging">Rezagado</span></button>
+      <button class="filter-chip" data-filter-type="evento" type="button" aria-pressed="false"><span class="dot dot-evento"></span><span data-en="Event">Evento</span></button>
+    </div>
+    <div class="filters-row">
+      <span class="filters-label" data-en="Channel">Canal</span>
+      <button class="filter-chip active" data-filter-channel="all" type="button" aria-pressed="true" data-en="All">Todos</button>
+      <button class="filter-chip" data-filter-channel="liquidez" type="button" aria-pressed="false" data-en="Cost of capital &amp; liquidity">Coste de capital y liquidez</button>
+      <button class="filter-chip" data-filter-channel="inflacion" type="button" aria-pressed="false" data-en="Inflation expectations">Expectativas de inflación</button>
+      <button class="filter-chip" data-filter-channel="riesgo" type="button" aria-pressed="false" data-en="Risk appetite">Apetito de riesgo</button>
+      <button class="filter-chip" data-filter-channel="institucional" type="button" aria-pressed="false" data-en="Institutional shocks">Shocks institucionales</button>
+    </div>
+    <div class="filters-summary" id="filtersSummary" role="status" aria-live="polite">Mostrando las 21 señales del panel.</div>
+  </div>
+
+  <!-- RESUMEN RÁPIDO -->
+  <section class="theme resumen">
+    <div class="theme-head">
+      <svg aria-hidden="true" focusable="false" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="16" width="18" height="4" rx="1"/></svg>
+      <h2 data-en="Quick overview">Resumen rápido</h2>
+    </div>
+    <p class="theme-why" data-en="All 21 signals in one view. Tap a row to jump to its card with the full analysis.">Las 21 señales en una sola vista. Toca una fila para saltar a su tarjeta con el análisis completo.</p>
+    <div class="rt-wrap" id="rtWrap">
+      <div class="rt-header-row"><span data-en="Signal">Señal</span><span data-en="Value">Valor</span><span data-en="Status">Estado</span><span data-en="When it acts">Cuándo actúa</span><span data-en="Channel">Canal</span></div>
+
+      <div class="rt-group" data-group="01">
+        <div class="rt-group-title" data-en="01 · Monetary policy">01 · Política monetaria</div>
+        <div class="rt-row" tabindex="0" role="button" data-type="adelantado" data-channel="liquidez" data-target="t-fedfunds" aria-label="Ir al detalle de Fed Funds" data-en-aria="Go to Fed Funds detail">
+          <span class="rt-name">Fed Funds</span><span class="rt-value">3.50%–3.75%</span><span class="badge serious" data-en="▲ Tension">▲ Tensión</span>
+          <span class="rt-when"><span class="dot dot-adelantado"></span><span data-en="Anticipates">Anticipa</span></span><span class="rt-channel" data-en="Cost of capital &amp; liquidity">Coste de capital y liquidez</span>
+        </div>
+        <div class="rt-row" tabindex="0" role="button" data-type="adelantado" data-channel="liquidez" data-target="t-curva" aria-label="Ir al detalle de la curva 10Y-2Y" data-en-aria="Go to 10Y-2Y curve detail">
+          <span class="rt-name" data-en="10Y-2Y curve">Curva 10Y-2Y</span><span class="rt-value">+0.52 pp</span><span class="badge good" data-en="● Favorable">● Favorable</span>
+          <span class="rt-when"><span class="dot dot-adelantado"></span><span data-en="Anticipates">Anticipa</span></span><span class="rt-channel" data-en="Cost of capital &amp; liquidity">Coste de capital y liquidez</span>
+        </div>
+      </div>
+
+      <div class="rt-group" data-group="02">
+        <div class="rt-group-title" data-en="02 · Inflation">02 · Inflación</div>
+        <div class="rt-row" tabindex="0" role="button" data-type="rezagado" data-channel="inflacion" data-target="t-cpigeneral" aria-label="Ir al detalle del CPI general" data-en-aria="Go to headline CPI detail">
+          <span class="rt-name" data-en="Headline CPI">CPI general</span><span class="rt-value">3.4%</span><span class="badge warning" data-en="⚠ Watch">⚠ Vigilar</span>
+          <span class="rt-when"><span class="dot dot-rezagado"></span><span data-en="Confirms">Confirma</span></span><span class="rt-channel" data-en="Inflation expectations">Expectativas de inflación</span>
+        </div>
+        <div class="rt-row" tabindex="0" role="button" data-type="rezagado" data-channel="inflacion" data-target="t-cpisub" aria-label="Ir al detalle del CPI subyacente" data-en-aria="Go to core CPI detail">
+          <span class="rt-name" data-en="Core CPI">CPI subyacente</span><span class="rt-value">2.5%</span><span class="badge warning" data-en="⚠ Watch">⚠ Vigilar</span>
+          <span class="rt-when"><span class="dot dot-rezagado"></span><span data-en="Confirms">Confirma</span></span><span class="rt-channel" data-en="Inflation expectations">Expectativas de inflación</span>
+        </div>
+      </div>
+
+      <div class="rt-group" data-group="03">
+        <div class="rt-group-title" data-en="03 · Global liquidity">03 · Liquidez global</div>
+        <div class="rt-row" tabindex="0" role="button" data-type="adelantado" data-channel="liquidez" data-target="t-balancefed" aria-label="Ir al detalle del balance de la Fed" data-en-aria="Go to Fed balance sheet detail">
+          <span class="rt-name" data-en="Fed balance sheet">Balance de la Fed</span><span class="rt-value" data-en="Expansion (reserve purchases)">Expansión (RMP)</span><span class="badge good" data-en="● Favorable">● Favorable</span>
+          <span class="rt-when"><span class="dot dot-adelantado"></span><span data-en="Anticipates">Anticipa</span></span><span class="rt-channel" data-en="Cost of capital &amp; liquidity">Coste de capital y liquidez</span>
+        </div>
+        <div class="rt-row" tabindex="0" role="button" data-type="adelantado" data-channel="liquidez" data-target="t-m2" aria-label="Ir al detalle del M2" data-en-aria="Go to M2 detail">
+          <span class="rt-name">M2</span><span class="rt-value" data-en="$22.6 trillion (+4.8%)">22.6 billones $ (+4.8%)</span><span class="badge good" data-en="● Favorable">● Favorable</span>
+          <span class="rt-when"><span class="dot dot-adelantado"></span><span data-en="Anticipates">Anticipa</span></span><span class="rt-channel" data-en="Cost of capital &amp; liquidity">Coste de capital y liquidez</span>
+        </div>
+      </div>
+
+      <div class="rt-group" data-group="04">
+        <div class="rt-group-title" data-en="04 · Dollar &amp; currencies">04 · Dólar y divisas</div>
+        <div class="rt-row" tabindex="0" role="button" data-type="coincidente" data-channel="riesgo" data-target="t-dxy" aria-label="Ir al detalle del DXY" data-en-aria="Go to DXY detail">
+          <span class="rt-name">DXY</span><span class="rt-value">99.60</span><span class="badge good" data-en="● Favorable">● Favorable</span>
+          <span class="rt-when"><span class="dot dot-coincidente"></span><span data-en="Now">Ahora</span></span><span class="rt-channel" data-en="Risk appetite">Apetito de riesgo</span>
+        </div>
+      </div>
+
+      <div class="rt-group" data-group="05">
+        <div class="rt-group-title" data-en="05 · Risk &amp; volatility">05 · Riesgo y volatilidad</div>
+        <div class="rt-row" tabindex="0" role="button" data-type="coincidente" data-channel="riesgo" data-target="t-vix" aria-label="Ir al detalle del VIX" data-en-aria="Go to VIX detail">
+          <span class="rt-name">VIX</span><span class="rt-value">15.19</span><span class="badge good" data-en="● Favorable">● Favorable</span>
+          <span class="rt-when"><span class="dot dot-coincidente"></span><span data-en="Now">Ahora</span></span><span class="rt-channel" data-en="Risk appetite">Apetito de riesgo</span>
+        </div>
+      </div>
+
+      <div class="rt-group" data-group="06">
+        <div class="rt-group-title" data-en="06 · Crypto: market structure">06 · Cripto: estructura de mercado</div>
+        <div class="rt-row" tabindex="0" role="button" data-type="coincidente" data-channel="riesgo" data-target="t-dominancia" aria-label="Ir al detalle de la dominancia de bitcoin" data-en-aria="Go to bitcoin dominance detail">
+          <span class="rt-name" data-en="BTC dominance">Dominancia BTC</span><span class="rt-value">56.4%</span><span class="badge neutral" data-en="○ Informational">○ Informativo</span>
+          <span class="rt-when"><span class="dot dot-coincidente"></span><span data-en="Now">Ahora</span></span><span class="rt-channel" data-en="Risk appetite">Apetito de riesgo</span>
+        </div>
+        <div class="rt-row" tabindex="0" role="button" data-type="coincidente" data-channel="riesgo" data-target="t-etfflows" aria-label="Ir al detalle de los flujos ETF de bitcoin" data-en-aria="Go to bitcoin ETF flows detail">
+          <span class="rt-name" data-en="BTC ETF flows">Flujos ETF BTC</span><span class="rt-value" data-en="Mixed (−$390M)">Mixtos (−390M$)</span><span class="badge warning" data-en="⚠ Watch">⚠ Vigilar</span>
+          <span class="rt-when"><span class="dot dot-coincidente"></span><span data-en="Now">Ahora</span></span><span class="rt-channel" data-en="Risk appetite">Apetito de riesgo</span>
+        </div>
+      </div>
+
+      <div class="rt-group" data-group="07">
+        <div class="rt-group-title" data-en="07 · Employment &amp; growth">07 · Empleo y crecimiento</div>
+        <div class="rt-row" tabindex="0" role="button" data-type="rezagado" data-channel="liquidez" data-target="t-paro" aria-label="Ir al detalle de la tasa de paro" data-en-aria="Go to unemployment rate detail">
+          <span class="rt-name" data-en="Unemployment rate">Tasa de paro</span><span class="rt-value">4.1%</span><span class="badge neutral" data-en="○ Informational">○ Informativo</span>
+          <span class="rt-when"><span class="dot dot-rezagado"></span><span data-en="Confirms">Confirma</span></span><span class="rt-channel" data-en="Cost of capital &amp; liquidity">Coste de capital y liquidez</span>
+        </div>
+        <div class="rt-row" tabindex="0" role="button" data-type="coincidente" data-channel="liquidez" data-target="t-nominas" aria-label="Ir al detalle de las nóminas no agrícolas" data-en-aria="Go to nonfarm payrolls detail">
+          <span class="rt-name" data-en="Nonfarm payrolls">Nóminas no agrícolas</span><span class="rt-value" data-en="−23,000">−23.000</span><span class="badge serious" data-en="▲ Tension">▲ Tensión</span>
+          <span class="rt-when"><span class="dot dot-coincidente"></span><span data-en="Now">Ahora</span></span><span class="rt-channel" data-en="Cost of capital &amp; liquidity">Coste de capital y liquidez</span>
+        </div>
+        <div class="rt-row" tabindex="0" role="button" data-type="adelantado" data-channel="riesgo" data-target="t-pmi" aria-label="Ir al detalle del ISM PMI" data-en-aria="Go to ISM PMI detail">
+          <span class="rt-name">ISM PMI</span><span class="rt-value">55.6</span><span class="badge good" data-en="● Favorable">● Favorable</span>
+          <span class="rt-when"><span class="dot dot-adelantado"></span><span data-en="Anticipates">Anticipa</span></span><span class="rt-channel" data-en="Risk appetite">Apetito de riesgo</span>
+        </div>
+      </div>
+
+      <div class="rt-group" data-group="08">
+        <div class="rt-group-title" data-en="08 · Commodities">08 · Materias primas</div>
+        <div class="rt-row" tabindex="0" role="button" data-type="coincidente" data-channel="inflacion" data-target="t-oro" aria-label="Ir al detalle del oro" data-en-aria="Go to gold detail">
+          <span class="rt-name" data-en="Gold">Oro</span><span class="rt-value" data-en="$4,397.00/oz">4.397,00 $/oz</span><span class="badge neutral" data-en="○ Informational">○ Informativo</span>
+          <span class="rt-when"><span class="dot dot-coincidente"></span><span data-en="Now">Ahora</span></span><span class="rt-channel" data-en="Inflation expectations">Expectativas de inflación</span>
+        </div>
+        <div class="rt-row" tabindex="0" role="button" data-type="coincidente" data-channel="inflacion" data-target="t-petroleo" aria-label="Ir al detalle del petróleo Brent" data-en-aria="Go to Brent oil detail">
+          <span class="rt-name" data-en="Brent oil">Petróleo Brent</span><span class="rt-value" data-en="$91.34/barrel">91,34 $/barril</span><span class="badge warning" data-en="⚠ Watch">⚠ Vigilar</span>
+          <span class="rt-when"><span class="dot dot-coincidente"></span><span data-en="Now">Ahora</span></span><span class="rt-channel" data-en="Inflation expectations">Expectativas de inflación</span>
+        </div>
+      </div>
+
+      <div class="rt-group" data-group="09">
+        <div class="rt-group-title" data-en="09 · Regulation &amp; political calendar">09 · Regulación y calendario político</div>
+        <div class="rt-row" tabindex="0" role="button" data-type="evento" data-channel="institucional" data-target="t-powell" aria-label="Ir al detalle de la transición en la Fed" data-en-aria="Go to Fed transition detail">
+          <span class="rt-name" data-en="Fed transition">Transición en la Fed</span><span class="rt-value" data-en="May 15, 2026">15 mayo 2026</span><span class="badge neutral" data-en="○ Informational">○ Informativo</span>
+          <span class="rt-when"><span class="dot dot-evento"></span><span data-en="Event">Evento</span></span><span class="rt-channel" data-en="Institutional shocks">Shocks institucionales</span>
+        </div>
+        <div class="rt-row" tabindex="0" role="button" data-type="evento" data-channel="institucional" data-target="t-genius" aria-label="Ir al detalle de la ley GENIUS" data-en-aria="Go to GENIUS Act detail">
+          <span class="rt-name" data-en="GENIUS Act">Ley GENIUS</span><span class="rt-value" data-en="In public comment period">En consulta pública</span><span class="badge good" data-en="● Favorable">● Favorable</span>
+          <span class="rt-when"><span class="dot dot-evento"></span><span data-en="Event">Evento</span></span><span class="rt-channel" data-en="Institutional shocks">Shocks institucionales</span>
+        </div>
+        <div class="rt-row" tabindex="0" role="button" data-type="evento" data-channel="institucional" data-target="t-clarity" aria-label="Ir al detalle de la Clarity Parity Act" data-en-aria="Go to Clarity/Parity Act detail">
+          <span class="rt-name">Clarity / Parity Act</span><span class="rt-value" data-en="In progress">En tramitación</span><span class="badge neutral" data-en="○ Informational">○ Informativo</span>
+          <span class="rt-when"><span class="dot dot-evento"></span><span data-en="Event">Evento</span></span><span class="rt-channel" data-en="Institutional shocks">Shocks institucionales</span>
+        </div>
+        <div class="rt-row" tabindex="0" role="button" data-type="evento" data-channel="institucional" data-target="t-elecciones" aria-label="Ir al detalle de las elecciones de medio mandato" data-en-aria="Go to midterm elections detail">
+          <span class="rt-name" data-en="Midterm elections">Elecciones medio mandato</span><span class="rt-value" data-en="Nov 3, 2026">3 nov. 2026</span><span class="badge neutral" data-en="○ Informational">○ Informativo</span>
+          <span class="rt-when"><span class="dot dot-evento"></span><span data-en="Event">Evento</span></span><span class="rt-channel" data-en="Institutional shocks">Shocks institucionales</span>
+        </div>
+      </div>
+
+      <div class="rt-group" data-group="10">
+        <div class="rt-group-title" data-en="10 · Geopolitics">10 · Geopolítica</div>
+        <div class="rt-row" tabindex="0" role="button" data-type="evento" data-channel="inflacion" data-target="t-aranceles" aria-label="Ir al detalle de aranceles y comercio" data-en-aria="Go to tariffs & trade detail">
+          <span class="rt-name" data-en="Tariffs &amp; trade">Aranceles y comercio</span><span class="rt-value" data-en="Active focus">Foco activo</span><span class="badge warning" data-en="⚠ Watch">⚠ Vigilar</span>
+          <span class="rt-when"><span class="dot dot-evento"></span><span data-en="Event">Evento</span></span><span class="rt-channel" data-en="Inflation expectations">Expectativas de inflación</span>
+        </div>
+        <div class="rt-row" tabindex="0" role="button" data-type="evento" data-channel="institucional" data-target="t-conflictos" aria-label="Ir al detalle de conflictos y sanciones" data-en-aria="Go to conflicts & sanctions detail">
+          <span class="rt-name" data-en="Conflicts / sanctions">Conflictos / sanciones</span><span class="rt-value" data-en="Active escalation (Iran)">Escalada activa (Irán)</span><span class="badge serious" data-en="▲ Tension">▲ Tensión</span>
+          <span class="rt-when"><span class="dot dot-evento"></span><span data-en="Event">Evento</span></span><span class="rt-channel" data-en="Institutional shocks">Shocks institucionales</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 0. CADENA DE TRANSMISIÓN -->
+  <section class="theme transmission">
+    <div class="theme-head">
+      <svg aria-hidden="true" focusable="false" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="6" r="2.5"/><circle cx="5" cy="18" r="2.5"/><circle cx="19" cy="12" r="2.5"/><path d="M7.3 6.8h3.2a3 3 0 0 1 3 3v0"/><path d="M7.3 17.2h3.2a3 3 0 0 0 3-3v0"/></svg>
+      <h2 data-en="How each signal transmits">Cómo se transmite cada señal</h2>
+    </div>
+    <p class="theme-why" data-en="Not every indicator carries the same weight or acts on the same timeline. Some lead the market, some move alongside the price, and some only confirm what already happened. Every card carries this same tag on its back face. It is my qualitative read on how it all fits together, not a calculation with exact weights.">No todos los indicadores pesan igual ni actúan al mismo tiempo. Unos se adelantan al mercado, otros se mueven a la vez que el precio, y otros solo confirman lo que ya pasó. Cada tarjeta lleva esta misma etiqueta en su cara trasera. Es una lectura cualitativa mía sobre cómo encaja todo, no un cálculo con pesos exactos.</p>
+
+    <div class="master-horizon-wrap">
+      <div class="mh-now-label" data-en="NOW">AHORA</div>
+      <div class="master-horizon">
+        <div class="mh-now-line"></div>
+        <div class="mh-zone rezagado" data-mh-type="rezagado">
+          <div class="mh-zone-accent"></div>
+          <div class="mh-zone-title" data-en="Confirms">Confirma</div>
+          <span class="mh-zone-time" data-en="Data lags by weeks">Dato con semanas de retraso</span>
+          <div class="mh-chips">
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-cpigeneral" data-type="rezagado" data-channel="inflacion" data-en="Headline CPI">CPI general</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-cpisub" data-type="rezagado" data-channel="inflacion" data-en="Core CPI">CPI subyacente</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-paro" data-type="rezagado" data-channel="liquidez" data-en="Unemployment rate">Tasa de paro</span>
+          </div>
+        </div>
+        <div class="mh-zone coincidente" data-mh-type="coincidente">
+          <div class="mh-zone-accent"></div>
+          <div class="mh-zone-title" data-en="Now">Ahora</div>
+          <span class="mh-zone-time" data-en="Moves in real time">Se mueve en tiempo real</span>
+          <div class="mh-chips">
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-dxy" data-type="coincidente" data-channel="riesgo">DXY</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-vix" data-type="coincidente" data-channel="riesgo">VIX</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-dominancia" data-type="coincidente" data-channel="riesgo" data-en="BTC dominance">Dominancia BTC</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-etfflows" data-type="coincidente" data-channel="riesgo" data-en="ETF flows">Flujos ETF</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-nominas" data-type="coincidente" data-channel="liquidez" data-en="Payrolls">Nóminas</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-oro" data-type="coincidente" data-channel="inflacion" data-en="Gold">Oro</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-petroleo" data-type="coincidente" data-channel="inflacion" data-en="Oil">Petróleo</span>
+          </div>
+        </div>
+        <div class="mh-zone adelantado" data-mh-type="adelantado">
+          <div class="mh-zone-accent"></div>
+          <div class="mh-zone-title" data-en="Anticipates">Anticipa</div>
+          <span class="mh-zone-time" data-en="Leads by weeks or months">Se adelanta semanas o meses</span>
+          <div class="mh-chips">
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-fedfunds" data-type="adelantado" data-channel="liquidez">Fed Funds</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-curva" data-type="adelantado" data-channel="liquidez" data-en="10Y-2Y curve">Curva 10Y-2Y</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-balancefed" data-type="adelantado" data-channel="liquidez" data-en="Fed balance sheet">Balance de la Fed</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-m2" data-type="adelantado" data-channel="liquidez">M2</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-pmi" data-type="adelantado" data-channel="riesgo">ISM PMI</span>
+          </div>
+        </div>
+        <div class="mh-zone evento" data-mh-type="evento">
+          <div class="mh-zone-accent"></div>
+          <div class="mh-zone-title" data-en="Event">Evento</div>
+          <span class="mh-zone-time" data-en="Date already on the calendar">Fecha ya fijada en el calendario</span>
+          <div class="mh-chips">
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-powell" data-type="evento" data-channel="institucional" data-en="Fed transition">Transición en la Fed</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-genius" data-type="evento" data-channel="institucional" data-en="GENIUS Act">Ley GENIUS</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-clarity" data-type="evento" data-channel="institucional">Clarity / Parity Act</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-elecciones" data-type="evento" data-channel="institucional" data-en="Elections">Elecciones</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-aranceles" data-type="evento" data-channel="inflacion" data-en="Tariffs">Aranceles</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-conflictos" data-type="evento" data-channel="institucional" data-en="Conflicts / sanctions">Conflictos / sanciones</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-row">
+      <div class="flow-col">
+        <div class="flow-card" data-channel="liquidez">
+          <div class="fc-top"><span class="fc-title" data-en="Cost of capital &amp; liquidity">Coste de capital y liquidez</span><span class="badge warning" data-en="⚠ Mixed">⚠ Mixta</span></div>
+          <div class="fc-feed-label" data-en="Fed by:">Alimentada por:</div>
+          <div class="fc-chips">
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-fedfunds" data-type="adelantado" data-channel="liquidez">Fed Funds</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-curva" data-type="adelantado" data-channel="liquidez" data-en="10Y-2Y curve">Curva 10Y-2Y</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-balancefed" data-type="adelantado" data-channel="liquidez" data-en="Fed balance sheet">Balance de la Fed</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-m2" data-type="adelantado" data-channel="liquidez">M2</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-paro" data-type="rezagado" data-channel="liquidez" data-en="Unemployment rate">Tasa de paro</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-nominas" data-type="coincidente" data-channel="liquidez" data-en="Payrolls">Nóminas</span>
+          </div>
+          <div class="fc-read" data-en="Liquidity is expanding underneath, but the market is now pricing a 65% chance of a September rate hike after the Iran-driven energy price spike.">Liquidez en expansión de fondo, pero el mercado ya descuenta un 65% de probabilidad de subida de tipos en septiembre tras el repunte de precios de la energía por la guerra con Irán.</div>
+        </div>
+        <div class="flow-card" data-channel="inflacion">
+          <div class="fc-top"><span class="fc-title" data-en="Inflation expectations">Expectativas de inflación</span><span class="badge warning" data-en="⚠ Mixed">⚠ Mixta</span></div>
+          <div class="fc-feed-label" data-en="Fed by:">Alimentada por:</div>
+          <div class="fc-chips">
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-cpigeneral" data-type="rezagado" data-channel="inflacion" data-en="Headline CPI">CPI general</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-cpisub" data-type="rezagado" data-channel="inflacion" data-en="Core CPI">CPI subyacente</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-petroleo" data-type="coincidente" data-channel="inflacion" data-en="Oil">Petróleo</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-oro" data-type="coincidente" data-channel="inflacion" data-en="Gold">Oro</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-aranceles" data-type="evento" data-channel="inflacion" data-en="Tariffs">Aranceles</span>
+          </div>
+          <div class="fc-read" data-en="Improving for two straight months, but still above target. Oil is spiking on the Iran crisis and the Canada tariff truce remains fragile, the main upside risks.">Mejorando dos meses seguidos, pero aún por encima del objetivo. El petróleo repunta con fuerza por la crisis de Irán y la tregua arancelaria con Canadá sigue siendo frágil, los principales riesgos al alza.</div>
+        </div>
+      </div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-col">
+        <div class="flow-card" data-channel="riesgo">
+          <div class="fc-top"><span class="fc-title" data-en="Risk appetite">Apetito de riesgo</span><span class="badge good" data-en="● Favorable">● Favorable</span></div>
+          <div class="fc-feed-label" data-en="Fed by:">Alimentada por:</div>
+          <div class="fc-chips">
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-vix" data-type="coincidente" data-channel="riesgo">VIX</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-dxy" data-type="coincidente" data-channel="riesgo">DXY</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-dominancia" data-type="coincidente" data-channel="riesgo" data-en="BTC dominance">Dominancia BTC</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-etfflows" data-type="coincidente" data-channel="riesgo" data-en="ETF flows">Flujos ETF</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-pmi" data-type="adelantado" data-channel="riesgo">ISM PMI</span>
+          </div>
+          <div class="fc-read" data-en="VIX near this year&#39;s low, a weak dollar short term, and PMI in expansion, though the market may be underpricing geopolitical risk. ETF flows remain the most erratic component.">VIX cerca del mínimo del año, dólar débil a corto plazo y PMI en expansión, aunque el mercado podría estar subestimando el riesgo geopolítico. Los flujos de ETF siguen siendo el componente más errático.</div>
+        </div>
+        <div class="flow-card" data-channel="institucional">
+          <div class="fc-top"><span class="fc-title" data-en="Direct &amp; institutional shocks">Shocks directos e institucionales</span><span class="badge warning" data-en="⚠ Under tension">⚠ En tensión</span></div>
+          <div class="fc-feed-label" data-en="Fed by:">Alimentada por:</div>
+          <div class="fc-chips">
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-powell" data-type="evento" data-channel="institucional" data-en="Fed transition">Transición en la Fed</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-genius" data-type="evento" data-channel="institucional" data-en="GENIUS Act">Ley GENIUS</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-clarity" data-type="evento" data-channel="institucional">Clarity / Parity Act</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-elecciones" data-type="evento" data-channel="institucional" data-en="Elections">Elecciones</span>
+            <span class="mh-chip" role="button" tabindex="0" data-target="t-conflictos" data-type="evento" data-channel="institucional" data-en="Conflicts / sanctions">Conflictos / sanciones</span>
+          </div>
+          <div class="fc-read" data-en="The Iran war is escalating after the memorandum expired without a deal, with strikes in the Strait of Hormuz: the year&#39;s first real acute shock. The crypto regulatory agenda keeps moving in parallel (GENIUS Act now in public comment, Clarity Act past its first Senate vote).">La guerra con Irán escala tras vencer el memorando sin acuerdo, con ataques en el estrecho de Ormuz: el primer choque agudo real del año. La agenda regulatoria cripto sigue avanzando en paralelo (Ley GENIUS en consulta pública, Clarity Act con su primera votación en el Senado ya superada).</div>
+        </div>
+      </div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-col">
+        <div class="flow-card">
+          <div class="fc-top"><span class="fc-title" data-en="Crypto">Cripto</span></div>
+          <div class="fc-read" data-en="Maximum beta: it receives the liquidity and risk-appetite channels first and hardest, and it is the only asset in the panel with its own regulatory-shock channel.">Máxima beta: recibe primero y con más intensidad los canales de liquidez y apetito de riesgo, y es el único activo del panel con un canal propio de shocks regulatorios.</div>
+        </div>
+        <div class="flow-card">
+          <div class="fc-top"><span class="fc-title" data-en="Stocks">Bolsa</span></div>
+          <div class="fc-read" data-en="More sensitive to the cost of capital via valuation multiples, and to the inflation channel via corporate margins. Reacts somewhat slower than crypto to the same stimulus.">Más sensible al coste de capital vía múltiplos de valoración, y al canal de inflación vía márgenes empresariales. Reacciona algo más despacio que cripto ante el mismo estímulo.</div>
+        </div>
+      </div>
+    </div>
+    <div class="flow-note" data-en="The badges in this section summarize the channel's aggregate status; they do not replace each indicator's individual signal light in the sections below. The filters above also apply here: they dim the zones, cards and bubbles that do not match, highlight the one that does, and any bubble jumps straight to its card when tapped.">Los badges de esta sección resumen el estado agregado del canal, no sustituyen al semáforo individual de cada indicador en las secciones de abajo. Los filtros de arriba también aplican aquí: atenúan las zonas, tarjetas y burbujas que no coinciden, resaltan la que sí, y cualquier burbuja te lleva directo a su tarjeta al tocarla.</div>
+  </section>
+
+  <!-- 1. POLÍTICA MONETARIA -->
+  <section class="theme">
+    <div class="theme-head">
+      <svg aria-hidden="true" focusable="false" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V10"/><path d="M9 21V10"/><path d="M15 21V10"/><path d="M19 21V10"/><path d="M3 10l9-6 9 6"/></svg>
+      <span class="theme-num">01</span><h2 data-en="Monetary policy &amp; interest rates">Política monetaria y tipos de interés</h2>
+    </div>
+    <p class="theme-why" data-en="The cost of money is the mother variable: lower rates push capital toward risk assets (crypto and growth stocks); high rates or hawkish surprises hit them first.">El coste del dinero es la variable madre: tipos más bajos empujan capital hacia activos de riesgo (cripto y bolsa growth); tipos altos o sorpresas hawkish los penalizan primero.</p>
+    <div class="tiles">
+
+      <div class="tile" tabindex="0" id="t-fedfunds" role="button" aria-expanded="false" data-type="adelantado" data-channel="liquidez" aria-label="Tipo de referencia de la Fed, tocar para más detalle" data-en-aria="Fed policy rate, tap for more detail">
+        <div class="tile-inner">
+          <div class="tile-face tile-front">
+            <div class="t-label" data-en="Fed policy rate (Fed Funds)">Tipo de referencia de la Fed (Fed Funds)</div>
+            <div class="t-value">3.50% – 3.75%</div>
+            <div class="t-delta" data-en="Held in July; the market now prices a ~65% chance of a September hike">Mantenido en julio; el mercado ya descuenta ~65% de probabilidad de subida en septiembre</div>
+            <div class="meter">
+              <div class="meter-track"><div class="meter-fill serious" style="left:0;width:45.3%"></div></div>
+              <div class="meter-labels"><span>0%</span><span>8%</span></div>
+            </div>
+            <span class="badge serious" data-en="▲ Tension">▲ Tensión</span>
+            <div class="flip-hint"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span data-en="More detail">Más detalle</span></div>
+          </div>
+          <div class="tile-face tile-back">
+            <div class="tb-label" data-en="Fed Funds">Fed Funds</div>
+            <div class="tb-value">3.50% – 3.75%</div>
+            <div class="horizon">
+              <div class="horizon-track">
+                <div class="horizon-seg rezagado"></div>
+                <div class="horizon-seg coincidente"></div>
+                <div class="horizon-seg active adelantado"></div>
+                <div class="horizon-seg evento"></div>
+              </div>
+              <div class="horizon-labels">
+                <span class="hz-label" data-en="Confirms">Confirma</span><span class="hz-label" data-en="Now">Ahora</span><span class="hz-label active" data-en="Anticipates">Anticipa</span><span class="hz-label" data-en="Event">Evento</span>
+              </div>
+            </div>
+            <div class="tb-channel" data-en="Channel: cost of capital &amp; liquidity">Canal: coste de capital y liquidez</div>
+            <div class="tb-cadence" data-en="Cadence: changes only at each FOMC meeting · next meeting: September 16, 2026">Cadencia: cambia solo en cada reunión del FOMC · próxima reunión: 16 de septiembre 2026</div>
+            <p class="tb-body" data-en="The range is set every 6-8 weeks at the FOMC. Below 2.5% is considered accommodative and above 4.5% restrictive; the current level sits in an intermediate zone, somewhat restrictive for today's inflation. What matters this week is the shift in expectations: after the escalating Iran conflict pushed energy prices higher, the market has gone from pricing in cuts to assigning close to a 65% probability to a rate hike at the September meeting.">El rango se decide cada 6-8 semanas en el FOMC. Por debajo de 2.5% se considera acomodaticio y por encima de 4.5% restrictivo; el nivel actual está en zona intermedia, algo restrictiva para la inflación de hoy. Lo relevante esta semana es el giro de las expectativas: tras la escalada del conflicto con Irán y su impacto en el precio de la energía, el mercado ha pasado de descontar recortes a asignar cerca de un 65% de probabilidad a una subida de tipos en la reunión de septiembre.</p>
+            <p class="tb-watch" data-en-html="<b>What to watch:</b> Warsh&#39;s Jackson Hole speech (Aug. 27-29) and whether August inflation confirms or undercuts the case for a hike."><b>Qué vigilar:</b> el discurso de Warsh en Jackson Hole (27-29 de agosto) y si la inflación de agosto confirma o desmiente la tesis de subida.</p>
+            <div class="tb-source" data-en="Source: Federal Reserve, FOMC statement July 2026 · J.P. Morgan Wealth Management">Fuente: Reserva Federal, comunicado FOMC julio 2026 · J.P. Morgan Wealth Management</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile" tabindex="0" id="t-curva" role="button" aria-expanded="false" data-type="adelantado" data-channel="liquidez" aria-label="Curva de tipos 10 años menos 2 años, tocar para más detalle" data-en-aria="10-year minus 2-year yield curve, tap for more detail">
+        <div class="tile-inner">
+          <div class="tile-face tile-front">
+            <div class="t-label" data-en="10-year minus 2-year yield curve">Curva de tipos 10 años menos 2 años</div>
+            <div class="t-value">+0.52 pp</div>
+            <div class="t-delta" data-en="Positive slope, normal curve (not inverted)">Pendiente positiva, curva normal (no invertida)</div>
+            <div class="meter">
+              <div class="meter-track"><div class="meter-center"></div><div class="meter-fill good" style="left:50%;width:17.3%"></div></div>
+              <div class="meter-labels"><span data-en="Inverted">Invertida</span><span data-en="Normal">Normal</span></div>
+            </div>
+            <span class="badge good" data-en="● Favorable">● Favorable</span>
+            <div class="flip-hint"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span data-en="More detail">Más detalle</span></div>
+          </div>
+          <div class="tile-face tile-back">
+            <div class="tb-label" data-en="10Y-2Y curve">Curva 10Y-2Y</div>
+            <div class="tb-value">+0.52 pp</div>
+            <div class="horizon">
+              <div class="horizon-track">
+                <div class="horizon-seg rezagado"></div>
+                <div class="horizon-seg coincidente"></div>
+                <div class="horizon-seg active adelantado"></div>
+                <div class="horizon-seg evento"></div>
+              </div>
+              <div class="horizon-labels">
+                <span class="hz-label" data-en="Confirms">Confirma</span><span class="hz-label" data-en="Now">Ahora</span><span class="hz-label active" data-en="Anticipates">Anticipa</span><span class="hz-label" data-en="Event">Evento</span>
+              </div>
+            </div>
+            <div class="tb-channel" data-en="Channel: cost of capital &amp; liquidity">Canal: coste de capital y liquidez</div>
+            <div class="tb-cadence" data-en="Cadence: real time (bond market, daily close)">Cadencia: tiempo real (mercado de bonos, cierre diario)</div>
+            <p class="tb-body" data-en="An inverted curve (negative spread) has preceded the last several U.S. recessions by 6 to 24 months. The spread has been positive for several months now, which reduces the imminent recession risk that was a real concern in 2023.">Una curva invertida (spread negativo) ha precedido a las últimas recesiones de EE.UU. con 6 a 24 meses de antelación. El spread lleva en positivo varios meses, lo que reduce el riesgo de recesión inminente que sí preocupaba en 2023.</p>
+            <p class="tb-watch" data-en-html="<b>What to watch:</b> a sharp re-inversion combined with falling employment would be the most reliable alarm signal in this panel."><b>Qué vigilar:</b> una reinversión brusca combinada con caída de empleo sería la señal de alarma más fiable del panel.</p>
+            <div class="tb-source" data-en="Source: FRED, Federal Reserve Bank of St. Louis">Fuente: FRED, Reserva Federal de San Luis</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 2. INFLACIÓN -->
+  <section class="theme">
+    <div class="theme-head">
+      <svg aria-hidden="true" focusable="false" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg>
+      <span class="theme-num">02</span><h2 data-en="Inflation">Inflación</h2>
+    </div>
+    <p class="theme-why" data-en="Determines how much room central banks have to maneuver. Falling inflation opens the door to more rate cuts and liquidity, historically the best scenario for bitcoin and for stocks.">Determina el margen de maniobra de los bancos centrales. Inflación a la baja abre la puerta a más recortes de tipos y liquidez, el mejor escenario histórico para bitcoin y para las bolsas.</p>
+    <div class="tiles">
+
+      <div class="tile" tabindex="0" id="t-cpigeneral" role="button" aria-expanded="false" data-type="rezagado" data-channel="inflacion" aria-label="CPI general interanual, tocar para más detalle" data-en-aria="Headline CPI year-on-year, tap for more detail">
+        <div class="tile-inner">
+          <div class="tile-face tile-front">
+            <div class="t-label" data-en="Headline CPI, year-on-year (U.S., Jul. 2026)">CPI general interanual (EE.UU., jul. 2026)</div>
+            <div class="t-value">3.4%</div>
+            <div class="t-delta" data-en="Down from 3.5% in June, +0.1% month-on-month">Baja desde 3.5% en junio, +0.1% mensual</div>
+            <div class="meter">
+              <div class="meter-track"><div class="meter-fill warning" style="left:0;width:42.5%"></div><div class="meter-tick" style="left:25%"></div></div>
+              <div class="meter-labels"><span>0%</span><span data-en="2% target">objetivo 2%</span><span>8%</span></div>
+            </div>
+            <span class="badge warning" data-en="⚠ Watch">⚠ Vigilar</span>
+            <div class="flip-hint"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span data-en="More detail">Más detalle</span></div>
+          </div>
+          <div class="tile-face tile-back">
+            <div class="tb-label" data-en="Headline CPI">CPI general</div>
+            <div class="tb-value" data-en="3.4% year-on-year">3.4% interanual</div>
+            <div class="horizon">
+              <div class="horizon-track">
+                <div class="horizon-seg active rezagado"></div>
+                <div class="horizon-seg coincidente"></div>
+                <div class="horizon-seg adelantado"></div>
+                <div class="horizon-seg evento"></div>
+              </div>
+              <div class="horizon-labels">
+                <span class="hz-label active" data-en="Confirms">Confirma</span><span class="hz-label" data-en="Now">Ahora</span><span class="hz-label" data-en="Anticipates">Anticipa</span><span class="hz-label" data-en="Event">Evento</span>
+              </div>
+            </div>
+            <div class="tb-channel" data-en="Channel: inflation expectations">Canal: expectativas de inflación</div>
+            <div class="tb-cadence" data-en="Cadence: monthly release · next reading (August) mid-September 2026">Cadencia: publicación mensual · próximo dato (agosto) a mediados de septiembre 2026</div>
+            <p class="tb-body" data-en="The Fed's formal target is 2% year-on-year. Sitting at 3.4% with two straight months of decline is the combination the market likes most: inflation easing without slamming the brakes on the economy, driven by falling energy prices.">El objetivo formal de la Fed es 2% interanual. Estar en 3.4% con dos meses seguidos de descenso es la combinación que más gusta al mercado: inflación cediendo sin frenar la economía de golpe, empujada por la caída de precios de la energía.</p>
+            <p class="tb-watch" data-en-html="<b>What to watch:</b> a rebound above 4% would force rate cuts off the table in the short term."><b>Qué vigilar:</b> un repunte por encima del 4% obligaría a descartar recortes de tipos a corto plazo.</p>
+            <div class="tb-source" data-en="Source: Trading Economics / BLS">Fuente: Trading Economics / BLS</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile" tabindex="0" id="t-cpisub" role="button" aria-expanded="false" data-type="rezagado" data-channel="inflacion" aria-label="CPI subyacente interanual, tocar para más detalle" data-en-aria="Core CPI year-on-year, tap for more detail">
+        <div class="tile-inner">
+          <div class="tile-face tile-front">
+            <div class="t-label" data-en="Core CPI, year-on-year (excludes energy &amp; food)">CPI subyacente interanual (excluye energía y alimentos)</div>
+            <div class="t-value">2.5%</div>
+            <div class="t-delta" data-en="Down from 2.6% in June, +0.2% month-on-month">Baja desde 2.6% en junio, +0.2% mensual</div>
+            <div class="meter">
+              <div class="meter-track"><div class="meter-fill warning" style="left:0;width:31.3%"></div><div class="meter-tick" style="left:25%"></div></div>
+              <div class="meter-labels"><span>0%</span><span data-en="2% target">objetivo 2%</span><span>8%</span></div>
+            </div>
+            <span class="badge warning" data-en="⚠ Watch">⚠ Vigilar</span>
+            <div class="flip-hint"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span data-en="More detail">Más detalle</span></div>
+          </div>
+          <div class="tile-face tile-back">
+            <div class="tb-label" data-en="Core CPI">CPI subyacente</div>
+            <div class="tb-value" data-en="2.5% year-on-year">2.5% interanual</div>
+            <div class="horizon">
+              <div class="horizon-track">
+                <div class="horizon-seg active rezagado"></div>
+                <div class="horizon-seg coincidente"></div>
+                <div class="horizon-seg adelantado"></div>
+                <div class="horizon-seg evento"></div>
+              </div>
+              <div class="horizon-labels">
+                <span class="hz-label active" data-en="Confirms">Confirma</span><span class="hz-label" data-en="Now">Ahora</span><span class="hz-label" data-en="Anticipates">Anticipa</span><span class="hz-label" data-en="Event">Evento</span>
+              </div>
+            </div>
+            <div class="tb-channel" data-en="Channel: inflation expectations">Canal: expectativas de inflación</div>
+            <div class="tb-cadence" data-en="Cadence: monthly release · next reading (August) mid-September 2026">Cadencia: publicación mensual · próximo dato (agosto) a mediados de septiembre 2026</div>
+            <p class="tb-body" data-en="It excludes energy and food, the most volatile items, which is why the Fed uses it as its underlying gauge. Dropping from 2.6% to 2.5% reinforces the case that structural inflation is still on its way to target, if slowly.">Excluye energía y alimentos, las partidas más volátiles, por eso la Fed lo usa como termómetro de fondo. Que baje de 2.6% a 2.5% refuerza la tesis de que la inflación estructural sigue camino al objetivo, aunque a ritmo lento.</p>
+            <p class="tb-watch" data-en-html="<b>What to watch:</b> if it diverges upward while the headline figure falls, that would signal the improvement is only about energy, not structural."><b>Qué vigilar:</b> si diverge al alza mientras el general baja, sería señal de que la mejora es solo por energía, no estructural.</p>
+            <div class="tb-source" data-en="Source: Trading Economics / BLS">Fuente: Trading Economics / BLS</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 3. LIQUIDEZ GLOBAL -->
+  <section class="theme">
+    <div class="theme-head">
+      <svg aria-hidden="true" focusable="false" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2s7 8.5 7 13a7 7 0 1 1-14 0c0-4.5 7-13 7-13z"/></svg>
+      <span class="theme-num">03</span><h2 data-en="Global liquidity">Liquidez global</h2>
+    </div>
+    <p class="theme-why" data-en="Of all liquid assets, crypto is the most sensitive to global liquidity: more dollars in circulation chasing returns tends to inflate both bitcoin and stock market multiples.">Cripto es, de todos los activos líquidos, el más sensible a la liquidez global: más dólares en circulación buscando rentabilidad tienden a inflar tanto bitcoin como los múltiplos bursátiles.</p>
+    <div class="tiles">
+
+      <div class="tile" tabindex="0" id="t-balancefed" role="button" aria-expanded="false" data-type="adelantado" data-channel="liquidez" aria-label="Balance de la Reserva Federal, tocar para más detalle" data-en-aria="Federal Reserve balance sheet, tap for more detail">
+        <div class="tile-inner">
+          <div class="tile-face tile-front">
+            <div class="t-label" data-en="Federal Reserve balance sheet">Balance de la Reserva Federal</div>
+            <div class="t-value" data-en="Expansion (reserve purchases)">Expansión (RMP)</div>
+            <div class="t-delta" data-en="QT ended in December 2025 after draining $2.4 trillion since 2022">Fin del QT en diciembre 2025 tras drenar 2.4 billones $ desde 2022</div>
+            <div class="meter">
+              <div class="meter-track"><div class="meter-fill good" style="left:0;width:83%"></div><div class="meter-marker" style="left:83%"></div></div>
+              <div class="meter-labels"><span>QT</span><span>Neutral</span><span>QE</span></div>
+            </div>
+            <span class="badge good" data-en="● Favorable">● Favorable</span>
+            <div class="flip-hint"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span data-en="More detail">Más detalle</span></div>
+          </div>
+          <div class="tile-face tile-back">
+            <div class="tb-label" data-en="Fed balance sheet">Balance de la Fed</div>
+            <div class="tb-value" data-en="Expansion (reserve purchases)">Expansión (RMP)</div>
+            <div class="horizon">
+              <div class="horizon-track">
+                <div class="horizon-seg rezagado"></div>
+                <div class="horizon-seg coincidente"></div>
+                <div class="horizon-seg active adelantado"></div>
+                <div class="horizon-seg evento"></div>
+              </div>
+              <div class="horizon-labels">
+                <span class="hz-label" data-en="Confirms">Confirma</span><span class="hz-label" data-en="Now">Ahora</span><span class="hz-label active" data-en="Anticipates">Anticipa</span><span class="hz-label" data-en="Event">Evento</span>
+              </div>
+            </div>
+            <div class="tb-channel" data-en="Channel: cost of capital &amp; liquidity">Canal: coste de capital y liquidez</div>
+            <div class="tb-cadence" data-en="Cadence: weekly, every Thursday (Fed's H.4.1 report)">Cadencia: semanal, cada jueves (informe H.4.1 de la Fed)</div>
+            <p class="tb-body" data-en="Between 2022 and 2025 the Fed shrank its balance sheet by $2.4 trillion (QT), draining liquidity. Since December 2025 it has been buying short-term Treasury bills to keep reserves &quot;ample,&quot; in practice a liquidity injection even though Powell avoided calling it QE.">Entre 2022 y 2025 la Fed redujo su balance en 2.4 billones de dólares (QT), drenando liquidez. Desde diciembre de 2025 compra letras del Tesoro a corto plazo para mantener reservas "amplias", en la práctica una inyección de liquidez aunque Powell evitara llamarlo QE.</p>
+            <p class="tb-watch" data-en-html="<b>What to watch:</b> the weekly pace of these purchases is a leading indicator of how much extra liquidity is entering the system."><b>Qué vigilar:</b> el ritmo semanal de estas compras (RMP) es un indicador adelantado de cuánta liquidez extra entra al sistema.</p>
+            <div class="tb-source" data-en="Source: International Banker / Federal Reserve">Fuente: International Banker / Reserva Federal</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile" tabindex="0" id="t-m2" role="button" aria-expanded="false" data-type="adelantado" data-channel="liquidez" aria-label="Oferta monetaria M2, tocar para más detalle" data-en-aria="M2 money supply, tap for more detail">
+        <div class="tile-inner">
+          <div class="tile-face tile-front">
+            <div class="t-label" data-en="M2 money supply (U.S.)">Oferta monetaria M2 (EE.UU.)</div>
+            <div class="t-value" data-en="$22.6 trillion">22.6 billones $</div>
+            <div class="t-delta" data-en="+4.8% year-on-year, all-time high">+4.8% interanual, máximo histórico</div>
+            <div class="meter">
+              <div class="meter-track"><div class="meter-fill good" style="left:0;width:48%"></div><div class="meter-tick" style="left:60%"></div></div>
+              <div class="meter-labels"><span>0%</span><span data-en="avg 6%">media 6%</span><span>10%</span></div>
+            </div>
+            <span class="badge good" data-en="● Favorable">● Favorable</span>
+            <div class="flip-hint"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span data-en="More detail">Más detalle</span></div>
+          </div>
+          <div class="tile-face tile-back">
+            <div class="tb-label" data-en="M2 (U.S.)">M2 (EE.UU.)</div>
+            <div class="tb-value" data-en="$22.6 trillion, +4.8%">22.6 billones $, +4.8%</div>
+            <div class="horizon">
+              <div class="horizon-track">
+                <div class="horizon-seg rezagado"></div>
+                <div class="horizon-seg coincidente"></div>
+                <div class="horizon-seg active adelantado"></div>
+                <div class="horizon-seg evento"></div>
+              </div>
+              <div class="horizon-labels">
+                <span class="hz-label" data-en="Confirms">Confirma</span><span class="hz-label" data-en="Now">Ahora</span><span class="hz-label active" data-en="Anticipates">Anticipa</span><span class="hz-label" data-en="Event">Evento</span>
+              </div>
+            </div>
+            <div class="tb-channel" data-en="Channel: cost of capital &amp; liquidity">Canal: coste de capital y liquidez</div>
+            <div class="tb-cadence" data-en="Cadence: monthly release, with a 5-6 week lag">Cadencia: publicación mensual, con 5-6 semanas de retraso</div>
+            <p class="tb-body" data-en="M2 measures cash, deposits, and very short-term funds in circulation: it is the ammunition available to buy assets. 4.8% year-on-year growth with the level at a record high is one of the most bullish signals in this panel for bitcoin, which tends to move 3-6 months behind M2.">El M2 mide efectivo, depósitos y fondos de muy corto plazo en circulación: es la munición disponible para comprar activos. Un crecimiento del 4.8% interanual con el nivel en récord histórico es una de las señales más alcistas del panel para bitcoin, que suele moverse con 3-6 meses de retraso respecto al M2.</p>
+            <p class="tb-watch" data-en-html="<b>What to watch:</b> acceleration above 6-7% tends to coincide with phases of strong risk appetite."><b>Qué vigilar:</b> una aceleración por encima del 6-7% suele coincidir con fases de apetito de riesgo fuerte.</p>
+            <div class="tb-source" data-en="Source: The Tradable">Fuente: The Tradable</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4. DÓLAR -->
+  <section class="theme">
+    <div class="theme-head">
+      <svg aria-hidden="true" focusable="false" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <span class="theme-num">04</span><h2 data-en="Dollar &amp; currencies">Dólar y divisas</h2>
+    </div>
+    <p class="theme-why" data-en="Bitcoin and gold trade as &quot;anti-dollar&quot; assets: a weak dollar tends to coincide with gains in crypto and commodities; a strong dollar drains global liquidity and pressures emerging markets.">Bitcoin y el oro cotizan como "anti-dólar": un dólar débil suele coincidir con subidas en cripto y materias primas; un dólar fuerte drena liquidez global y presiona a los mercados emergentes.</p>
+    <div class="tiles">
+
+      <div class="tile" tabindex="0" id="t-dxy" role="button" aria-expanded="false" data-type="coincidente" data-channel="riesgo" aria-label="Índice dólar DXY, tocar para más detalle" data-en-aria="Dollar index (DXY), tap for more detail">
+        <div class="tile-inner">
+          <div class="tile-face tile-front">
+            <div class="t-label" data-en="Dollar index (DXY)">Índice dólar (DXY)</div>
+            <div class="t-value">99.60</div>
+            <div class="t-delta" data-en="Essentially flat since Friday (-0.07%), still weak on the month and the year">Prácticamente plano desde el viernes (-0.07%), sigue débil en el mes y en el año</div>
+            <div class="meter">
+              <div class="meter-track"><div class="meter-fill good" style="left:0;width:48.0%"></div></div>
+              <div class="meter-labels"><span>90</span><span>110</span></div>
+            </div>
+            <span class="badge good" data-en="● Favorable">● Favorable</span>
+            <div class="flip-hint"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span data-en="More detail">Más detalle</span></div>
+          </div>
+          <div class="tile-face tile-back">
+            <div class="tb-label" data-en="DXY">DXY</div>
+            <div class="tb-value">99.60</div>
+            <div class="horizon">
+              <div class="horizon-track">
+                <div class="horizon-seg rezagado"></div>
+                <div class="horizon-seg active coincidente"></div>
+                <div class="horizon-seg adelantado"></div>
+                <div class="horizon-seg evento"></div>
+              </div>
+              <div class="horizon-labels">
+                <span class="hz-label" data-en="Confirms">Confirma</span><span class="hz-label active" data-en="Now">Ahora</span><span class="hz-label" data-en="Anticipates">Anticipa</span><span class="hz-label" data-en="Event">Evento</span>
+              </div>
+            </div>
+            <div class="tb-channel" data-en="Channel: risk appetite">Canal: apetito de riesgo</div>
+            <div class="tb-cadence" data-en="Cadence: real time">Cadencia: tiempo real</div>
+            <p class="tb-body" data-en="The DXY measures the dollar against a basket of six currencies, with the euro as the largest weight. Bitcoin, gold and commodities trade in dollars: a weak dollar amounts to a relative discount and tends to coincide with rallies. The past month's drop is the relevant part short term, even though the dollar is still positive on the year.">El DXY mide el dólar frente a una cesta de seis divisas, con el euro como mayor peso. Bitcoin, oro y materias primas cotizan en dólares: un dólar débil equivale a un abaratamiento relativo y suele coincidir con subidas. La caída del último mes es la parte relevante a corto plazo, aunque en el año el dólar sigue positivo.</p>
+            <p class="tb-watch" data-en-html="<b>What to watch:</b> a break below 97 would reinforce the weak-dollar narrative more durably."><b>Qué vigilar:</b> una ruptura por debajo de 97 reforzaría la narrativa de dólar débil de forma más duradera.</p>
+            <div class="tb-source" data-en="Source: Trading Economics">Fuente: Trading Economics</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 5. RIESGO / VOLATILIDAD -->
+  <section class="theme">
+    <div class="theme-head">
+      <svg aria-hidden="true" focusable="false" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span class="theme-num">05</span><h2 data-en="Risk sentiment &amp; volatility">Sentimiento de riesgo y volatilidad</h2>
+    </div>
+    <p class="theme-why" data-en="Measures the market's real-time risk appetite. Volatility spikes almost always hit crypto first and hardest, the highest-beta asset in the market.">Mide el apetito por el riesgo del mercado en tiempo real. Picos de volatilidad casi siempre golpean primero y con más fuerza a cripto, el activo de mayor beta del mercado.</p>
+    <div class="tiles">
+
+      <div class="tile" tabindex="0" id="t-vix" role="button" aria-expanded="false" data-type="coincidente" data-channel="riesgo" aria-label="VIX, tocar para más detalle" data-en-aria="VIX, tap for more detail">
+        <div class="tile-inner">
+          <div class="tile-face tile-front">
+            <div class="t-label" data-en="VIX (S&amp;P 500 implied volatility)">VIX (volatilidad implícita S&amp;P 500)</div>
+            <div class="t-value">15.19</div>
+            <div class="t-delta" data-en="Closed at 15.19 on Aug. 17, near this year&#39;s low despite the Iran crisis">Cierra en 15.19 el 17 de agosto, cerca del mínimo del año pese a la crisis con Irán</div>
+            <div class="meter">
+              <div class="meter-track"><div class="meter-fill good" style="left:0;width:38.0%"></div><div class="meter-tick" style="left:50%"></div></div>
+              <div class="meter-labels"><span>0</span><span data-en="fear 20">miedo 20</span><span>40</span></div>
+            </div>
+            <span class="badge good" data-en="● Favorable">● Favorable</span>
+            <div class="flip-hint"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span data-en="More detail">Más detalle</span></div>
+          </div>
+          <div class="tile-face tile-back">
+            <div class="tb-label" data-en="VIX">VIX</div>
+            <div class="tb-value">15.19</div>
+            <div class="horizon">
+              <div class="horizon-track">
+                <div class="horizon-seg rezagado"></div>
+                <div class="horizon-seg active coincidente"></div>
+                <div class="horizon-seg adelantado"></div>
+                <div class="horizon-seg evento"></div>
+              </div>
+              <div class="horizon-labels">
+                <span class="hz-label" data-en="Confirms">Confirma</span><span class="hz-label active" data-en="Now">Ahora</span><span class="hz-label" data-en="Anticipates">Anticipa</span><span class="hz-label" data-en="Event">Evento</span>
+              </div>
+            </div>
+            <div class="tb-channel" data-en="Channel: risk appetite">Canal: apetito de riesgo</div>
+            <div class="tb-cadence" data-en="Cadence: real time">Cadencia: tiempo real</div>
+            <p class="tb-body" data-en="Below 20 the market is in &quot;no fear&quot; mode; between 20 and 30 there is moderate nervousness; above 30 is panic (the historical peak was 82.7 in March 2020). The current level, near this year&#39;s low, is striking in the middle of the escalating Iran conflict: it suggests the stock market is not yet pricing in the geopolitical risk.">Por debajo de 20 el mercado está en modo "sin miedo"; entre 20 y 30 hay nerviosismo moderado; por encima de 30 es pánico (el pico histórico fue 82.7 en marzo de 2020). El nivel actual, cerca del mínimo del año, llama la atención en plena escalada del conflicto con Irán: sugiere que la bolsa aún no está descontando el riesgo geopolítico.</p>
+            <p class="tb-watch" data-en-html="<b>What to watch:</b> VIX spikes tend to coincide with bitcoin's biggest hourly drops; very low, sustained levels sometimes precede surprises because the market stops hedging."><b>Qué vigilar:</b> los picos de VIX suelen coincidir con las mayores caídas de bitcoin en horas; niveles muy bajos y sostenidos a veces preceden sorpresas porque el mercado deja de cubrirse.</p>
+            <div class="tb-source" data-en="Source: FRED, Federal Reserve Bank of St. Louis / Trading Economics">Fuente: FRED, Reserva Federal de San Luis / Trading Economics</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 6. CRIPTO ESPECÍFICO -->
+  <section class="theme">
+    <div class="theme-head">
+      <svg aria-hidden="true" focusable="false" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6.5"/><circle cx="15" cy="15" r="6.5"/></svg>
+      <span class="theme-num">06</span><h2 data-en="Crypto: market structure">Cripto: estructura de mercado</h2>
+    </div>
+    <p class="theme-why" data-en="Beyond general macro, crypto has its own gauges of institutional money flow and how capital is distributed within the sector itself.">Además de la macro general, cripto tiene sus propios termómetros de flujo de dinero institucional y de reparto de capital dentro del propio sector.</p>
+    <div class="tiles">
+
+      <div class="tile" tabindex="0" id="t-dominancia" role="button" aria-expanded="false" data-type="coincidente" data-channel="riesgo" aria-label="Dominancia de Bitcoin, tocar para más detalle" data-en-aria="Bitcoin dominance, tap for more detail">
+        <div class="tile-inner">
+          <div class="tile-face tile-front">
+            <div class="t-label" data-en="Bitcoin dominance">Dominancia de Bitcoin</div>
+            <div class="t-value">56.4%</div>
+            <div class="t-delta" data-en="Share of total crypto market capitalization">Sobre la capitalización total del mercado cripto</div>
+            <div class="meter">
+              <div class="meter-track"><div class="meter-fill neutral" style="left:0;width:56.4%"></div><div class="meter-tick" style="left:50%"></div></div>
+              <div class="meter-labels"><span>0%</span><span>50%</span><span>100%</span></div>
+            </div>
+            <span class="badge neutral" data-en="○ Informational">○ Informativo</span>
+            <div class="flip-hint"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span data-en="More detail">Más detalle</span></div>
+          </div>
+          <div class="tile-face tile-back">
+            <div class="tb-label" data-en="BTC dominance">Dominancia BTC</div>
+            <div class="tb-value">56.4%</div>
+            <div class="horizon">
+              <div class="horizon-track">
+                <div class="horizon-seg rezagado"></div>
+                <div class="horizon-seg active coincidente"></div>
+                <div class="horizon-seg adelantado"></div>
+                <div class="horizon-seg evento"></div>
+              </div>
+              <div class="horizon-labels">
+                <span class="hz-label" data-en="Confirms">Confirma</span><span class="hz-label active" data-en="Now">Ahora</span><span class="hz-label" data-en="Anticipates">Anticipa</span><span class="hz-label" data-en="Event">Evento</span>
+              </div>
+            </div>
+            <div class="tb-channel" data-en="Channel: risk appetite (crypto)">Canal: apetito de riesgo (cripto)</div>
+            <div class="tb-cadence" data-en="Cadence: real time">Cadencia: tiempo real</div>
+            <p class="tb-body" data-en="When dominance rises, institutional capital enters through bitcoin first, the crypto asset considered the sector's &quot;safest&quot; bet. A sustained drop below 50% tends to coincide with &quot;altseason&quot; phases, where capital rotates into ether and altcoins chasing higher returns.">Cuando la dominancia sube, el capital institucional entra primero por bitcoin, el activo cripto considerado más "seguro" del sector. Una caída sostenida por debajo del 50% suele coincidir con fases de "altseason", donde el capital rota hacia ether y altcoins buscando más rentabilidad.</p>
+            <p class="tb-watch" data-en-html="<b>What to watch:</b> multi-week trend changes, not daily noise."><b>Qué vigilar:</b> cambios de tendencia de varias semanas, no el ruido diario.</p>
+            <div class="tb-source" data-en="Source: CoinGecko / CoinMarketCap">Fuente: CoinGecko / CoinMarketCap</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile" tabindex="0" id="t-etfflows" role="button" aria-expanded="false" data-type="coincidente" data-channel="riesgo" aria-label="Flujos ETF spot de bitcoin, tocar para más detalle" data-en-aria="Bitcoin spot ETF flows, tap for more detail">
+        <div class="tile-inner">
+          <div class="tile-face tile-front">
+            <div class="t-label" data-en="Bitcoin spot ETF net flows">Flujos netos ETF spot de bitcoin</div>
+            <div class="t-value" data-en="Mixed">Mixtos</div>
+            <div class="t-delta" data-en="+$853M week of Aug. 9, -$390M the following week; still the latest published figure">+853M$ semana del 9 ago., -390M$ la semana siguiente; sigue siendo el dato más reciente publicado</div>
+            <div class="meter">
+              <div class="meter-track"><div class="meter-center"></div><div class="meter-fill warning" style="left:30.5%;width:19.5%"></div></div>
+              <div class="meter-labels"><span data-en="Outflows">Salidas</span><span data-en="Inflows">Entradas</span></div>
+            </div>
+            <span class="badge warning" data-en="⚠ Watch">⚠ Vigilar</span>
+            <div class="flip-hint"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span data-en="More detail">Más detalle</span></div>
+          </div>
+          <div class="tile-face tile-back">
+            <div class="tb-label" data-en="BTC spot ETF flows">Flujos ETF spot BTC</div>
+            <div class="tb-value" data-en="-$390M (latest reading)">-390M$ (último dato)</div>
+            <div class="horizon">
+              <div class="horizon-track">
+                <div class="horizon-seg rezagado"></div>
+                <div class="horizon-seg active coincidente"></div>
+                <div class="horizon-seg adelantado"></div>
+                <div class="horizon-seg evento"></div>
+              </div>
+              <div class="horizon-labels">
+                <span class="hz-label" data-en="Confirms">Confirma</span><span class="hz-label active" data-en="Now">Ahora</span><span class="hz-label" data-en="Anticipates">Anticipa</span><span class="hz-label" data-en="Event">Evento</span>
+              </div>
+            </div>
+            <div class="tb-channel" data-en="Channel: risk appetite">Canal: apetito de riesgo</div>
+            <div class="tb-cadence" data-en="Cadence: daily, at U.S. market close">Cadencia: diaria, al cierre del mercado en EE.UU.</div>
+            <p class="tb-body" data-en="Bitcoin spot ETFs, led by BlackRock's IBIT, are today the main channel for regulated institutional money to enter. After weeks of strong inflows ($853M the week of August 9), a $390M weekly outflow does not break the trend on its own, but it is worth watching. At the time of this update, no more recent single-day or weekly figure had been published beyond this reading.">Los ETF spot de bitcoin, con IBIT de BlackRock a la cabeza, son hoy la vía principal de entrada de dinero institucional regulado. Tras semanas de entradas fuertes (853M$ la semana del 9 de agosto), una salida semanal de 390M$ no rompe la tendencia por sí sola, pero merece seguimiento. A fecha de esta actualización no se ha publicado un dato diario o semanal más reciente que este.</p>
+            <p class="tb-watch" data-en-html="<b>What to watch:</b> three or more straight days of net outflows tends to precede price corrections of between 5% and 15%."><b>Qué vigilar:</b> tres o más días seguidos de salidas netas suele preceder correcciones de precio de entre un 5% y un 15%.</p>
+            <div class="tb-source" data-en="Source: CoinDesk / Crypto Times">Fuente: CoinDesk / Crypto Times</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 7. EMPLEO Y CRECIMIENTO -->
+  <section class="theme">
+    <div class="theme-head">
+      <svg aria-hidden="true" focusable="false" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M2 13h20"/></svg>
+      <span class="theme-num">07</span><h2 data-en="Employment &amp; growth">Empleo y crecimiento</h2>
+    </div>
+    <p class="theme-why" data-en="The labor market is the variable that weighs most on the Fed's calendar alongside inflation. A sharp cooldown pulls rate cuts forward (positive for liquidity), but if it is too fast it signals recession risk (negative for risk appetite).">El mercado laboral es la variable que más pesa en el calendario de la Fed junto a la inflación. Un enfriamiento brusco adelanta recortes de tipos (positivo para liquidez), pero si es demasiado rápido señala riesgo de recesión (negativo para el apetito de riesgo).</p>
+    <div class="tiles">
+
+      <div class="tile" tabindex="0" id="t-paro" role="button" aria-expanded="false" data-type="rezagado" data-channel="liquidez" aria-label="Tasa de paro, tocar para más detalle" data-en-aria="Unemployment rate, tap for more detail">
+        <div class="tile-inner">
+          <div class="tile-face tile-front">
+            <div class="t-label" data-en="Unemployment rate (U.S., Jul. 2026)">Tasa de paro (EE.UU., jul. 2026)</div>
+            <div class="t-value">4.1%</div>
+            <div class="t-delta" data-en="Marginal change from the prior month">Cambio marginal respecto al mes anterior</div>
+            <div class="meter">
+              <div class="meter-track"><div class="meter-fill neutral" style="left:0;width:41%"></div><div class="meter-tick" style="left:40%"></div></div>
+              <div class="meter-labels"><span>0%</span><span data-en="full employment 4%">pleno empleo 4%</span><span>10%</span></div>
+            </div>
+            <span class="badge neutral" data-en="○ Informational">○ Informativo</span>
+            <div class="flip-hint"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span data-en="More detail">Más detalle</span></div>
+          </div>
+          <div class="tile-face tile-back">
+            <div class="tb-label" data-en="Unemployment rate">Tasa de paro</div>
+            <div class="tb-value">4.1%</div>
+            <div class="horizon">
+              <div class="horizon-track">
+                <div class="horizon-seg active rezagado"></div>
+                <div class="horizon-seg coincidente"></div>
+                <div class="horizon-seg adelantado"></div>
+                <div class="horizon-seg evento"></div>
+              </div>
+              <div class="horizon-labels">
+                <span class="hz-label active" data-en="Confirms">Confirma</span><span class="hz-label" data-en="Now">Ahora</span><span class="hz-label" data-en="Anticipates">Anticipa</span><span class="hz-label" data-en="Event">Evento</span>
+              </div>
+            </div>
+            <div class="tb-channel" data-en="Channel: cost of capital &amp; liquidity">Canal: coste de capital y liquidez</div>
+            <div class="tb-cadence" data-en="Cadence: monthly release · next reading (August) early September 2026">Cadencia: publicación mensual · próximo dato (agosto) a principios de septiembre 2026</div>
+            <p class="tb-body" data-en="Below 4-4.5% is generally considered full employment in the U.S. The July reading is still in a historically low zone, so on its own it is not alarming.">Por debajo del 4-4.5% se suele considerar pleno empleo en EE.UU. El dato de julio sigue en zona históricamente baja, así que por sí solo no es alarmante.</p>
+            <p class="tb-watch" data-en-html="<b>What to watch:</b> combined with negative payrolls is where it starts to get concerning; two straight months of a sharp rise would be a recession signal."><b>Qué vigilar:</b> combinado con nóminas negativas es lo que empieza a preocupar; dos meses seguidos subiendo con fuerza sí sería señal de recesión.</p>
+            <div class="tb-source" data-en="Source: Bureau of Labor Statistics">Fuente: Bureau of Labor Statistics</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile" tabindex="0" id="t-nominas" role="button" aria-expanded="false" data-type="coincidente" data-channel="liquidez" aria-label="Nóminas no agrícolas, tocar para más detalle" data-en-aria="Nonfarm payrolls, tap for more detail">
+        <div class="tile-inner">
+          <div class="tile-face tile-front">
+            <div class="t-label" data-en="Nonfarm payrolls (U.S., Jul. 2026)">Nóminas no agrícolas (EE.UU., jul. 2026)</div>
+            <div class="t-value">-23.000</div>
+            <div class="t-delta" data-en="First drop of the year, in local education and retail trade">Primera caída del año, en educación local y comercio minorista</div>
+            <div class="meter">
+              <div class="meter-track"><div class="meter-center"></div><div class="meter-fill serious" style="left:42.3%;width:7.7%"></div></div>
+              <div class="meter-labels"><span data-en="Job losses">Destrucción</span><span data-en="Job gains">Creación</span></div>
+            </div>
+            <span class="badge serious" data-en="▲ Tension">▲ Tensión</span>
+            <div class="flip-hint"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span data-en="More detail">Más detalle</span></div>
+          </div>
+          <div class="tile-face tile-back">
+            <div class="tb-label" data-en="Nonfarm payrolls">Nóminas no agrícolas</div>
+            <div class="tb-value">-23.000</div>
+            <div class="horizon">
+              <div class="horizon-track">
+                <div class="horizon-seg rezagado"></div>
+                <div class="horizon-seg active coincidente"></div>
+                <div class="horizon-seg adelantado"></div>
+                <div class="horizon-seg evento"></div>
+              </div>
+              <div class="horizon-labels">
+                <span class="hz-label" data-en="Confirms">Confirma</span><span class="hz-label active" data-en="Now">Ahora</span><span class="hz-label" data-en="Anticipates">Anticipa</span><span class="hz-label" data-en="Event">Evento</span>
+              </div>
+            </div>
+            <div class="tb-channel" data-en="Channel: cost of capital &amp; liquidity">Canal: coste de capital y liquidez</div>
+            <div class="tb-cadence" data-en="Cadence: monthly release · next reading (August) early September 2026">Cadencia: publicación mensual · próximo dato (agosto) a principios de septiembre 2026</div>
+            <p class="tb-body" data-en="Measures net jobs created or lost each month outside the farm sector. July's drop is the first of the year, concentrated in sectors sensitive to public spending and consumption.">Miden el empleo neto creado o destruido cada mes fuera del sector agrícola. La caída de julio es la primera del año, concentrada en sectores sensibles al gasto público y al consumo.</p>
+            <p class="tb-watch" data-en-html="<b>What to watch:</b> if a negative reading repeats in August or September, the market will start pricing in cuts driven by real weakness, a more ambiguous scenario for risk than cuts driven by falling inflation."><b>Qué vigilar:</b> si se repite un dato negativo en agosto o septiembre, el mercado empezará a descontar recortes por debilidad real, un escenario más ambiguo para el riesgo que unos recortes por inflación a la baja.</p>
+            <div class="tb-source" data-en="Source: Bureau of Labor Statistics">Fuente: Bureau of Labor Statistics</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile" tabindex="0" id="t-pmi" role="button" aria-expanded="false" data-type="adelantado" data-channel="riesgo" aria-label="ISM PMI manufacturero, tocar para más detalle" data-en-aria="ISM Manufacturing PMI, tap for more detail">
+        <div class="tile-inner">
+          <div class="tile-face tile-front">
+            <div class="t-label" data-en="ISM Manufacturing PMI (U.S., Jul. 2026)">ISM PMI manufacturero (EE.UU., jul. 2026)</div>
+            <div class="t-value">55.6</div>
+            <div class="t-delta" data-en="Above 50 = expansion">Por encima de 50 = expansión</div>
+            <div class="meter">
+              <div class="meter-track"><div class="meter-fill good" style="left:0;width:55.6%"></div><div class="meter-tick" style="left:50%"></div></div>
+              <div class="meter-labels"><span>0</span><span>50</span><span>100</span></div>
+            </div>
+            <span class="badge good" data-en="● Favorable">● Favorable</span>
+            <div class="flip-hint"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span data-en="More detail">Más detalle</span></div>
+          </div>
+          <div class="tile-face tile-back">
+            <div class="tb-label" data-en="ISM Manufacturing PMI">ISM PMI manufacturero</div>
+            <div class="tb-value">55.6</div>
+            <div class="horizon">
+              <div class="horizon-track">
+                <div class="horizon-seg rezagado"></div>
+                <div class="horizon-seg coincidente"></div>
+                <div class="horizon-seg active adelantado"></div>
+                <div class="horizon-seg evento"></div>
+              </div>
+              <div class="horizon-labels">
+                <span class="hz-label" data-en="Confirms">Confirma</span><span class="hz-label" data-en="Now">Ahora</span><span class="hz-label active" data-en="Anticipates">Anticipa</span><span class="hz-label" data-en="Event">Evento</span>
+              </div>
+            </div>
+            <div class="tb-channel" data-en="Channel: risk appetite">Canal: apetito de riesgo</div>
+            <div class="tb-cadence" data-en="Cadence: monthly release · next reading (August) early September 2026">Cadencia: publicación mensual · próximo dato (agosto) a principios de septiembre 2026</div>
+            <p class="tb-body" data-en="Above 50 manufacturing is in expansion; below, in contraction. July's 55.6 is a solid reading and contrasts with the weak payrolls print, a divergence typical of economic transition phases.">Por encima de 50 el sector manufacturero está en expansión; por debajo, en contracción. El 55.6% de julio es una lectura sólida y contrasta con el dato débil de nóminas, una divergencia típica de fases de transición económica.</p>
+            <p class="tb-watch" data-en-html="<b>What to watch:</b> if it falls below 50 while employment stays weak, the market would start talking openly about recession."><b>Qué vigilar:</b> si cae por debajo de 50 mientras el empleo sigue débil, el mercado empezaría a hablar abiertamente de recesión.</p>
+            <div class="tb-source" data-en="Source: ISM">Fuente: ISM</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 8. MATERIAS PRIMAS -->
+  <section class="theme">
+    <div class="theme-head">
+      <svg aria-hidden="true" focusable="false" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>
+      <span class="theme-num">08</span><h2 data-en="Commodities (risk &amp; inflation proxy)">Materias primas (proxy de riesgo e inflación)</h2>
+    </div>
+    <p class="theme-why" data-en="Gold is the classic hedge against inflation and currency distrust, and it competes directly with bitcoin as a &quot;store of value&quot;. Oil is a direct input into future inflation.">El oro es el termómetro clásico de cobertura contra inflación y desconfianza en la divisa, y compite directamente con bitcoin como "reserva de valor". El petróleo es un input directo de la inflación futura.</p>
+    <div class="tiles">
+
+      <div class="tile" tabindex="0" id="t-oro" role="button" aria-expanded="false" data-type="coincidente" data-channel="inflacion" aria-label="Oro, tocar para más detalle" data-en-aria="Gold, tap for more detail">
+        <div class="tile-inner">
+          <div class="tile-face tile-front">
+            <div class="t-label" data-en="Gold (troy ounce)">Oro (onza troy)</div>
+            <div class="t-value" data-en="$4,397.00">4.397,00 $</div>
+            <div class="t-delta" data-en="+31.8% year to date, +10.70% this month">+31.8% en el año, +10.70% en el mes</div>
+            <div class="meter">
+              <div class="meter-track"><div class="meter-fill neutral" style="left:0;width:53.0%"></div></div>
+              <div class="meter-labels"><span>0%</span><span>+60% YTD</span></div>
+            </div>
+            <span class="badge neutral" data-en="○ Informational">○ Informativo</span>
+            <div class="flip-hint"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span data-en="More detail">Más detalle</span></div>
+          </div>
+          <div class="tile-face tile-back">
+            <div class="tb-label" data-en="Gold">Oro</div>
+            <div class="tb-value" data-en="$4,397.00/oz">4.397,00 $/oz</div>
+            <div class="horizon">
+              <div class="horizon-track">
+                <div class="horizon-seg rezagado"></div>
+                <div class="horizon-seg active coincidente"></div>
+                <div class="horizon-seg adelantado"></div>
+                <div class="horizon-seg evento"></div>
+              </div>
+              <div class="horizon-labels">
+                <span class="hz-label" data-en="Confirms">Confirma</span><span class="hz-label active" data-en="Now">Ahora</span><span class="hz-label" data-en="Anticipates">Anticipa</span><span class="hz-label" data-en="Event">Evento</span>
+              </div>
+            </div>
+            <div class="tb-channel" data-en="Channel: inflation expectations">Canal: expectativas de inflación</div>
+            <div class="tb-cadence" data-en="Cadence: real time">Cadencia: tiempo real</div>
+            <p class="tb-body" data-en="Gold competes with bitcoin for the same &quot;anti-dollar&quot; and currency-distrust hedging capital flow. This year's rally is driven by sustained central bank buying (China alone added around 20 tonnes in July), the softer inflation turn and, this week, safe-haven demand from the escalating Iran conflict.">El oro compite con bitcoin por el mismo flujo de capital "anti-dólar" y de cobertura frente a la desconfianza en la divisa. La subida del año está impulsada por compras sostenidas de bancos centrales (China sumó unas 20 toneladas solo en julio), el giro más suave de la inflación y, esta semana, la búsqueda de refugio ante la escalada del conflicto con Irán.</p>
+            <p class="tb-watch" data-en-html="<b>What to watch:</b> a slowdown in Asian central bank buying would be the first sign the rally is losing steam."><b>Qué vigilar:</b> una desaceleración de las compras de bancos centrales asiáticos sería la primera señal de que el rally pierde fuelle.</p>
+            <div class="tb-source" data-en="Source: Trading Economics">Fuente: Trading Economics</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile" tabindex="0" id="t-petroleo" role="button" aria-expanded="false" data-type="coincidente" data-channel="inflacion" aria-label="Petróleo Brent, tocar para más detalle" data-en-aria="Brent oil, tap for more detail">
+        <div class="tile-inner">
+          <div class="tile-face tile-front">
+            <div class="t-label" data-en="Brent oil">Petróleo Brent</div>
+            <div class="t-value" data-en="$91.34/barrel">91,34 $/barril</div>
+            <div class="t-delta" data-en="+2.7% since Monday, a multi-week high on the Iran-Hormuz escalation">+2.7% desde el lunes, máximo de varias semanas por la escalada Irán-Ormuz</div>
+            <div class="meter">
+              <div class="meter-track"><div class="meter-fill warning" style="left:0;width:51.3%"></div></div>
+              <div class="meter-labels"><span data-en="$40">40$</span><span data-en="$140">140$</span></div>
+            </div>
+            <span class="badge warning" data-en="⚠ Watch">⚠ Vigilar</span>
+            <div class="flip-hint"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span data-en="More detail">Más detalle</span></div>
+          </div>
+          <div class="tile-face tile-back">
+            <div class="tb-label" data-en="Brent oil">Petróleo Brent</div>
+            <div class="tb-value" data-en="$91.34/barrel">91,34 $/barril</div>
+            <div class="horizon">
+              <div class="horizon-track">
+                <div class="horizon-seg rezagado"></div>
+                <div class="horizon-seg active coincidente"></div>
+                <div class="horizon-seg adelantado"></div>
+                <div class="horizon-seg evento"></div>
+              </div>
+              <div class="horizon-labels">
+                <span class="hz-label" data-en="Confirms">Confirma</span><span class="hz-label active" data-en="Now">Ahora</span><span class="hz-label" data-en="Anticipates">Anticipa</span><span class="hz-label" data-en="Event">Evento</span>
+              </div>
+            </div>
+            <div class="tb-channel" data-en="Channel: inflation expectations">Canal: expectativas de inflación</div>
+            <div class="tb-cadence" data-en="Cadence: real time">Cadencia: tiempo real</div>
+            <p class="tb-body" data-en="Oil is a direct input into CPI: diesel and gasoline rise, inflation rises one or two months later. At $91.34 it is climbing hard this week on the escalating U.S.-Iran conflict: the memorandum of understanding expired without a deal on August 17 and there are reported strikes in the Strait of Hormuz, a key chokepoint for crude shipping.">El petróleo es un input directo del CPI: sube el diésel y la gasolina, sube la inflación con uno o dos meses de retraso. En 91.34 dólares sube con fuerza esta semana por la escalada del conflicto entre EE.UU. e Irán: venció el memorando de entendimiento sin acuerdo el 17 de agosto y hay ataques reportados en el estrecho de Ormuz, un cuello de botella clave del transporte marítimo de crudo.</p>
+            <p class="tb-watch" data-en-html="<b>What to watch:</b> actual ship traffic through the Strait of Hormuz (already well below normal) and whether the price approaches $100-110, which would reactivate the inflation narrative."><b>Qué vigilar:</b> el tráfico real de buques por el estrecho de Ormuz (ya muy por debajo de lo normal) y si el precio se acerca a 100-110 dólares, lo que reactivaría el discurso de inflación.</p>
+            <div class="tb-source" data-en="Source: Forbes Advisor / Trading Economics">Fuente: Forbes Advisor / Trading Economics</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 9. REGULACIÓN Y CALENDARIO POLÍTICO -->
+  <section class="theme">
+    <div class="theme-head">
+      <svg aria-hidden="true" focusable="false" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M5 7h14"/><path d="M5 7l-3 6h6l-3-6z"/><path d="M19 7l-3 6h6l-3-6z"/><path d="M8 21h8"/></svg>
+      <span class="theme-num">09</span><h2 data-en="Regulation &amp; political calendar">Regulación y calendario político</h2>
+    </div>
+    <p class="theme-why" data-en="More than any other asset in this panel, crypto remains sensitive to one-off regulatory decisions that can move the market within hours.">Cripto sigue siendo, más que ningún otro activo del panel, sensible a decisiones regulatorias puntuales que pueden mover el mercado en cuestión de horas.</p>
+    <div class="tiles">
+
+      <div class="tile" tabindex="0" id="t-powell" role="button" aria-expanded="false" data-type="evento" data-channel="institucional" aria-label="Fin del mandato de Powell, tocar para más detalle" data-en-aria="End of Powell's term at the Fed, tap for more detail">
+        <div class="tile-inner">
+          <div class="tile-face tile-front">
+            <div class="t-label" data-en="End of Jerome Powell's term">Fin del mandato de Jerome Powell</div>
+            <div class="t-value" data-en="May 15, 2026">15 mayo 2026</div>
+            <div class="t-delta" data-en="Already happened this year">Ya ocurrido este año</div>
+            <div class="qual-icon-row"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg></div>
+            <span class="badge neutral" data-en="○ Informational">○ Informativo</span>
+            <div class="flip-hint"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span data-en="More detail">Más detalle</span></div>
+          </div>
+          <div class="tile-face tile-back">
+            <div class="tb-label" data-en="Fed transition">Transición en la Fed</div>
+            <div class="tb-value" data-en="May 15, 2026">15 mayo 2026</div>
+            <div class="horizon">
+              <div class="horizon-track">
+                <div class="horizon-seg rezagado"></div>
+                <div class="horizon-seg coincidente"></div>
+                <div class="horizon-seg adelantado"></div>
+                <div class="horizon-seg active evento"></div>
+              </div>
+              <div class="horizon-labels">
+                <span class="hz-label" data-en="Confirms">Confirma</span><span class="hz-label" data-en="Now">Ahora</span><span class="hz-label" data-en="Anticipates">Anticipa</span><span class="hz-label active" data-en="Event">Evento</span>
+              </div>
+            </div>
+            <div class="tb-channel" data-en="Channel: institutional shock">Canal: shock institucional</div>
+            <div class="tb-cadence" data-en="Cadence: one-off event, already happened (May 2026)">Cadencia: evento puntual, ya ocurrido (mayo 2026)</div>
+            <p class="tb-body" data-en="A successor seen as more favorable to cutting rates is expected, which the market usually reads as positive for risk assets short term, but it introduces the risk that Fed independence is perceived as weaker, which has historically pushed up long-term risk premia. Warsh has kept a deliberately sparse communication style in his early appearances, adding uncertainty ahead of Jackson Hole.">Se espera un sucesor con perfil más favorable a bajar tipos, lo que el mercado suele leer como positivo para activos de riesgo a corto plazo, pero introduce el riesgo de que la independencia de la Fed se perciba más débil, algo que históricamente presiona al alza las primas de riesgo a largo plazo. Warsh ha mantenido un perfil de comunicación deliberadamente parco en sus primeras comparecencias, lo que añade incertidumbre de cara a Jackson Hole.</p>
+            <p class="tb-watch" data-en-html="<b>What to watch:</b> Warsh&#39;s first speech as chair at the Jackson Hole Symposium (Aug. 27-29, 2026) will set the tone for the years ahead."><b>Qué vigilar:</b> el primer discurso de Warsh como presidente en el Jackson Hole Symposium (27-29 de agosto de 2026) marcará el tono de los próximos años.</p>
+            <div class="tb-source" data-en="Source: official Federal Reserve calendar">Fuente: calendario oficial de la Reserva Federal</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile" tabindex="0" id="t-genius" role="button" aria-expanded="false" data-type="evento" data-channel="institucional" aria-label="Ley GENIUS, tocar para más detalle" data-en-aria="GENIUS Act, tap for more detail">
+        <div class="tile-inner">
+          <div class="tile-face tile-front">
+            <div class="t-label" data-en="GENIUS Act (stablecoin regulation)">Ley GENIUS (regulación de stablecoins)</div>
+            <div class="t-value" data-en="In public comment period">En consulta pública</div>
+            <div class="t-delta" data-en="Treasury publishes its proposed rule on Aug. 19, 60-day public comment period">El Tesoro publica su propuesta normativa el 19 de agosto, 60 días de comentario público</div>
+            <div class="qual-icon-row"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M5 7h14"/><path d="M5 7l-3 6h6l-3-6z"/><path d="M19 7l-3 6h6l-3-6z"/><path d="M8 21h8"/></svg></div>
+            <span class="badge good" data-en="● Favorable">● Favorable</span>
+            <div class="flip-hint"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span data-en="More detail">Más detalle</span></div>
+          </div>
+          <div class="tile-face tile-back">
+            <div class="tb-label" data-en="GENIUS Act">Ley GENIUS</div>
+            <div class="tb-value" data-en="In public comment period">En consulta pública</div>
+            <div class="horizon">
+              <div class="horizon-track">
+                <div class="horizon-seg rezagado"></div>
+                <div class="horizon-seg coincidente"></div>
+                <div class="horizon-seg adelantado"></div>
+                <div class="horizon-seg active evento"></div>
+              </div>
+              <div class="horizon-labels">
+                <span class="hz-label" data-en="Confirms">Confirma</span><span class="hz-label" data-en="Now">Ahora</span><span class="hz-label" data-en="Anticipates">Anticipa</span><span class="hz-label active" data-en="Event">Evento</span>
+              </div>
+            </div>
+            <div class="tb-channel" data-en="Channel: institutional shock">Canal: shock institucional</div>
+            <div class="tb-cadence" data-en="Cadence: as regulatory progress happens, no fixed calendar · next milestone: comment period ends October 2026, effective Jan. 18, 2027">Cadencia: según avance regulatorio, sin calendario fijo · próximo hito: fin del plazo de comentarios en octubre 2026, entrada en vigor 18 enero 2027</div>
+            <p class="tb-body" data-en="Regulates stablecoins at the federal level in the U.S. for the first time: issuer licensing, capital, custody and anti-money-laundering rules. On August 19 the Treasury published its proposed rule on when a stablecoin is considered &quot;issued&quot; in the U.S. and when a provider is &quot;offering or selling&quot; it, with a 60-day public comment period before it takes full effect on January 18, 2027.">Regula por primera vez de forma federal las stablecoins en EE.UU.: licencias de emisor, capital, custodia y normas antiblanqueo. El 19 de agosto el Tesoro publicó su propuesta normativa sobre cuándo una stablecoin se considera "emitida" en EE.UU. y cuándo un proveedor la está "ofreciendo o vendiendo", con 60 días de comentario público antes de la entrada en vigor definitiva el 18 de enero de 2027.</p>
+            <p class="tb-watch" data-en-html="<b>What to watch:</b> the volume and tone of public comments, and whether foreign issuers secure reciprocity arrangements before the July 2028 deadline."><b>Qué vigilar:</b> el volumen y tono de los comentarios públicos, y si los emisores extranjeros logran acuerdos de reciprocidad antes del plazo de julio de 2028.</p>
+            <div class="tb-source" data-en="Source: U.S. Department of the Treasury / The Block">Fuente: Departamento del Tesoro de EE.UU. / The Block</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile" tabindex="0" id="t-clarity" role="button" aria-expanded="false" data-type="evento" data-channel="institucional" aria-label="Ley de estructura de mercado, tocar para más detalle" data-en-aria="Market structure bill, tap for more detail">
+        <div class="tile-inner">
+          <div class="tile-face tile-front">
+            <div class="t-label" data-en="Market structure bill (Clarity / Parity Act)">Ley de estructura de mercado (Clarity / Parity Act)</div>
+            <div class="t-value" data-en="In progress">En tramitación</div>
+            <div class="t-delta" data-en="Senate opens the first procedural vote; a final vote could come in September">El Senado abre la primera votación procedimental; posible voto final en septiembre</div>
+            <div class="qual-icon-row"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M5 7h14"/><path d="M5 7l-3 6h6l-3-6z"/><path d="M19 7l-3 6h6l-3-6z"/><path d="M8 21h8"/></svg></div>
+            <span class="badge neutral" data-en="○ Informational">○ Informativo</span>
+            <div class="flip-hint"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span data-en="More detail">Más detalle</span></div>
+          </div>
+          <div class="tile-face tile-back">
+            <div class="tb-label" data-en="Clarity / Parity Act">Clarity / Parity Act</div>
+            <div class="tb-value" data-en="In progress">En tramitación</div>
+            <div class="horizon">
+              <div class="horizon-track">
+                <div class="horizon-seg rezagado"></div>
+                <div class="horizon-seg coincidente"></div>
+                <div class="horizon-seg adelantado"></div>
+                <div class="horizon-seg active evento"></div>
+              </div>
+              <div class="horizon-labels">
+                <span class="hz-label" data-en="Confirms">Confirma</span><span class="hz-label" data-en="Now">Ahora</span><span class="hz-label" data-en="Anticipates">Anticipa</span><span class="hz-label active" data-en="Event">Evento</span>
+              </div>
+            </div>
+            <div class="tb-channel" data-en="Channel: institutional shock">Canal: shock institucional</div>
+            <div class="tb-cadence" data-en="Cadence: on the Senate's legislative calendar">Cadencia: según calendario legislativo del Senado</div>
+            <p class="tb-body" data-en="Aims to end the SEC-CFTC turf dispute over which crypto assets are securities and which are commodities, the sector's biggest source of U.S. regulatory uncertainty since 2021. It already passed the House; on August 8 the Senate opened the first procedural stage of voting, giving the bill a real chance at a final vote in September.">Busca terminar con la disputa de competencias entre la SEC y la CFTC sobre qué activos cripto son valores y cuáles materias primas, la mayor fuente de incertidumbre regulatoria del sector en EE.UU. desde 2021. Ya pasó la Cámara de Representantes; el 8 de agosto el Senado abrió la primera fase procedimental de la votación, lo que da a la ley una oportunidad real de voto final en septiembre.</p>
+            <p class="tb-watch" data-en-html="<b>What to watch:</b> the outcome of the procedural vote and whether Senate leadership schedules the final vote before the November elections."><b>Qué vigilar:</b> el resultado de la votación procedimental y si el liderazgo del Senado programa el voto final antes de las elecciones de noviembre.</p>
+            <div class="tb-source" data-en="Source: DL News / CoinDesk">Fuente: DL News / CoinDesk</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile" tabindex="0" id="t-elecciones" role="button" aria-expanded="false" data-type="evento" data-channel="institucional" aria-label="Elecciones de medio mandato, tocar para más detalle" data-en-aria="Midterm elections, tap for more detail">
+        <div class="tile-inner">
+          <div class="tile-face tile-front">
+            <div class="t-label" data-en="U.S. midterm elections">Elecciones de medio mandato en EE.UU.</div>
+            <div class="t-value" data-en="November 3, 2026">3 noviembre 2026</div>
+            <div class="t-delta" data-en="Could flip control of Congress">Podrían cambiar el control del Congreso</div>
+            <div class="qual-icon-row"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg></div>
+            <span class="badge neutral" data-en="○ Informational">○ Informativo</span>
+            <div class="flip-hint"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span data-en="More detail">Más detalle</span></div>
+          </div>
+          <div class="tile-face tile-back">
+            <div class="tb-label" data-en="Midterm elections">Elecciones de medio mandato</div>
+            <div class="tb-value" data-en="November 3, 2026">3 noviembre 2026</div>
+            <div class="horizon">
+              <div class="horizon-track">
+                <div class="horizon-seg rezagado"></div>
+                <div class="horizon-seg coincidente"></div>
+                <div class="horizon-seg adelantado"></div>
+                <div class="horizon-seg active evento"></div>
+              </div>
+              <div class="horizon-labels">
+                <span class="hz-label" data-en="Confirms">Confirma</span><span class="hz-label" data-en="Now">Ahora</span><span class="hz-label" data-en="Anticipates">Anticipa</span><span class="hz-label active" data-en="Event">Evento</span>
+              </div>
+            </div>
+            <div class="tb-channel" data-en="Channel: institutional shock">Canal: shock institucional</div>
+            <div class="tb-cadence" data-en="Cadence: fixed event, November 3, 2026">Cadencia: evento fijo, 3 de noviembre de 2026</div>
+            <p class="tb-body" data-en="A change of majority in Congress could speed up or slam the brakes on the entire pending crypto regulatory agenda, Clarity/Parity Act included. Markets tend to price in this kind of event with more volatility in the weeks before, not just in crypto but across the broader stock market.">Un cambio de mayoría en el Congreso podría acelerar o frenar en seco toda la agenda regulatoria cripto en tramitación, Clarity/Parity Act incluida. Los mercados suelen anticipar este tipo de eventos con más volatilidad en las semanas previas, no solo en cripto sino en el conjunto de la bolsa.</p>
+            <p class="tb-watch" data-en-html="<b>What to watch:</b> voting-intention polls from September and October onward."><b>Qué vigilar:</b> encuestas de intención de voto a partir de septiembre y octubre.</p>
+            <div class="tb-source" data-en="Source: U.S. election calendar">Fuente: calendario electoral de EE.UU.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 10. GEOPOLÍTICA -->
+  <section class="theme">
+    <div class="theme-head">
+      <svg aria-hidden="true" focusable="false" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c3 3.5 3 14.5 0 18"/><path d="M12 3c-3 3.5-3 14.5 0 18"/></svg>
+      <span class="theme-num">10</span><h2 data-en="Geopolitics">Geopolítica</h2>
+    </div>
+    <p class="theme-why" data-en="Geopolitical shocks (wars, tariffs, sanctions) tend to trigger sharp, correlated moves across all risk assets at once, crypto included, and are the hardest to anticipate with data.">Los choques geopolíticos (guerras, aranceles, sanciones) suelen generar movimientos bruscos y correlacionados en todos los activos de riesgo a la vez, incluida cripto, y son los más difíciles de anticipar con datos.</p>
+    <div class="tiles">
+
+      <div class="tile" tabindex="0" id="t-aranceles" role="button" aria-expanded="false" data-type="evento" data-channel="inflacion" aria-label="Política comercial y aranceles, tocar para más detalle" data-en-aria="Trade policy & tariffs, tap for more detail">
+        <div class="tile-inner">
+          <div class="tile-face tile-front">
+            <div class="t-label" data-en="Trade policy &amp; tariffs">Política comercial y aranceles</div>
+            <div class="t-value" data-en="Active focus">Foco activo</div>
+            <div class="t-delta" data-en="Trump pauses the 50% Canada tariffs for 3 days as a deal is finalized">Trump pausa 3 días los aranceles del 50% a Canadá mientras se cierra un acuerdo</div>
+            <div class="qual-icon-row"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V3"/><path d="M4 4h14l-3 4 3 4H4"/></svg></div>
+            <span class="badge warning" data-en="⚠ Watch">⚠ Vigilar</span>
+            <div class="flip-hint"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span data-en="More detail">Más detalle</span></div>
+          </div>
+          <div class="tile-face tile-back">
+            <div class="tb-label" data-en="Tariffs &amp; trade">Aranceles y comercio</div>
+            <div class="tb-value" data-en="Active focus">Foco activo</div>
+            <div class="horizon">
+              <div class="horizon-track">
+                <div class="horizon-seg rezagado"></div>
+                <div class="horizon-seg coincidente"></div>
+                <div class="horizon-seg adelantado"></div>
+                <div class="horizon-seg active evento"></div>
+              </div>
+              <div class="horizon-labels">
+                <span class="hz-label" data-en="Confirms">Confirma</span><span class="hz-label" data-en="Now">Ahora</span><span class="hz-label" data-en="Anticipates">Anticipa</span><span class="hz-label active" data-en="Event">Evento</span>
+              </div>
+            </div>
+            <div class="tb-channel" data-en="Channel: inflation expectations">Canal: expectativas de inflación</div>
+            <div class="tb-cadence" data-en="Cadence: as trade-policy announcements happen, no fixed calendar">Cadencia: según anuncios de política comercial, sin calendario fijo</div>
+            <p class="tb-body" data-en="Tariffs make imported goods more expensive, which pushes CPI up and complicates the Fed's job of cutting rates without reigniting inflation. On August 18 Trump paused the planned 50% tariffs on Canadian goods for three days while both governments finalize a deal, the latest example of how these announcements generate one-off volatility.">Los aranceles encarecen bienes importados, lo que presiona al alza el CPI y complica el trabajo de la Fed para bajar tipos sin reavivar la inflación. El 18 de agosto Trump pausó durante tres días los aranceles del 50% previstos sobre bienes canadienses mientras ambos gobiernos cierran un acuerdo, el último ejemplo de cómo estos anuncios generan volatilidad puntual.</p>
+            <p class="tb-watch" data-en-html="<b>What to watch:</b> new tariff announcements tend to move bonds and currencies first, before stocks or crypto."><b>Qué vigilar:</b> los anuncios arancelarios nuevos suelen moverse primero en bonos y divisas antes que en bolsa o cripto.</p>
+            <div class="tb-source" data-en="Source: U.S. trade policy tracker / CBC News">Fuente: seguimiento de política comercial de EE.UU. / CBC News</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile" tabindex="0" id="t-conflictos" role="button" aria-expanded="false" data-type="evento" data-channel="institucional" aria-label="Conflictos y sanciones, tocar para más detalle" data-en-aria="Ongoing conflicts & sanctions, tap for more detail">
+        <div class="tile-inner">
+          <div class="tile-face tile-front">
+            <div class="t-label" data-en="Ongoing conflicts &amp; sanctions">Conflictos y sanciones en curso</div>
+            <div class="t-value" data-en="Active escalation (Iran)">Escalada activa (Irán)</div>
+            <div class="t-delta" data-en="US-Iran memorandum expires without a deal; strikes reported in the Strait of Hormuz">Vence el memorando EE.UU.-Irán sin acuerdo; ataques reportados en el estrecho de Ormuz</div>
+            <div class="qual-icon-row"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></div>
+            <span class="badge serious" data-en="▲ Tension">▲ Tensión</span>
+            <div class="flip-hint"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span data-en="More detail">Más detalle</span></div>
+          </div>
+          <div class="tile-face tile-back">
+            <div class="tb-label" data-en="Conflicts &amp; sanctions">Conflictos y sanciones</div>
+            <div class="tb-value" data-en="Active escalation (Iran)">Escalada activa (Irán)</div>
+            <div class="horizon">
+              <div class="horizon-track">
+                <div class="horizon-seg rezagado"></div>
+                <div class="horizon-seg coincidente"></div>
+                <div class="horizon-seg adelantado"></div>
+                <div class="horizon-seg active evento"></div>
+              </div>
+              <div class="horizon-labels">
+                <span class="hz-label" data-en="Confirms">Confirma</span><span class="hz-label" data-en="Now">Ahora</span><span class="hz-label" data-en="Anticipates">Anticipa</span><span class="hz-label active" data-en="Event">Evento</span>
+              </div>
+            </div>
+            <div class="tb-channel" data-en="Channel: institutional shock">Canal: shock institucional</div>
+            <div class="tb-cadence" data-en="Cadence: as geopolitical events happen, no fixed calendar">Cadencia: según eventos geopolíticos, sin calendario fijo</div>
+            <p class="tb-body" data-en="The 60-day US-Iran memorandum of understanding expired on August 17 without a lasting peace deal. Trump has ruled out extending it and says no talks are underway. The focus is on the Strait of Hormuz: ship traffic has fallen to a fraction of normal (28 crossings between Friday and Sunday versus a pre-war average of 130 a day), vessel strikes with fatalities have been reported, and the UAE detected Iranian ballistic missiles and suspended trade with Iran. It is the panel's first real acute geopolitical shock in weeks.">El memorando de entendimiento entre EE.UU. e Irán, vigente 60 días, venció el 17 de agosto sin un acuerdo de paz duradero. Trump ha descartado extenderlo y afirma que no hay conversaciones en marcha. El foco está en el estrecho de Ormuz: el tráfico de buques ha caído a una fracción de lo habitual (28 cruces entre viernes y domingo frente a una media de 130 diarios antes de la guerra), se han reportado ataques a embarcaciones con víctimas mortales, y Emiratos Árabes Unidos detectó misiles balísticos iraníes y suspendió su comercio con Irán. Es el primer choque geopolítico agudo real del panel en semanas.</p>
+            <p class="tb-watch" data-en-html="<b>What to watch:</b> any actual (not just threatened) closure of the Strait of Hormuz would send oil sharply higher; gold and oil remain the first assets to react to a real geopolitical shock, ahead of crypto or stocks."><b>Qué vigilar:</b> cualquier cierre real (no solo amenazado) del estrecho de Ormuz dispararía el petróleo con fuerza; oro y petróleo siguen siendo los primeros activos en reaccionar a un choque geopolítico real, antes que cripto o bolsa.</p>
+            <div class="tb-source" data-en="Source: CNN / Bloomberg / BlackRock Geopolitical Risk Dashboard">Fuente: CNN / Bloomberg / BlackRock Geopolitical Risk Dashboard</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <h3 data-en="Sources consulted in this update">Fuentes consultadas en esta actualización</h3>
+    <div class="sources-list">
+      <div><a href="https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm" target="_blank" rel="noopener" data-en="Federal Reserve, FOMC statement July 2026">Federal Reserve, comunicado FOMC julio 2026</a></div>
+      <div><a href="https://tradingeconomics.com/united-states/interest-rate" target="_blank" rel="noopener" data-en="Trading Economics, U.S. interest rate">Trading Economics, tipo de interés EE.UU.</a></div>
+      <div><a href="https://fred.stlouisfed.org/series/T10Y2Y" target="_blank" rel="noopener" data-en="FRED, 10-year minus 2-year spread">FRED, spread 10 años - 2 años</a></div>
+      <div><a href="https://tradingeconomics.com/united-states/inflation-cpi" target="_blank" rel="noopener" data-en="Trading Economics, U.S. CPI">Trading Economics, CPI EE.UU.</a></div>
+      <div><a href="https://tradingeconomics.com/dxy:cur" target="_blank" rel="noopener" data-en="Trading Economics, DXY dollar index">Trading Economics, índice dólar DXY</a></div>
+      <div><a href="https://tradingeconomics.com/united-states/cboe-volatility-index-vix-fed-data.html" target="_blank" rel="noopener" data-en="Trading Economics, VIX">Trading Economics, VIX</a></div>
+      <div><a href="https://thetradable.com/markets/us-m2-growth-hits-48-as-money-supply-reaches-record-226-trillion-and-liquidity-stabilizes--ms" target="_blank" rel="noopener" data-en="The Tradable, M2 growth">The Tradable, crecimiento M2</a></div>
+      <div><a href="https://internationalbanker.com/banking/why-the-fed-began-a-new-phase-of-balance-sheet-expansion-in-december/" target="_blank" rel="noopener" data-en="International Banker, end of the Fed's QT">International Banker, fin del QT de la Fed</a></div>
+      <div><a href="https://www.bls.gov/news.release/empsit.nr0.htm" target="_blank" rel="noopener" data-en="Bureau of Labor Statistics, employment report">Bureau of Labor Statistics, informe de empleo</a></div>
+      <div><a href="https://www.prnewswire.com/news-releases/manufacturing-pmi-at-55-6-july-2026-ism-manufacturing-pmi-report-302840669.html" target="_blank" rel="noopener" data-en="ISM, Manufacturing PMI July 2026">ISM, PMI manufacturero julio 2026</a></div>
+      <div><a href="https://tradingeconomics.com/commodity/gold" target="_blank" rel="noopener" data-en="Trading Economics, gold price">Trading Economics, precio del oro</a></div>
+      <div><a href="https://tradingeconomics.com/commodity/brent-crude-oil" target="_blank" rel="noopener" data-en="Trading Economics, Brent oil price">Trading Economics, precio del petróleo Brent</a></div>
+      <div><a href="https://www.coindesk.com/markets/2026/08/09/bitcoin-investors-pour-usd853-million-into-spot-etfs-blackrock-s-ibit-claims-the-bulk" target="_blank" rel="noopener" data-en="CoinDesk, bitcoin ETF flows">CoinDesk, flujos ETF de bitcoin</a></div>
+      <div><a href="https://www.cryptotimes.io/2026/08/15/bitcoin-etfs-lose-390m-as-solana-funds-buck-broader-crypto-outflows/" target="_blank" rel="noopener" data-en="Crypto Times, bitcoin ETF outflows">Crypto Times, salidas de ETF de bitcoin</a></div>
+      <div><a href="https://www.tv-hub.org/guide/bitcoin-dominance" target="_blank" rel="noopener" data-en="Bitcoin dominance">Dominancia de bitcoin</a></div>
+      <div><a href="https://www.dlnews.com/articles/regulation/key-dates-for-us-crypto-regulation-in-2026/" target="_blank" rel="noopener" data-en="DL News, 2026 crypto regulatory calendar">DL News, calendario regulatorio cripto 2026</a></div>
+      <div><a href="https://fred.stlouisfed.org/series/VIXCLS" target="_blank" rel="noopener" data-en="FRED, VIX close">FRED, cierre del VIX</a></div>
+      <div><a href="https://www.cnbc.com/select/the-price-of-gold-today-august-19-2026/" target="_blank" rel="noopener" data-en="CNBC / Fortune, gold price August 19">CNBC / Fortune, precio del oro 19 de agosto</a></div>
+      <div><a href="https://www.forbes.com/advisor/investing/oil-prices-today/" target="_blank" rel="noopener" data-en="Forbes Advisor, Brent oil price">Forbes Advisor, precio del petróleo Brent</a></div>
+      <div><a href="https://www.bloomberg.com/news/articles/2026-08-17/bitcoin-etfs-see-largest-outflow-in-six-weeks-as-token-stagnates" target="_blank" rel="noopener" data-en="Bloomberg, bitcoin ETF outflows">Bloomberg, salidas de ETF de bitcoin</a></div>
+      <div><a href="https://www.theblock.co/news/regulation/2026-08-17-us-treasury-seeks-public-comment-genius-act-stablecoin-rules-411987" target="_blank" rel="noopener" data-en="The Block, Treasury GENIUS Act rulemaking">The Block, propuesta normativa del Tesoro sobre la Ley GENIUS</a></div>
+      <div><a href="https://www.coindesk.com/policy/2026/08/08/u-s-senate-opens-first-stage-of-crypto-clarity-act-voting-to-give-bill-a-chance-next-month" target="_blank" rel="noopener" data-en="CoinDesk, Senate opens Clarity Act vote">CoinDesk, el Senado abre la votación de la Clarity Act</a></div>
+      <div><a href="https://www.cbc.ca/news/politics/new-trump-tariffs-deadline-9.7311125" target="_blank" rel="noopener" data-en="CBC News, Canada tariff pause">CBC News, pausa arancelaria con Canadá</a></div>
+      <div><a href="https://www.bloomberg.com/news/articles/2026-08-18/trump-takes-hard-line-on-iran-as-hormuz-standoff-drags-on" target="_blank" rel="noopener" data-en="Bloomberg, Iran-Hormuz standoff">Bloomberg, tensión en el estrecho de Ormuz</a></div>
+      <div><a href="https://www.chase.com/personal/investments/learning-and-insights/article/september-2026-rate-hike-now-expected-amid-energy-shocks" target="_blank" rel="noopener" data-en="J.P. Morgan / Chase, September rate hike outlook">J.P. Morgan / Chase, previsión de subida de tipos en septiembre</a></div>
+    </div>
+    <p style="margin-top:14px;" data-en="This panel updates automatically once a day with a scheduled task that re-checks these same sources. The values shown are a snapshot at the time of the update and may vary intraday.">Este panel se actualiza automáticamente una vez al día con una tarea programada que vuelve a consultar estas mismas fuentes. Los valores mostrados son una fotografía del momento de la actualización y pueden variar intradía.</p>
+  </footer>
+
+</div>
+</div>
+
+<script>
+  const root = document.getElementById('vizRoot');
+  const btn = document.getElementById('themeToggle');
+  const langBtn = document.getElementById('langToggle');
+  let dark = false;
+  let currentLang = 'es';
+  let refreshDynamicText = () => {};
+
+  function updateThemeButtonLabel() {
+    if (currentLang === 'en') {
+      btn.textContent = dark ? 'Light mode' : 'Dark mode';
+    } else {
+      btn.textContent = dark ? 'Modo claro' : 'Modo oscuro';
+    }
+  }
+  btn.addEventListener('click', () => {
+    dark = !dark;
+    root.setAttribute('data-theme', dark ? 'dark' : 'light');
+    updateThemeButtonLabel();
+  });
+
+  function applyLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-en]').forEach((el) => {
+      if (el.dataset.es === undefined) el.dataset.es = el.textContent;
+      el.textContent = lang === 'en' ? el.dataset.en : el.dataset.es;
+    });
+    document.querySelectorAll('[data-en-html]').forEach((el) => {
+      if (el.dataset.esHtml === undefined) el.dataset.esHtml = el.innerHTML;
+      el.innerHTML = lang === 'en' ? el.dataset.enHtml : el.dataset.esHtml;
+    });
+    document.querySelectorAll('[data-en-aria]').forEach((el) => {
+      if (el.dataset.esAria === undefined) el.dataset.esAria = el.getAttribute('aria-label');
+      el.setAttribute('aria-label', lang === 'en' ? el.dataset.enAria : el.dataset.esAria);
+    });
+    langBtn.textContent = lang === 'en' ? 'ES' : 'EN';
+    langBtn.title = lang === 'en' ? 'Cambiar a español' : 'Switch to English';
+    langBtn.setAttribute('aria-label', langBtn.title);
+    updateThemeButtonLabel();
+    refreshDynamicText();
+  }
+  langBtn.addEventListener('click', () => applyLanguage(currentLang === 'es' ? 'en' : 'es'));
+
+  function toggleFlip(tile, force) {
+    const flipped = tile.classList.toggle('flipped', force);
+    tile.setAttribute('aria-expanded', flipped ? 'true' : 'false');
+  }
+  document.querySelectorAll('.tile').forEach((tile) => {
+    tile.addEventListener('click', () => toggleFlip(tile));
+    tile.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleFlip(tile);
+      }
+    });
+  });
+
+  (function () {
+    const tiles = Array.from(document.querySelectorAll('.tile'));
+    const rows = Array.from(document.querySelectorAll('.rt-row'));
+    const rtGroups = Array.from(document.querySelectorAll('.rt-group'));
+    const sections = Array.from(document.querySelectorAll('section.theme:not(.transmission):not(.resumen)'));
+    const typeButtons = Array.from(document.querySelectorAll('[data-filter-type]'));
+    const channelButtons = Array.from(document.querySelectorAll('[data-filter-channel]'));
+    const mhZones = Array.from(document.querySelectorAll('.mh-zone'));
+    const flowCards = Array.from(document.querySelectorAll('.flow-card[data-channel]'));
+    const indChips = Array.from(document.querySelectorAll('.mh-chip[data-target]'));
+    const summary = document.getElementById('filtersSummary');
+    let currentType = 'all';
+    let currentChannel = 'all';
+
+    function statusOfBadge(el) {
+      const b = el.querySelector('.badge');
+      if (!b) return 'neutral';
+      if (b.classList.contains('good')) return 'good';
+      if (b.classList.contains('warning')) return 'warning';
+      if (b.classList.contains('serious')) return 'serious';
+      if (b.classList.contains('critical')) return 'critical';
+      return 'neutral';
+    }
+
+    function applyFilters() {
+      let visibleCount = 0;
+      const counts = { good: 0, warning: 0, serious: 0, critical: 0, neutral: 0 };
+      tiles.forEach((tile) => {
+        const typeOk = currentType === 'all' || tile.dataset.type === currentType;
+        const channelOk = currentChannel === 'all' || tile.dataset.channel === currentChannel;
+        const visible = typeOk && channelOk;
+        tile.classList.toggle('hidden-by-filter', !visible);
+        if (visible) {
+          visibleCount++;
+          counts[statusOfBadge(tile.querySelector('.tile-front'))]++;
+        }
+      });
+      sections.forEach((sec) => {
+        const anyVisible = sec.querySelectorAll('.tile:not(.hidden-by-filter)').length > 0;
+        sec.classList.toggle('hidden-by-filter', !anyVisible);
+      });
+      rows.forEach((row) => {
+        const typeOk = currentType === 'all' || row.dataset.type === currentType;
+        const channelOk = currentChannel === 'all' || row.dataset.channel === currentChannel;
+        row.classList.toggle('hidden-by-filter', !(typeOk && channelOk));
+      });
+      rtGroups.forEach((g) => {
+        const anyVisible = g.querySelectorAll('.rt-row:not(.hidden-by-filter)').length > 0;
+        g.classList.toggle('all-hidden', !anyVisible);
+      });
+      indChips.forEach((chip) => {
+        const typeOk = currentType === 'all' || chip.dataset.type === currentType;
+        const channelOk = currentChannel === 'all' || chip.dataset.channel === currentChannel;
+        chip.classList.toggle('chip-muted', !(typeOk && channelOk));
+      });
+      mhZones.forEach((zone) => {
+        const hasVisibleChip = zone.querySelectorAll('.mh-chip:not(.chip-muted)').length > 0;
+        zone.classList.toggle('zone-muted', !hasVisibleChip);
+        zone.classList.toggle('zone-active-filter', currentType !== 'all' && zone.dataset.mhType === currentType);
+      });
+      flowCards.forEach((card) => {
+        const hasVisibleChip = card.querySelectorAll('.mh-chip:not(.chip-muted)').length > 0;
+        card.classList.toggle('card-muted', !hasVisibleChip);
+        card.classList.toggle('card-active-filter', currentChannel !== 'all' && card.dataset.channel === currentChannel);
+      });
+      const labels = currentLang === 'en'
+        ? { good: 'favorable', warning: 'to watch', serious: 'in tension', critical: 'adverse', neutral: 'informational',
+            showingAll: (n) => `Showing all <b>${n}</b> signals in the panel: `,
+            none: 'No signal matches that combined filter. Try dropping the channel or type filter.',
+            showingSome: (v, n) => `Showing <b>${v}</b> of ${n} signals: ` }
+        : { good: 'favorables', warning: 'a vigilar', serious: 'en tensión', critical: 'adversas', neutral: 'informativas',
+            showingAll: (n) => `Mostrando las <b>${n}</b> señales del panel: `,
+            none: 'Ninguna señal cumple ese filtro combinado. Prueba a soltar el filtro de canal o de tipo.',
+            showingSome: (v, n) => `Mostrando <b>${v}</b> de ${n} señales: ` };
+      const parts = [
+        `<span class="fs-good">${counts.good} ${labels.good}</span>`,
+        `<span class="fs-warning">${counts.warning} ${labels.warning}</span>`,
+        `<span class="fs-serious">${counts.serious} ${labels.serious}</span>`,
+        `<span class="fs-critical">${counts.critical} ${labels.critical}</span>`,
+        `<span class="fs-neutral">${counts.neutral} ${labels.neutral}</span>`,
+      ].join(', ');
+      if (visibleCount === tiles.length) {
+        summary.innerHTML = `${labels.showingAll(tiles.length)}${parts}.`;
+      } else if (visibleCount === 0) {
+        summary.innerHTML = labels.none;
+      } else {
+        summary.innerHTML = `${labels.showingSome(visibleCount, tiles.length)}${parts}.`;
+      }
+    }
+    refreshDynamicText = applyFilters;
+
+    typeButtons.forEach((btn) => btn.addEventListener('click', () => {
+      currentType = btn.dataset.filterType;
+      typeButtons.forEach((b) => {
+        const active = b === btn;
+        b.classList.toggle('active', active);
+        b.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+      applyFilters();
+    }));
+    channelButtons.forEach((btn) => btn.addEventListener('click', () => {
+      currentChannel = btn.dataset.filterChannel;
+      channelButtons.forEach((b) => {
+        const active = b === btn;
+        b.classList.toggle('active', active);
+        b.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+      applyFilters();
+    }));
+
+    function jumpToTile(targetId) {
+      const tile = document.getElementById(targetId);
+      if (!tile) return;
+      tile.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      toggleFlip(tile, true);
+      tile.focus({ preventScroll: true });
+    }
+    rows.forEach((row) => {
+      row.addEventListener('click', () => jumpToTile(row.dataset.target));
+      row.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          jumpToTile(row.dataset.target);
+        }
+      });
+    });
+    indChips.forEach((chip) => {
+      chip.addEventListener('click', () => jumpToTile(chip.dataset.target));
+      chip.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          jumpToTile(chip.dataset.target);
+        }
+      });
+    });
+
+    applyFilters();
+  })();
+</script>
+</body>
+</html>
