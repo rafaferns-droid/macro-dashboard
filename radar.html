@@ -71,7 +71,7 @@ h1{font-size:1.3rem;font-weight:700;margin-bottom:.2rem}
 
 <script>
 const B=900000, fmt=n=>n?n.toLocaleString('es-ES')+' €':'—';
-const ZONAS=["Todas","Diagonal Mar","Glòries / 22@","Badalona Puerto","El Gorg","El Masnou","Poblenou"];
+const ZONAS=["Todas","Diagonal Mar","Glòries / 22@","Badalona Puerto","El Gorg","El Masnou","Poblenou","Vila Olímpica"];
 const FILTROS=[["todos","Todos"],["ambos","💚 Ambos"],["rafa","👨 Rafa"],["manana","👩 Manana"],["sin","⏳ Sin votar"]];
 const PK=[["parking","🅿️ Parking"],["piscina","🏊 Piscina"],["gimnasio","🏋️ Gym"]];
 
@@ -184,6 +184,66 @@ const PROMOS = [
     unidades:[
       {id:"glor-06",titulo:"Pisos con terraza · vistas al mar + Sagrada Família",precio:null,m2:null,hab:null,planta:"Varias",url:"https://info.cornexcapital.com/plaza-glorias-nueva-promocion-de-lujo-en-el-corazon-de-barcelona"},
       {id:"glor-07",titulo:"Áticos · planta cima · vistas panorámicas 360º",precio:null,m2:null,hab:null,planta:"Ático",url:"https://info.cornexcapital.com/plaza-glorias-nueva-promocion-de-lujo-en-el-corazon-de-barcelona"},
+    ]
+  },
+
+  // DIAGONAL MAR - NUEVAS PROMOCIONES
+  {
+    id:"p-dmtower", zona:"Diagonal Mar",
+    nombre:"Diagonal Mar Tower · 27 plantas · lujo",
+    desc:"Torre 27 plantas · 88 residencias 100-227m² + terrazas hasta 160m² · Piscina infinita rooftop 360º · Seguridad 24h · Restaurante · A un paso de la playa",
+    amenities:{parking:true,piscina:true,gimnasio:true},
+    notas:"4 hab disponibles hasta 227m² · Parking + trastero incluidos · Acabados parquet bambú + mármol · jacuzzi en baños",
+    url_promo:"https://www.aproperties.es/barcelona/diagonal-mar/espectacular-obra-nueva-de-lujo-frente-al-mar",
+    unidades:[
+      {id:"dm-05",titulo:"4 hab · hasta 227m² · terraza hasta 160m² · planta alta",precio:null,m2:null,terraza:null,hab:4,planta:"Alta",url:"https://www.aproperties.es/barcelona/diagonal-mar/espectacular-obra-nueva-de-lujo-frente-al-mar"},
+      {id:"dm-06",titulo:"Dúplex · hasta 227m² · vistas 360º al mar",precio:null,m2:null,terraza:null,hab:null,planta:"Dúplex",url:"https://www.aproperties.es/barcelona/diagonal-mar/espectacular-obra-nueva-de-lujo-frente-al-mar"},
+    ]
+  },
+  {
+    id:"p-dmcoldwell", zona:"Diagonal Mar",
+    nombre:"Diagonal Mar · 21 viviendas · piscina azotea · Coldwell Banker",
+    desc:"21 viviendas · 5 plantas + ático · 67-217m² · Todas con balcón · Piscina en azotea · 4 hab disponibles en algunas plantas",
+    amenities:{parking:false,piscina:true,gimnasio:false},
+    notas:"Ático 2 hab + terraza 92m² · pl 1ª con terrazas 20m² y 30m² · vistas laterales al mar",
+    url_promo:"https://www.coldwellbanker.es/search?t=20&o=sale&z=2&a=1&l=7&d=356",
+    unidades:[
+      {id:"dm-07",titulo:"4 hab · hasta 217m² · balcón · piscina azotea",precio:null,m2:217,terraza:null,hab:4,planta:"Media",url:"https://www.coldwellbanker.es/search?t=20&o=sale&z=2&a=1&l=7&d=356"},
+      {id:"dm-08",titulo:"Ático · 2 hab · terraza 92m² · azotea piscina",precio:null,m2:null,terraza:92,hab:2,planta:"Ático",url:"https://www.coldwellbanker.es/search?t=20&o=sale&z=2&a=1&l=7&d=356"},
+    ]
+  },
+  // GLÒRIES - nueva promoción grande
+  {
+    id:"p-gloriadiag", zona:"Glòries / 22@",
+    nombre:"Gloria Diagonal · Lucas Fox · Av Diagonal · 2 torres",
+    desc:"2 torres de 14 y 11 plantas · 102 apartamentos · Spa: piscina climatizada + jacuzzi + sauna + hammam · Gym + yoga · Kids club · Piscina infinity rooftop · Entrega Q1 2027",
+    amenities:{parking:true,piscina:true,gimnasio:true},
+    notas:"Parking opcional (no incluido) · Acabados LUV Studio · Av. Diagonal · desde 615.000€ · 54 unidades disponibles",
+    url_promo:"https://www.lucasfox.es/obra-nueva/gloria-diagonal.html",
+    unidades:[
+      {id:"glor-08",titulo:"1-4 hab · desde 615.000€ · terraza · vistas ciudad + mar",precio:615000,m2:null,terraza:null,hab:null,planta:"Varias",url:"https://www.lucasfox.es/obra-nueva/gloria-diagonal.html"},
+    ]
+  },
+  {
+    id:"p-gloriapark", zona:"Glòries / 22@",
+    nombre:"Gloria Park · Lucas Fox · Parc de la Ciutadella",
+    desc:"Junto al Parc de la Ciutadella · Piscina infinity rooftop · Spa: jacuzzi + sauna + hammam · Gym + yoga · Kids club · Terrazas con vistas al mar · Entrega finales 2027",
+    amenities:{parking:true,piscina:true,gimnasio:true},
+    notas:"Parking disponible · Acabados LUV Studio · suite con vestidor + baño en suite · precio a consultar",
+    url_promo:"https://www.lucasfox.es/obra-nueva/gloria-park.html",
+    unidades:[
+      {id:"glor-09",titulo:"Pisos y áticos · terraza · vistas al mar + ciudad",precio:null,m2:null,terraza:null,hab:null,planta:"Varias",url:"https://www.lucasfox.es/obra-nueva/gloria-park.html"},
+    ]
+  },
+  {
+    id:"p-selvaresidencial", zona:"Glòries / 22@",
+    nombre:"Selva Residencial · 22@ Poblenou",
+    desc:"EN CONSTRUCCIÓN · 22@ Barcelona · Viviendas 1-3 hab · cocina equipada · zona tranquila con todos los servicios · metros 22@",
+    amenities:{parking:false,piscina:false,gimnasio:false},
+    notas:"Oferta de lanzamiento · inicio de obra reciente · precio desde consultar",
+    url_promo:"https://www.yaencontre.com/promocion/obra-nueva/barcelona/distrito-sant-marti",
+    unidades:[
+      {id:"glor-10",titulo:"1-3 hab · obra nueva 22@ · cocina equipada",precio:null,m2:null,terraza:null,hab:null,planta:"Varias",url:"https://www.yaencontre.com/promocion/obra-nueva/barcelona/distrito-sant-marti"},
     ]
   },
   // Diagonal Mar - pisos individuales de distintas promociones
