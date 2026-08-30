@@ -71,7 +71,7 @@ h1{font-size:1.3rem;font-weight:700;margin-bottom:.2rem}
 
 <script>
 const B=900000, fmt=n=>n?n.toLocaleString('es-ES')+' €':'—';
-const ZONAS=["Todas","Diagonal Mar","Glòries / 22@","Badalona Puerto","El Gorg","El Masnou","Poblenou","Vila Olímpica"];
+const ZONAS=["Todas","Diagonal Mar","Glòries / 22@","Vila Olímpica","Badalona Puerto","El Gorg","El Masnou","Poblenou"];
 const FILTROS=[["todos","Todos"],["ambos","💚 Ambos"],["rafa","👨 Rafa"],["manana","👩 Manana"],["sin","⏳ Sin votar"]];
 const PK=[["parking","🅿️ Parking"],["piscina","🏊 Piscina"],["gimnasio","🏋️ Gym"]];
 
@@ -245,6 +245,58 @@ const PROMOS = [
     url_promo:"https://www.yaencontre.com/promocion/obra-nueva/barcelona/distrito-sant-marti",
     unidades:[
       {id:"glor-10",titulo:"1-3 hab · obra nueva 22@ · cocina equipada",precio:null,m2:null,terraza:null,hab:null,planta:"Varias",url:"https://www.yaencontre.com/promocion/obra-nueva/barcelona/distrito-sant-marti"},
+    ]
+  },
+
+  // VILA OLÍMPICA
+  {
+    id:"p-thebridge", zona:"Vila Olímpica",
+    nombre:"THE BRIDGE · Lucas Fox · Batlleiroig arch.",
+    desc:"20 viviendas · 47-131m² + terrazas hasta 76m² · Piscina azotea con vistas al mar · Gym · Parking · Eficiencia energética AA · Calle Joan Miró · Entrega Q2 2027",
+    amenities:{parking:true,piscina:true,gimnasio:true},
+    notas:"14 unidades disponibles · 1-3 hab (no hay 4 hab) · diseño Batlleiroig · junto Puerto Olímpico · reformado · desde 1.010.000€",
+    url_promo:"https://www.lucasfox.es/obra-nueva/the-bridge.html",
+    unidades:[
+      {id:"vo-01",titulo:"2 hab · 84m² + terraza 19m² · desde 1.010.000€",precio:1010000,m2:84,terraza:19,hab:2,planta:"Varias",url:"https://www.lucasfox.es/comprar-vivienda/espana/barcelona/barcelona-ciudad/villa-olimpica/piso/bcn59796.html"},
+      {id:"vo-02",titulo:"3 hab · 126m² + terraza 34m² · 1.335.000€",precio:1335000,m2:126,terraza:34,hab:3,planta:"Varias",url:"https://www.lucasfox.es/obra-nueva/the-bridge.html"},
+      {id:"vo-03",titulo:"Ático · 2 hab · 124m² + terraza 48m² · 1.880.000€",precio:1880000,m2:124,terraza:48,hab:2,planta:"Ático",url:"https://www.lucasfox.es/obra-nueva/the-bridge.html"},
+      {id:"vo-04",titulo:"4 hab · 125m² · 1.895.000€ · edificio 1992",precio:1895000,m2:125,hab:4,planta:"Alta",url:"https://www.lucasfox.es/obra-nueva/the-bridge.html"},
+    ]
+  },
+  {
+    id:"p-illallum", zona:"Vila Olímpica",
+    nombre:"Illa de la Llum · primera línea mar",
+    desc:"Primera línea del mar · 192m² · 4 hab (1 suite) · Terraza perimetral · 2 piscinas · Pádel · Conserjería · Vigilancia 24h",
+    amenities:{parking:true,piscina:true,gimnasio:false},
+    notas:"Segunda mano · acabados alta calidad · orientación sol todo el día · 2 plazas parking + trastero · 5 min playa",
+    url_promo:"https://www.diagonalmarbarcelona.com/en/flats-sale-terrace-vila-olimpica",
+    unidades:[
+      {id:"vo-05",titulo:"4 hab · 192m² · terraza perimetral · primera línea mar",precio:null,m2:192,hab:4,planta:"Alta",url:"https://www.diagonalmarbarcelona.com/en/flats-sale-terrace-vila-olimpica"},
+    ]
+  },
+  // POBLENOU - NUEVAS
+  {
+    id:"p-juanaustria", zona:"Poblenou",
+    nombre:"Joan d'Austria 101 · Durán Carasso",
+    desc:"15 viviendas · 3 hab + balcón/terraza 10-20m² · Ático exclusivo con terraza 60m² · Diseño contemporáneo · 22@ · Cerca Ciutadella",
+    amenities:{parking:false,piscina:false,gimnasio:false},
+    notas:"Solo 3 hab (no 4) · precio a consultar · Durán Carasso · entrega pendiente",
+    url_promo:"https://www.durancarasso.es/en/barcelona/el-parc-la-llacuna-del-poblenou/new-development-for-sale-in-el-parc-i-la-llacuna-del-poblenou-barcelona",
+    unidades:[
+      {id:"pob-07",titulo:"3 hab · balcón/terraza 10-20m² · diseño contemporáneo",precio:null,m2:null,terraza:15,hab:3,planta:"Media",url:"https://www.durancarasso.es/en/barcelona/el-parc-la-llacuna-del-poblenou/new-development-for-sale-in-el-parc-i-la-llacuna-del-poblenou-barcelona"},
+      {id:"pob-08",titulo:"Ático · 3 hab · terraza privada 60m²",precio:null,m2:null,terraza:60,hab:3,planta:"Ático",url:"https://www.durancarasso.es/en/barcelona/el-parc-la-llacuna-del-poblenou/new-development-for-sale-in-el-parc-i-la-llacuna-del-poblenou-barcelona"},
+    ]
+  },
+  // GLÒRIES - Mandarin Oriental (bonus encontrado)
+  {
+    id:"p-mandarin", zona:"Glòries / 22@",
+    nombre:"Mandarin Oriental Residences · Eixample Dreta",
+    desc:"3 unidades disponibles · 235m²+ · 2-3 hab · Ultra lujo · Mandarin Oriental brand · Eixample junto Glòries",
+    amenities:{parking:true,piscina:true,gimnasio:true},
+    notas:"Precio desde 4.250.000€ · branded residences · servicios hoteleros Mandarin · para referencia únicamente",
+    url_promo:"https://www.lucasfox.com/new-development/mandarin-oriental-residences.html",
+    unidades:[
+      {id:"glor-11",titulo:"2-3 hab · 235m²+ · servicios hoteleros Mandarin",precio:4250000,m2:235,hab:3,planta:"Alta",url:"https://www.lucasfox.com/new-development/mandarin-oriental-residences.html"},
     ]
   },
   // Diagonal Mar - pisos individuales de distintas promociones
