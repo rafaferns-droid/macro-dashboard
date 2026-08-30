@@ -71,7 +71,7 @@ h1{font-size:1.3rem;font-weight:700;margin-bottom:.2rem}
 
 <script>
 const B=900000, fmt=n=>n?n.toLocaleString('es-ES')+' €':'—';
-const ZONAS=["Todas","Diagonal Mar","Badalona Puerto","El Gorg","El Masnou","Poblenou"];
+const ZONAS=["Todas","Diagonal Mar","Glòries / 22@","Badalona Puerto","El Gorg","El Masnou","Poblenou"];
 const FILTROS=[["todos","Todos"],["ambos","💚 Ambos"],["rafa","👨 Rafa"],["manana","👩 Manana"],["sin","⏳ Sin votar"]];
 const PK=[["parking","🅿️ Parking"],["piscina","🏊 Piscina"],["gimnasio","🏋️ Gym"]];
 
@@ -147,6 +147,43 @@ const PROMOS = [
       {id:"mas-01",titulo:"3 hab · 109m² útiles + terraza 39m² · 1ª planta",precio:875000,m2:109,terraza:39,hab:3,planta:"1ª",url:"https://www.lucasfox.es/comprar-vivienda/espana/barcelona/maresme/el-masnou/piso/mrs69078.html"},
       {id:"mas-02",titulo:"3 hab · 107m² útiles + terraza 45m² + jardín 150m² · Planta baja",precio:925000,m2:107,terraza:45,jardín:150,hab:3,planta:"Baja",url:"https://www.lucasfox.es/comprar-vivienda/espana/barcelona/maresme/el-masnou/piso/mrs69076.html"},
       {id:"mas-03",titulo:"3 hab · 107m² útiles + terraza 45m² · 2ª planta",precio:925000,m2:107,terraza:45,hab:3,planta:"2ª",url:"https://www.lucasfox.es/comprar-vivienda/espana/barcelona/maresme/el-masnou/piso/mrs69081.html"},
+    ]
+  },
+  {
+    id:"p-gloriesbcn", zona:"Glòries / 22@",
+    nombre:"Glòries BCN · Realia / Colliers",
+    desc:"Plaça de les Glòries 34 · 47 pisos · Todos con terraza · Piscina cubierta · Suelo radiante · Porcelanosa",
+    amenities:{parking:false,piscina:true,gimnasio:false},
+    notas:"Parking NO incluido en precio · Últimas unidades disponibles · 4min metro L1 Glòries · 5min 22@",
+    url_promo:"https://residencial.colliers.com/barcelona/glories-barcelona/",
+    unidades:[
+      {id:"glor-01",titulo:"4 hab · 158m² · 1ª planta · sin terraza",precio:613500,m2:158,hab:4,planta:"1ª",url:"https://www.idealista.com/obra-nueva/95297534/"},
+      {id:"glor-02",titulo:"4 hab · 170m² · 1ª planta · terraza",precio:713500,m2:170,terraza:null,hab:4,planta:"1ª",url:"https://www.idealista.com/obra-nueva/95297534/"},
+      {id:"glor-03",titulo:"3 hab · 124m² · 2ª planta · terraza",precio:609400,m2:124,terraza:null,hab:3,planta:"2ª",url:"https://www.idealista.com/obra-nueva/95297534/"},
+    ]
+  },
+  {
+    id:"p-gloriesaelca", zona:"Glòries / 22@",
+    nombre:"Residencial Glòries · Aelca",
+    desc:"Calle Ávila · 71 viviendas · Piscina cubierta + solarium + gimnasio + lobby gastronómico + conserjería · Dúplex en pl 8-9 con terrazas grandes",
+    amenities:{parking:true,piscina:true,gimnasio:true},
+    notas:"4 hab disponibles · dúplex plantas 8-9 con amplias terrazas · calidades premium · 4min metro L1 Glòries",
+    url_promo:"https://www.aelca.es/es/proyectos/residencial-glories/",
+    unidades:[
+      {id:"glor-04",titulo:"4 hab · plantas intermedias · diseño funcional",precio:null,m2:null,hab:4,planta:"Media",url:"https://www.aelca.es/es/proyectos/residencial-glories/"},
+      {id:"glor-05",titulo:"Dúplex 4 hab · plantas 8-9 · terraza grande",precio:null,m2:null,hab:4,planta:"8-9 (dúplex)",url:"https://www.aelca.es/es/proyectos/residencial-glories/"},
+    ]
+  },
+  {
+    id:"p-plazaglorias", zona:"Glòries / 22@",
+    nombre:"Plaza Glòries · Cornex Capital · LUJO",
+    desc:"94 viviendas · 2 torres · Piscina infinity rooftop 360º (vistas al mar + Sagrada Família) · Spa: jacuzzi + sauna + hammam · Acabados LUV Studio",
+    amenities:{parking:true,piscina:true,gimnasio:true},
+    notas:"5 áticos en cima de las dos torres · suites con vestidor + baño en suite · vistas panorámicas al mar · precio premium >1M",
+    url_promo:"https://info.cornexcapital.com/plaza-glorias-nueva-promocion-de-lujo-en-el-corazon-de-barcelona",
+    unidades:[
+      {id:"glor-06",titulo:"Pisos con terraza · vistas al mar + Sagrada Família",precio:null,m2:null,hab:null,planta:"Varias",url:"https://info.cornexcapital.com/plaza-glorias-nueva-promocion-de-lujo-en-el-corazon-de-barcelona"},
+      {id:"glor-07",titulo:"Áticos · planta cima · vistas panorámicas 360º",precio:null,m2:null,hab:null,planta:"Ático",url:"https://info.cornexcapital.com/plaza-glorias-nueva-promocion-de-lujo-en-el-corazon-de-barcelona"},
     ]
   },
   // Diagonal Mar - pisos individuales de distintas promociones
