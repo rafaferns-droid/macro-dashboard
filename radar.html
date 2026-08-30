@@ -7,277 +7,203 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#0f1117;color:#e8eaf0;font-family:system-ui,-apple-system,sans-serif;padding:1rem;max-width:640px;margin:0 auto}
-h1{font-size:1.3rem;font-weight:700;margin-bottom:.25rem}
-.sub{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:#6b7280;margin-bottom:.15rem}
-.stats{font-size:.7rem;color:#6b7280;margin-bottom:.75rem}
-.user-bar{display:flex;gap:.5rem;margin-bottom:1rem;background:#181c27;border:1px solid #2a3047;border-radius:12px;padding:.5rem}
-.user-btn{flex:1;border:none;border-radius:8px;padding:.55rem;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit}
-.user-btn.rafa{background:rgba(79,142,247,.15);color:#4f8ef7;border:1px solid rgba(79,142,247,.4)}
-.user-btn.manana{background:rgba(167,139,250,.12);color:#a78bfa;border:1px solid rgba(167,139,250,.3)}
-.user-btn.active-rafa{background:rgba(79,142,247,.35);color:#fff;border-color:#4f8ef7}
-.user-btn.active-manana{background:rgba(167,139,250,.35);color:#fff;border-color:#a78bfa}
-.prefs-block{background:#181c27;border:1px solid #2a3047;border-radius:12px;padding:.65rem .9rem;margin-bottom:.8rem}
-.prefs-title{font-size:.57rem;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;margin-bottom:.35rem}
-.prefs-btns{display:flex;gap:.35rem;flex-wrap:wrap}
-.zones{display:flex;gap:.28rem;flex-wrap:wrap;margin-bottom:.5rem}
-.filters{display:flex;gap:.28rem;flex-wrap:wrap;margin-bottom:.85rem}
-button{font-family:inherit;cursor:pointer}
-.btn{border-radius:8px;padding:4px 11px;font-size:.74rem;font-weight:400;transition:all .15s}
-.card{background:#1e2333;border:1px solid #2a3047;border-radius:14px;padding:.85rem;margin-bottom:.65rem;transition:opacity .2s}
+h1{font-size:1.3rem;font-weight:700;margin-bottom:.2rem}
+.sub{font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:#6b7280;margin-bottom:.15rem}
+.stats{font-size:.7rem;color:#6b7280;margin-bottom:.8rem}
+.block{background:#181c27;border:1px solid #2a3047;border-radius:12px;padding:.65rem .9rem;margin-bottom:.75rem}
+.block-title{font-size:.57rem;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;margin-bottom:.4rem}
+.row{display:flex;gap:.3rem;flex-wrap:wrap}
+.btn{border-radius:8px;padding:4px 11px;font-size:.74rem;cursor:pointer;font-family:inherit;transition:all .15s}
+.card{background:#1e2333;border:1px solid #2a3047;border-radius:14px;padding:.85rem;margin-bottom:.65rem}
 .card-top{display:flex;justify-content:space-between;gap:.5rem;margin-bottom:.35rem}
 .card-complejo{font-size:.57rem;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;margin-bottom:2px}
 .card-titulo{font-size:.83rem;font-weight:600;color:#e8eaf0;line-height:1.4}
-.card-precio{font-family:monospace;font-size:.88rem;font-weight:700}
-.card-sobre{font-size:.58rem;color:#fbbf24}
+.precio{font-family:monospace;font-size:.88rem;font-weight:700}
+.sobre{font-size:.58rem;color:#fbbf24}
 .pills{display:flex;flex-wrap:wrap;gap:.22rem;margin-bottom:.45rem}
 .pill{display:inline-block;font-size:.6rem;font-weight:600;padding:2px 6px;border-radius:99px}
-.pill-ok{background:rgba(52,211,153,.15);color:#34d399;border:1px solid rgba(52,211,153,.3)}
-.pill-no{background:rgba(107,114,128,.1);color:#6b7280;border:1px solid #2a3047}
-.notas{font-size:.67rem;color:#9ca3af;line-height:1.55;margin-bottom:.45rem;border-left:2px solid #2a3047;padding-left:.5rem}
-.card-footer{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.4rem}
-.card-actions{display:flex;gap:.3rem;align-items:center}
-.score{font-family:monospace;font-size:.68rem;font-weight:700;border-radius:6px;padding:1px 6px}
-.link-btn{font-size:.64rem;color:#4f8ef7;text-decoration:none;border:1px solid rgba(79,142,247,.3);border-radius:6px;padding:2px 7px}
-.vote-section{display:flex;flex-direction:column;gap:.3rem;align-items:flex-end}
-.vote-row{display:flex;gap:.25rem;align-items:center}
-.vote-label{font-size:.6rem;color:#6b7280;min-width:40px;text-align:right}
-.vote-btn{border:none;border-radius:7px;padding:2px 9px;font-size:.78rem;background:rgba(255,255,255,.06);color:#6b7280;transition:all .15s}
-.vote-btn.like-rafa{background:rgba(79,142,247,.25);color:#4f8ef7}
-.vote-btn.dislike-rafa{background:rgba(248,113,113,.2);color:#f87171}
-.vote-btn.like-manana{background:rgba(167,139,250,.25);color:#a78bfa}
-.vote-btn.dislike-manana{background:rgba(248,113,113,.2);color:#f87171}
-.match-badge{font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:99px;margin-left:.3rem}
-.match-both{background:rgba(52,211,153,.2);color:#34d399;border:1px solid rgba(52,211,153,.4)}
-.match-none{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3)}
-.match-partial{background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3)}
+.ok{background:rgba(52,211,153,.15);color:#34d399;border:1px solid rgba(52,211,153,.3)}
+.no{background:rgba(107,114,128,.1);color:#6b7280;border:1px solid #2a3047}
+.notas{font-size:.67rem;color:#9ca3af;line-height:1.55;margin-bottom:.5rem;border-left:2px solid #2a3047;padding-left:.5rem}
+.footer{display:flex;justify-content:space-between;align-items:flex-end}
+.left{display:flex;gap:.3rem;align-items:center;flex-wrap:wrap}
+.sc{font-family:monospace;font-size:.68rem;font-weight:700;border-radius:6px;padding:1px 6px}
+.lnk{font-size:.64rem;color:#4f8ef7;text-decoration:none;border:1px solid rgba(79,142,247,.3);border-radius:6px;padding:2px 7px}
+.votes{display:flex;flex-direction:column;gap:.3rem}
+.vrow{display:flex;align-items:center;gap:.25rem}
+.vlbl{font-size:.62rem;font-weight:600;min-width:44px;text-align:right}
+.vb{border:none;border-radius:7px;padding:2px 9px;font-size:.78rem;background:rgba(255,255,255,.06);color:#6b7280;cursor:pointer;font-family:inherit;transition:all .15s}
+.vb.lr{background:rgba(79,142,247,.25);color:#4f8ef7}
+.vb.dr{background:rgba(248,113,113,.2);color:#f87171}
+.vb.lm{background:rgba(167,139,250,.25);color:#a78bfa}
+.vb.dm{background:rgba(248,113,113,.2);color:#f87171}
+.badge{font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:99px;border:1px solid}
+.b-both{background:rgba(52,211,153,.15);color:#34d399;border-color:rgba(52,211,153,.4)}
+.b-div{background:rgba(251,191,36,.12);color:#fbbf24;border-color:rgba(251,191,36,.3)}
+.b-none{background:rgba(248,113,113,.12);color:#f87171;border-color:rgba(248,113,113,.3)}
 .empty{text-align:center;color:#6b7280;padding:2rem;font-size:.83rem}
-.legend{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.6rem;font-size:.65rem;color:#6b7280}
-.legend span{display:flex;align-items:center;gap:.2rem}
-.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
 </style>
 </head>
 <body>
-
-<div class="sub">Búsqueda Inmobiliaria</div>
+<div class="sub">Búsqueda Inmobiliaria · Rafa & Manana</div>
 <h1>Radar de pisos 🏠</h1>
-<div class="stats" id="stats">Cargando...</div>
+<div class="stats" id="stats"></div>
 
-<div class="user-bar">
-  <button class="user-btn rafa" id="btn-rafa" onclick="setUser('rafa')">👨 Rafa</button>
-  <button class="user-btn manana" id="btn-manana" onclick="setUser('manana')">👩 Manana</button>
+<div class="block">
+  <div class="block-title">Prioridades del score</div>
+  <div class="row" id="prefs"></div>
 </div>
-
-<div class="prefs-block">
-  <div class="prefs-title">Prioridades del score</div>
-  <div class="prefs-btns" id="prefs-btns"></div>
-</div>
-
-<div class="zones" id="zones"></div>
-<div class="filters" id="filters"></div>
-
-<div class="legend">
-  <span><span class="dot" style="background:#4f8ef7"></span>Rafa</span>
-  <span><span class="dot" style="background:#a78bfa"></span>Manana</span>
-  <span><span class="dot" style="background:#34d399"></span>Ambos 👍</span>
-  <span><span class="dot" style="background:#f87171"></span>Ambos 👎</span>
-</div>
-
+<div class="row" id="zonas" style="margin-bottom:.5rem"></div>
+<div class="row" id="filtros" style="margin-bottom:.85rem"></div>
 <div id="cards"></div>
 
 <script>
-const BUDGET = 900000;
-const fmt = n => n ? n.toLocaleString('es-ES') + ' €' : '—';
-
-const PISOS = [
-  {id:"dm-01",zona:"Diagonal Mar",complejo:"Illa del Llac",titulo:"4 hab · 130m² · terraza 12m² · parking · piscina + gimnasio",precio:1149000,m2:130,terraza:12,hab:4,planta:"Alta",parking:true,piscina:true,gimnasio:true,vistas:"Mar y zona verde",estado:"Segunda mano",url:"https://www.aproperties.es/barcelona/diagonal-mar/piso-de-130-m2-con-terraza-aparcamiento-piscina-y-vistas-en-venta-en-diagonal-mar-barcelona",fuente:"aProperties",notas:"4 hab (1 suite) · suroeste · 5 min playa · 2 plazas parking incl."},
+const B=900000, fmt=n=>n?n.toLocaleString('es-ES')+' €':'—';
+const ZONAS=["Todas","Diagonal Mar","Badalona Puerto","El Gorg","El Masnou","Poblenou"];
+const FILTROS=[["todos","Todos"],["ambos","💚 Ambos gustan"],["rafa","👨 Rafa"],["manana","👩 Manana"],["sin","⏳ Sin votar"]];
+const PK=[["parking","🅿️ Parking"],["piscina","🏊 Piscina"],["gimnasio","🏋️ Gym"]];
+const PISOS=[
+  {id:"dm-01",zona:"Diagonal Mar",complejo:"Illa del Llac",titulo:"4 hab · 130m² · terraza 12m² · parking · piscina + gym",precio:1149000,m2:130,terraza:12,hab:4,planta:"Alta",parking:true,piscina:true,gimnasio:true,vistas:"Mar y zona verde",estado:"Segunda mano",url:"https://www.aproperties.es/barcelona/diagonal-mar/piso-de-130-m2-con-terraza-aparcamiento-piscina-y-vistas-en-venta-en-diagonal-mar-barcelona",fuente:"aProperties",notas:"4 hab (1 suite) · suroeste · 5 min playa · 2 plazas parking incl."},
   {id:"dm-02",zona:"Diagonal Mar",complejo:"Illa del Mar",titulo:"Ático dúplex · 153m² + terraza 70m² piscina privada · 3 hab",precio:2500000,m2:153,terraza:70,hab:3,planta:"Ático",parking:true,piscina:true,gimnasio:true,vistas:"Mar + ciudad panorámica",estado:"Segunda mano",url:"https://www.aproperties.es/barcelona/diagonal-mar/atico-de-lujo-de-153-m2-con-terraza-aparcamiento-piscina-y-sea-views-en-venta-en-diagonal-mar-barcelona",fuente:"aProperties",notas:"Piscina privada + jacuzzi · amueblado · sauna comunitaria"},
   {id:"dm-03",zona:"Diagonal Mar",complejo:"Illa del Mar",titulo:"Planta 24 · 116m² + terraza 63m² · 3 hab · amueblado · parking",precio:1850000,m2:116,terraza:63,hab:3,planta:"24ª",parking:true,piscina:true,gimnasio:true,vistas:"Mar directo + skyline",estado:"Segunda mano",url:"https://www.aproperties.es/barcelona/diagonal-mar/piso-de-116-m2-con-terraza-aparcamiento-piscina-y-sea-views-en-venta-en-diagonal-mar-barcelona",fuente:"aProperties",notas:"Suelos mármol · mobiliario italiano · terraza rodea el piso"},
   {id:"dm-04",zona:"Diagonal Mar",complejo:"ANTARES (Odile Decq)",titulo:"Obra nueva · 5ª pl · 141m² + 2 terrazas 44m² · 2 hab",precio:1431712,m2:141,terraza:44,hab:2,planta:"5ª",parking:true,piscina:true,gimnasio:true,vistas:"Mar + ciudad",estado:"Obra nueva",url:"https://www.aproperties.es/barcelona/diagonal-mar/obra-nueva-con-terraza-aparcamiento-piscina-y-sea-views-en-venta-en-diagonal-mar-barcelona",fuente:"aProperties",notas:"Piscina infinita pl 27 · gym 1.000m² · jacuzzi · restaurante · solo 2 hab"},
-  {id:"bad-01",zona:"Badalona Puerto",complejo:"Somnia Mare · Realia",titulo:"4 hab · 164m² · 4ª planta · parking · piscina + gym · VISITADA",precio:637000,m2:164,terraza:null,hab:4,planta:"4ª",parking:true,piscina:true,gimnasio:true,vistas:"Puerto + mar",estado:"Obra nueva entregada",url:"https://www.idealista.com/inmueble/108895337/",fuente:"Idealista",notas:"Primera línea puerto · 1 plaza garaje · piscina + gym + coworking · VISITADA · reseñas mencionan filtraciones en garaje"},
+  {id:"bad-01",zona:"Badalona Puerto",complejo:"Somnia Mare · Realia",titulo:"4 hab · 164m² · 4ª planta · parking · piscina + gym · VISITADA",precio:637000,m2:164,terraza:null,hab:4,planta:"4ª",parking:true,piscina:true,gimnasio:true,vistas:"Puerto + mar",estado:"Obra nueva entregada",url:"https://www.idealista.com/inmueble/108895337/",fuente:"Idealista",notas:"Primera línea puerto · 1 plaza garaje · piscina + gym + coworking · VISITADA · ojo: reseñas filtraciones en garaje"},
   {id:"bad-02",zona:"Badalona Puerto",complejo:"Somnia Mare · Realia",titulo:"4 hab · 164m² · 2ª planta · 2 parkings · piscina + gym",precio:641000,m2:164,terraza:null,hab:4,planta:"2ª",parking:true,piscina:true,gimnasio:true,vistas:"Puerto + mar",estado:"Obra nueva entregada",url:"https://www.magnum-partners.com/viviendas/somnia-mare-by-portum/",fuente:"Magnum/Realia",notas:"Primera línea puerto · 2 plazas garaje · piscina + gym + coworking"},
-  {id:"bad-03",zona:"Badalona Puerto",complejo:"Somnia Mare · Realia",titulo:"Ático · 3 hab · 186m² · planta 11 · 2 parkings · vistas panorámicas",precio:772000,m2:186,terraza:null,hab:3,planta:"11ª",parking:true,piscina:true,gimnasio:true,vistas:"Mar + ciudad panorámica",estado:"Obra nueva entregada",url:"https://www.idealista.com/inmueble/111980943/",fuente:"Idealista",notas:"Planta 11 · 2 plazas garaje · vistas panorámicas · ojo: reseñas mencionan filtraciones en garaje"},
-  {id:"bad-04",zona:"Badalona Puerto",complejo:"Somnia Vera · Realia",titulo:"3 hab · 128m² · 4ª planta · parking · piscina + gym · EN CONSTRUCCIÓN",precio:626000,m2:128,terraza:null,hab:3,planta:"4ª",parking:true,piscina:true,gimnasio:true,vistas:"Puerto + mar",estado:"Obra nueva en construcción",url:"https://www.idealista.com/inmueble/112072697/",fuente:"Idealista",notas:"Rambla del Gorg 8 · la que veis construir · misma promotora · precio 4 hab pendiente"},
+  {id:"bad-03",zona:"Badalona Puerto",complejo:"Somnia Mare · Realia",titulo:"Ático · 3 hab · 186m² · planta 11 · 2 parkings · vistas panorámicas",precio:772000,m2:186,terraza:null,hab:3,planta:"11ª",parking:true,piscina:true,gimnasio:true,vistas:"Mar + ciudad panorámica",estado:"Obra nueva entregada",url:"https://www.idealista.com/inmueble/111980943/",fuente:"Idealista",notas:"Planta 11 · 2 plazas garaje · vistas panorámicas · ojo: reseñas filtraciones garaje"},
+  {id:"bad-04",zona:"Badalona Puerto",complejo:"Somnia Vera · Realia",titulo:"3 hab · 128m² · 4ª planta · parking · piscina + gym · EN CONSTRUCCIÓN",precio:626000,m2:128,terraza:null,hab:3,planta:"4ª",parking:true,piscina:true,gimnasio:true,vistas:"Puerto + mar",estado:"Obra nueva en construcción",url:"https://www.idealista.com/inmueble/112072697/",fuente:"Idealista",notas:"Rambla del Gorg 8 · la que veis construir · precio 4 hab pendiente"},
   {id:"bad-05",zona:"Badalona Puerto",complejo:"Somnia Vera · Realia",titulo:"3 hab · 126m² · 3ª planta · parking · piscina + gym · EN CONSTRUCCIÓN",precio:673000,m2:126,terraza:null,hab:3,planta:"3ª",parking:true,piscina:true,gimnasio:true,vistas:"Puerto + mar",estado:"Obra nueva en construcción",url:"https://www.idealista.com/inmueble/112072718/",fuente:"Idealista",notas:"Rambla del Gorg 8 · misma promotora que Somnia Mare · precio 4 hab pendiente"},
   {id:"bad-06",zona:"Badalona Puerto",complejo:"Residencial Marenostrum · Lucas Fox",titulo:"4 hab · 143m² · junto canal puerto · 2 piscinas · parking",precio:627000,m2:143,terraza:null,hab:4,planta:"2ª",parking:true,piscina:true,gimnasio:false,vistas:"Litoral y canal",estado:"Obra nueva 2025",url:"https://www.lucasfox.es/obra-nueva/marenostrum.html",fuente:"Lucas Fox",notas:"Junto al canal del puerto · 2 piscinas · aerotermia · 3km BCN · no primera línea playa"},
-  {id:"bad-07",zona:"Badalona Puerto",complejo:"Living Badalona Torner II",titulo:"4 hab · 152m² · parking + trastero · obra nueva",precio:674700,m2:152,terraza:null,hab:4,planta:"2ª",parking:true,piscina:false,gimnasio:false,vistas:"Ciudad",estado:"Obra nueva",url:"https://www.idealista.com/inmueble/110038714/",fuente:"Idealista",notas:"Junto Mercat Torner · 5 min Ayuntamiento · no primera línea mar · sin piscina"},
-  {id:"bad-08",zona:"Badalona Puerto",complejo:"Passeig Marítim Badalona",titulo:"3 hab · 123m² + terraza · parking · piscina + solarium · primera línea",precio:null,m2:123,terraza:null,hab:3,planta:"Alta",parking:true,piscina:true,gimnasio:false,vistas:"Mar directo (primera línea)",estado:"Segunda mano",url:"https://www.idealista.com/en/venta-viviendas/badalona-barcelona/con-pisos/",fuente:"Idealista",notas:"Passeig Marítim · diseño contemporáneo · gran zona comunitaria con piscina y solarium · precio a consultar"},
-  {id:"bad-09",zona:"Badalona Puerto",complejo:"Port de Badalona · Ático",titulo:"Ático · 152m² · 2 terrazas · planta alta · parking · primera línea puerto",precio:null,m2:152,terraza:null,hab:3,planta:"Ático",parking:true,piscina:false,gimnasio:false,vistas:"Mar + puerto",estado:"Segunda mano",url:"https://www.idealista.com/en/venta-viviendas/badalona-barcelona/",fuente:"Idealista",notas:"Ático en el Port de Badalona · 2 terrazas (nivel piso + superior) · parking incl. · precio a consultar"},
+  {id:"bad-07",zona:"Badalona Puerto",complejo:"Living Badalona Torner II",titulo:"4 hab · 152m² · parking + trastero · obra nueva",precio:674700,m2:152,terraza:null,hab:4,planta:"2ª",parking:true,piscina:false,gimnasio:false,vistas:"Ciudad",estado:"Obra nueva",url:"https://www.idealista.com/inmueble/110038714/",fuente:"Idealista",notas:"Junto Mercat Torner · no primera línea mar · sin piscina"},
+  {id:"bad-08",zona:"Badalona Puerto",complejo:"Passeig Marítim Badalona",titulo:"3 hab · 123m² + terraza · parking · piscina · primera línea",precio:null,m2:123,terraza:null,hab:3,planta:"Alta",parking:true,piscina:true,gimnasio:false,vistas:"Mar directo (primera línea)",estado:"Segunda mano",url:"https://www.idealista.com/en/venta-viviendas/badalona-barcelona/con-pisos/",fuente:"Idealista",notas:"Passeig Marítim · gran zona comunitaria con piscina y solarium · precio a consultar"},
+  {id:"bad-09",zona:"Badalona Puerto",complejo:"Port de Badalona · Ático",titulo:"Ático · 152m² · 2 terrazas · planta alta · parking",precio:null,m2:152,terraza:null,hab:3,planta:"Ático",parking:true,piscina:false,gimnasio:false,vistas:"Mar + puerto",estado:"Segunda mano",url:"https://www.idealista.com/en/venta-viviendas/badalona-barcelona/",fuente:"Idealista",notas:"Ático Port de Badalona · 2 terrazas · parking incl. · precio a consultar"},
   {id:"gorg-01",zona:"El Gorg",complejo:"Residencial Gorg · Coldwell Banker",titulo:"Obra nueva · 123m² + terraza 214m² · 3 hab · parking · piscina",precio:849000,m2:123,terraza:214,hab:3,planta:"Alta",parking:true,piscina:true,gimnasio:false,vistas:"Mar (terraza)",estado:"Obra nueva 2024",url:"https://www.coldwellbanker.es/en/badalona/gorg-progres/new-development-with-swimming-pool-and-parking-gorg-badalona/units/CBES2264_B",fuente:"Coldwell Banker",notas:"Unidad B · terraza 214m² · aerotermia · parquet · 3km BCN · sin gimnasio"},
   {id:"gorg-02",zona:"El Gorg",complejo:"Residencial Gorg · Coldwell Banker",titulo:"Obra nueva · 121m² + terraza 23m² · 4 hab · parking · piscina",precio:622000,m2:121,terraza:23,hab:4,planta:"Media-alta",parking:true,piscina:true,gimnasio:false,vistas:"Mar (terraza)",estado:"Obra nueva 2024",url:"https://www.coldwellbanker.es/en/badalona/gorg-progres/new-development-with-swimming-pool-and-parking-gorg-badalona/units/CBES2264_E",fuente:"Coldwell Banker",notas:"Unidad E · 4 hab · aerotermia · parquet · dentro de presupuesto · sin gimnasio"},
-  {id:"mas-01",zona:"El Masnou",complejo:"AURAS · Lucas Fox · primera línea mar",titulo:"3 hab · 109m² útiles + terraza 39m² · 1ª planta · parking · piscina + spa + gym",precio:875000,m2:109,terraza:39,hab:3,planta:"1ª",parking:true,piscina:true,gimnasio:true,vistas:"Mar directo (primera línea)",estado:"Obra nueva · entrega Q4 2028",url:"https://www.lucasfox.es/comprar-vivienda/espana/barcelona/maresme/el-masnou/piso/mrs69078.html",fuente:"Lucas Fox",notas:"109m² útiles · primera línea mar · piscina ext+int · spa · sauna · gym · 15 min BCN · entrega Q4 2028"},
-  {id:"mas-02",zona:"El Masnou",complejo:"AURAS · Lucas Fox · primera línea mar",titulo:"3 hab · 107m² útiles + terraza 45m² + jardín 150m² · planta baja",precio:925000,m2:107,terraza:45,hab:3,planta:"Baja",parking:true,piscina:true,gimnasio:true,vistas:"Mar directo + jardín privado",estado:"Obra nueva · entrega Q4 2028",url:"https://www.lucasfox.es/comprar-vivienda/espana/barcelona/maresme/el-masnou/piso/mrs69076.html",fuente:"Lucas Fox",notas:"107m² útiles + 45m² terraza + 150m² JARDÍN PRIVADO · primera línea mar · entrega Q4 2028"},
-  {id:"mas-03",zona:"El Masnou",complejo:"AURAS · Lucas Fox · primera línea mar",titulo:"3 hab · 107m² útiles + terraza 45m² · 2ª planta · parking · piscina + spa + gym",precio:925000,m2:107,terraza:45,hab:3,planta:"2ª",parking:true,piscina:true,gimnasio:true,vistas:"Mar directo (primera línea)",estado:"Obra nueva · entrega Q4 2028",url:"https://www.lucasfox.es/comprar-vivienda/espana/barcelona/maresme/el-masnou/piso/mrs69081.html",fuente:"Lucas Fox",notas:"107m² útiles · primera línea mar · piscina ext+int · spa · sauna · gym · entrega Q4 2028"},
-  {id:"pob-01",zona:"Poblenou",complejo:"Calle Llull",titulo:"121m² · 4 hab dobles · 5ª planta exterior · vistas parque",precio:715000,m2:121,terraza:0,hab:4,planta:"5ª",parking:false,piscina:false,gimnasio:false,vistas:"Parque",estado:"Segunda mano",url:"https://www.idealista.com/en/inmueble/112250246/",fuente:"Idealista",notas:"4 hab dobles · parking opcional +25.000€"},
+  {id:"mas-01",zona:"El Masnou",complejo:"AURAS · Lucas Fox · primera línea mar",titulo:"3 hab · 109m² útiles + terraza 39m² · 1ª planta · parking · piscina + spa + gym",precio:875000,m2:109,terraza:39,hab:3,planta:"1ª",parking:true,piscina:true,gimnasio:true,vistas:"Mar directo (primera línea)",estado:"Obra nueva · entrega Q4 2028",url:"https://www.lucasfox.es/comprar-vivienda/espana/barcelona/maresme/el-masnou/piso/mrs69078.html",fuente:"Lucas Fox",notas:"109m² útiles · primera línea mar · piscina ext+int · spa · sauna · gym · 15 min BCN · Q4 2028"},
+  {id:"mas-02",zona:"El Masnou",complejo:"AURAS · Lucas Fox · primera línea mar",titulo:"3 hab · 107m² útiles + terraza 45m² + jardín 150m² · planta baja",precio:925000,m2:107,terraza:45,hab:3,planta:"Baja",parking:true,piscina:true,gimnasio:true,vistas:"Mar directo + jardín privado",estado:"Obra nueva · entrega Q4 2028",url:"https://www.lucasfox.es/comprar-vivienda/espana/barcelona/maresme/el-masnou/piso/mrs69076.html",fuente:"Lucas Fox",notas:"107m² útiles + 45m² terraza + 150m² JARDÍN PRIVADO · primera línea mar · Q4 2028"},
+  {id:"mas-03",zona:"El Masnou",complejo:"AURAS · Lucas Fox · primera línea mar",titulo:"3 hab · 107m² útiles + terraza 45m² · 2ª planta · parking · piscina + spa + gym",precio:925000,m2:107,terraza:45,hab:3,planta:"2ª",parking:true,piscina:true,gimnasio:true,vistas:"Mar directo (primera línea)",estado:"Obra nueva · entrega Q4 2028",url:"https://www.lucasfox.es/comprar-vivienda/espana/barcelona/maresme/el-masnou/piso/mrs69081.html",fuente:"Lucas Fox",notas:"107m² útiles · primera línea mar · piscina ext+int · spa · sauna · gym · Q4 2028"},
+  {id:"pob-01",zona:"Poblenou",complejo:"Calle Llull",titulo:"121m² · 4 hab dobles · 5ª planta exterior",precio:715000,m2:121,terraza:0,hab:4,planta:"5ª",parking:false,piscina:false,gimnasio:false,vistas:"Parque",estado:"Segunda mano",url:"https://www.idealista.com/en/inmueble/112250246/",fuente:"Idealista",notas:"4 hab dobles · parking opcional +25.000€"},
   {id:"pob-02",zona:"Poblenou",complejo:"Rambla del Poblenou",titulo:"Ático · 133m² + terraza 155m² · 4 hab · Rambla",precio:1050000,m2:133,terraza:155,hab:4,planta:"Ático 5ª",parking:false,piscina:false,gimnasio:false,vistas:"Rambla + ciudad",estado:"Segunda mano",url:"https://www.idealista.com/en/inmueble/111931324/",fuente:"Idealista",notas:"Terraza brutal 155m² · Rambla del Poblenou · sin piscina comunitaria"},
   {id:"pob-03",zona:"Poblenou",complejo:"Can Ricart Lofts · 22@",titulo:"Obra nueva · dúplex y lofts · terrazas · jardín · naves s.XIX",precio:null,m2:null,terraza:null,hab:null,planta:"Varias",parking:false,piscina:false,gimnasio:false,vistas:"Parc Central 22@",estado:"Obra nueva",url:"https://bonavistadev.com/en/development/lofts-can-ricart/",fuente:"Bonavista",notas:"Precio a consultar · edificios industriales s.XIX · proyecto único"},
   {id:"pob-04",zona:"Poblenou",complejo:"LUX Poblenou",titulo:"Casas obra nueva · piscina privada + jardín · 216m²",precio:null,m2:216,terraza:null,hab:3,planta:"Baja+1ª",parking:false,piscina:true,gimnasio:false,vistas:"Jardín privado",estado:"Obra nueva",url:"https://www.idealista.com/en/geo/venta-viviendas/metro-poblenou/",fuente:"Idealista",notas:"Casas con piscina privada y jardín · muy cerca playa y 22@ · precio a consultar"},
   {id:"pob-05",zona:"Poblenou",complejo:"Ático diseño · Poblenou",titulo:"Ático · 160m² + terraza 64m² · bóvedas catalanas · 3 hab",precio:null,m2:160,terraza:64,hab:3,planta:"Ático",parking:false,piscina:false,gimnasio:false,vistas:"Poblenou",estado:"Segunda mano",url:"https://www.idealista.com/venta-viviendas/barcelona/sant-marti/el-poblenou/con-de-tres-dormitorios/",fuente:"Idealista",notas:"160m² con bóvedas catalanas · terraza 64m² · mucho carácter · precio a consultar"},
-  {id:"pob-06",zona:"Poblenou",complejo:"Ramon Turró · Rambla Poblenou",titulo:"4 hab · 128m² + terraza 12m² · piscina · Rambla · finca 2000",precio:null,m2:128,terraza:12,hab:4,planta:"Alta",parking:false,piscina:true,gimnasio:false,vistas:"Rambla Poblenou",estado:"Segunda mano",url:"https://www.idealista.com/venta-viviendas/barcelona/sant-marti/el-poblenou/con-pisos/",fuente:"Idealista",notas:"4 hab todas exteriores a Rambla · 1 suite con vestidor · piscina comunitaria · precio a consultar"},
+  {id:"pob-06",zona:"Poblenou",complejo:"Ramon Turró · Rambla Poblenou",titulo:"4 hab · 128m² + terraza 12m² · piscina · finca 2000",precio:null,m2:128,terraza:12,hab:4,planta:"Alta",parking:false,piscina:true,gimnasio:false,vistas:"Rambla Poblenou",estado:"Segunda mano",url:"https://www.idealista.com/venta-viviendas/barcelona/sant-marti/el-poblenou/con-pisos/",fuente:"Idealista",notas:"4 hab todas exteriores a Rambla · 1 suite con vestidor · piscina comunitaria · precio a consultar"},
 ];
 
-const ZONAS = ["Todas","Diagonal Mar","Badalona Puerto","El Gorg","El Masnou","Poblenou"];
-const PREFS_KEYS = [["parking","🅿️ Parking"],["piscina","🏊 Piscina"],["gimnasio","🏋️ Gym"]];
+let V={r:{},m:{}}, prefs={parking:true,piscina:false,gimnasio:false}, zona="Todas", filtro="todos";
 
-let votos = {rafa:{}, manana:{}};
-let prefs = {parking:true,piscina:false,gimnasio:false};
-let zona = "Todas", filtro = "todos", user = "rafa";
+function save(){try{localStorage.setItem("rpv3",JSON.stringify({V,prefs}))}catch(e){}}
+function load(){try{const d=JSON.parse(localStorage.getItem("rpv3")||"{}");if(d.V){V=d.V;if(!V.r)V.r={};if(!V.m)V.m={}}if(d.prefs)prefs=d.prefs}catch(e){}}
 
-function save() {
-  try {
-    localStorage.setItem("rf-votos-dual", JSON.stringify(votos));
-    localStorage.setItem("rf-prefs-v2", JSON.stringify(prefs));
-    localStorage.setItem("rf-user", user);
-  } catch(e){}
+function sc(p){
+  if(!p.precio)return null;
+  let s=50;
+  if(p.precio<=B)s+=20;else s-=15;
+  if(p.m2>=120)s+=10;else if(p.m2&&p.m2<100)s-=10;
+  if(p.terraza>=30)s+=10;else if(p.terraza>=15)s+=5;
+  if(p.hab>=4)s+=8;else if(p.hab===3)s+=3;
+  if(prefs.parking&&p.parking)s+=5;
+  if(prefs.piscina&&p.piscina)s+=5;
+  if(prefs.gimnasio&&p.gimnasio)s+=4;
+  if(p.vistas?.toLowerCase().includes("mar"))s+=8;
+  if(p.estado.includes("nueva"))s+=5;
+  if(V.r[p.id]==="like"&&V.m[p.id]==="like")s+=15;
+  return Math.max(0,Math.min(100,Math.round(s)));
 }
 
-function load() {
-  try {
-    const v = localStorage.getItem("rf-votos-dual");
-    if (v) votos = JSON.parse(v);
-    if (!votos.rafa) votos.rafa = {};
-    if (!votos.manana) votos.manana = {};
-    const p = localStorage.getItem("rf-prefs-v2");
-    if (p) prefs = JSON.parse(p);
-    const u = localStorage.getItem("rf-user");
-    if (u) user = u;
-  } catch(e){}
+function pl(ok,l){return`<span class="pill ${ok?"ok":"no"}">${l}</span>`}
+
+function badge(id){
+  const r=V.r[id],m=V.m[id];
+  if(r==="like"&&m==="like")return'<span class="badge b-both">💚 Ambos</span>';
+  if(r==="dislike"&&m==="dislike")return'<span class="badge b-none">❌ Ambos no</span>';
+  if(r&&m&&r!==m)return'<span class="badge b-div">🤔 Dividido</span>';
+  return"";
 }
 
-function calcScore(p) {
-  if (!p.precio) return null;
-  let s = 50;
-  if (p.precio <= BUDGET) s += 20; else s -= 15;
-  if (p.m2 >= 120) s += 10; else if (p.m2 && p.m2 < 100) s -= 10;
-  if (p.terraza >= 30) s += 10; else if (p.terraza >= 15) s += 5;
-  if (p.hab >= 4) s += 8; else if (p.hab === 3) s += 3;
-  if (prefs.parking && p.parking) s += 5;
-  if (prefs.piscina && p.piscina) s += 5;
-  if (prefs.gimnasio && p.gimnasio) s += 4;
-  if (p.vistas?.toLowerCase().includes("mar")) s += 8;
-  if (p.estado.includes("nueva")) s += 5;
-  // Bonus si ambos dieron like
-  if (votos.rafa[p.id]==='like' && votos.manana[p.id]==='like') s += 15;
-  return Math.max(0, Math.min(100, Math.round(s)));
-}
-
-function pill(ok, label) {
-  return `<span class="pill ${ok?'pill-ok':'pill-no'}">${label}</span>`;
-}
-
-function matchBadge(id) {
-  const r = votos.rafa[id], m = votos.manana[id];
-  if (r==='like' && m==='like') return '<span class="match-badge match-both">💚 Ambos</span>';
-  if (r==='dislike' && m==='dislike') return '<span class="match-badge match-none">❌ Ambos no</span>';
-  if ((r==='like'||m==='like') && !r!==!m) return '<span class="match-badge match-partial">🤔 Dividido</span>';
-  return '';
-}
-
-function renderCard(p) {
-  const rv = votos.rafa[p.id], mv = votos.manana[p.id];
-  const s = calcScore(p);
-  const over = p.precio && p.precio > BUDGET;
-  const scCol = s >= 70 ? "#34d399" : s >= 40 ? "#fbbf24" : "#f87171";
-  const bothLike = rv==='like' && mv==='like';
-  const bothDislike = rv==='dislike' && mv==='dislike';
-  const borderCol = bothLike ? 'rgba(52,211,153,.5)' : bothDislike ? 'rgba(248,113,113,.35)' : '#2a3047';
-  const opacity = bothDislike ? '.4' : '1';
-
-  return `<div class="card" style="border-color:${borderCol};opacity:${opacity}" id="card-${p.id}">
+function card(p){
+  const r=V.r[p.id],m=V.m[p.id];
+  const s=sc(p),over=p.precio&&p.precio>B;
+  const sc2=s>=70?"#34d399":s>=40?"#fbbf24":"#f87171";
+  const bl=r==="like"&&m==="like",bn=r==="dislike"&&m==="dislike";
+  return`<div class="card" style="border-color:${bl?"rgba(52,211,153,.5)":bn?"rgba(248,113,113,.35)":"#2a3047"};opacity:${bn?.4:1}">
     <div class="card-top">
-      <div style="flex:1">
-        <div class="card-complejo">${p.complejo}</div>
-        <div class="card-titulo">${p.titulo}</div>
-      </div>
-      <div style="text-align:right;flex-shrink:0">
-        <div class="card-precio" style="color:${over?'#fbbf24':'#34d399'}">${fmt(p.precio)}</div>
-        ${over?'<div class="card-sobre">sobre presupuesto</div>':''}
-      </div>
+      <div style="flex:1"><div class="card-complejo">${p.complejo}</div><div class="card-titulo">${p.titulo}</div></div>
+      <div style="text-align:right;flex-shrink:0"><div class="precio" style="color:${over?"#fbbf24":"#34d399"}">${fmt(p.precio)}</div>${over?'<div class="sobre">sobre presupuesto</div>':""}</div>
     </div>
     <div class="pills">
-      ${p.m2?pill(p.m2>=120,p.m2+'m²'):''}
-      ${p.terraza!=null?pill(p.terraza>=20,'☀️ '+p.terraza+'m²'):''}
-      ${p.hab?pill(p.hab>=4,p.hab+' hab'):''}
-      ${p.planta?pill(true,p.planta):''}
-      ${pill(p.parking,'🅿️')}${pill(p.piscina,'🏊')}${pill(p.gimnasio,'🏋️')}
-      ${p.vistas?pill(p.vistas.toLowerCase().includes('mar'),'👁 '+p.vistas):''}
-      ${pill(p.estado.includes('nueva'),p.estado)}
-      ${matchBadge(p.id)}
+      ${p.m2?pl(p.m2>=120,p.m2+"m²"):""}
+      ${p.terraza!=null?pl(p.terraza>=20,"☀️ "+p.terraza+"m²"):""}
+      ${p.hab?pl(p.hab>=4,p.hab+" hab"):""}
+      ${p.planta?pl(true,p.planta):""}
+      ${pl(p.parking,"🅿️")}${pl(p.piscina,"🏊")}${pl(p.gimnasio,"🏋️")}
+      ${p.vistas?pl(p.vistas.toLowerCase().includes("mar"),"👁 "+p.vistas):""}
+      ${pl(p.estado.includes("nueva"),p.estado)}
+      ${badge(p.id)}
     </div>
-    ${p.notas?`<div class="notas">${p.notas}</div>`:''}
-    <div class="card-footer">
-      <div class="card-actions">
-        ${s!==null?`<span class="score" style="color:${scCol};border:1px solid ${scCol};background:${scCol}18">⭐ ${s}%</span>`:''}
-        <a class="link-btn" href="${p.url}" target="_blank">🔗 ${p.fuente}</a>
+    ${p.notas?`<div class="notas">${p.notas}</div>`:""}
+    <div class="footer">
+      <div class="left">
+        ${s!==null?`<span class="sc" style="color:${sc2};border:1px solid ${sc2};background:${sc2}18">⭐ ${s}%</span>`:""}
+        <a class="lnk" href="${p.url}" target="_blank">🔗 ${p.fuente}</a>
       </div>
-      <div class="vote-section">
-        <div class="vote-row">
-          <span class="vote-label" style="color:#4f8ef7">Rafa</span>
-          <button class="vote-btn ${rv==='like'?'like-rafa':''}" onclick="vote('${p.id}','like','rafa')">👍</button>
-          <button class="vote-btn ${rv==='dislike'?'dislike-rafa':''}" onclick="vote('${p.id}','dislike','rafa')">👎</button>
+      <div class="votes">
+        <div class="vrow">
+          <span class="vlbl" style="color:#4f8ef7">Rafa</span>
+          <button class="vb ${r==="like"?"lr":""}" onclick="vote('${p.id}','like','r')">👍</button>
+          <button class="vb ${r==="dislike"?"dr":""}" onclick="vote('${p.id}','dislike','r')">👎</button>
         </div>
-        <div class="vote-row">
-          <span class="vote-label" style="color:#a78bfa">Manana</span>
-          <button class="vote-btn ${mv==='like'?'like-manana':''}" onclick="vote('${p.id}','like','manana')">👍</button>
-          <button class="vote-btn ${mv==='dislike'?'dislike-manana':''}" onclick="vote('${p.id}','dislike','manana')">👎</button>
+        <div class="vrow">
+          <span class="vlbl" style="color:#a78bfa">Manana</span>
+          <button class="vb ${m==="like"?"lm":""}" onclick="vote('${p.id}','like','m')">👍</button>
+          <button class="vb ${m==="dislike"?"dm":""}" onclick="vote('${p.id}','dislike','m')">👎</button>
         </div>
       </div>
     </div>
   </div>`;
 }
 
-function vote(id, tipo, u) {
-  votos[u][id] = votos[u][id] === tipo ? undefined : tipo;
-  if (!votos[u][id]) delete votos[u][id];
-  save();
-  render();
+function vote(id,tipo,u){
+  V[u][id]=V[u][id]===tipo?undefined:tipo;
+  if(!V[u][id])delete V[u][id];
+  save();render();
 }
 
-function setUser(u) { user = u; save(); render(); }
-function togglePref(k) { prefs[k] = !prefs[k]; save(); render(); }
-function setZona(z) { zona = z; render(); }
-function setFiltro(f) { filtro = f; render(); }
+function render(){
+  const rL=Object.values(V.r).filter(v=>v==="like").length;
+  const mL=Object.values(V.m).filter(v=>v==="like").length;
+  const both=PISOS.filter(p=>V.r[p.id]==="like"&&V.m[p.id]==="like").length;
+  document.getElementById("stats").innerHTML=
+    `${PISOS.length} pisos · <span style="color:#4f8ef7">Rafa ${rL}👍</span> · <span style="color:#a78bfa">Manana ${mL}👍</span> · <span style="color:#34d399">${both} coinciden 💚</span>`;
 
-function render() {
-  const rLikes = Object.values(votos.rafa).filter(v=>v==='like').length;
-  const mLikes = Object.values(votos.manana).filter(v=>v==='like').length;
-  const both = PISOS.filter(p=>votos.rafa[p.id]==='like'&&votos.manana[p.id]==='like').length;
-  document.getElementById('stats').innerHTML =
-    `${PISOS.length} pisos · <span style="color:#4f8ef7">Rafa: ${rLikes} 👍</span> · <span style="color:#a78bfa">Manana: ${mLikes} 👍</span> · <span style="color:#34d399">Coinciden: ${both} 💚</span>`;
+  document.getElementById("prefs").innerHTML=PK.map(([k,l])=>
+    `<button class="btn" style="border:1px solid ${prefs[k]?"#4f8ef7":"#2a3047"};background:${prefs[k]?"rgba(79,142,247,.2)":"transparent"};color:${prefs[k]?"#4f8ef7":"#6b7280"};font-weight:${prefs[k]?600:400}" onclick="togglePref('${k}')">${l}</button>`
+  ).join("");
 
-  // User bar
-  document.getElementById('btn-rafa').className = `user-btn rafa${user==='rafa'?' active-rafa':''}`;
-  document.getElementById('btn-manana').className = `user-btn manana${user==='manana'?' active-manana':''}`;
+  document.getElementById("zonas").innerHTML=ZONAS.map(z=>
+    `<button class="btn" style="border:1px solid ${zona===z?"#4f8ef7":"#2a3047"};background:${zona===z?"rgba(79,142,247,.2)":"transparent"};color:${zona===z?"#4f8ef7":"#6b7280"};font-weight:${zona===z?600:400}" onclick="setZona('${z}')">${z}</button>`
+  ).join("");
 
-  // Prefs
-  document.getElementById('prefs-btns').innerHTML = PREFS_KEYS.map(([k,l]) =>
-    `<button class="btn" style="border:1px solid ${prefs[k]?'#4f8ef7':'#2a3047'};background:${prefs[k]?'rgba(79,142,247,.2)':'transparent'};color:${prefs[k]?'#4f8ef7':'#6b7280'};font-weight:${prefs[k]?600:400}" onclick="togglePref('${k}')">${l}</button>`
-  ).join('');
+  document.getElementById("filtros").innerHTML=FILTROS.map(([k,l])=>
+    `<button class="btn" style="border:1px solid ${filtro===k?"#34d399":"#2a3047"};background:${filtro===k?"rgba(52,211,153,.15)":"transparent"};color:${filtro===k?"#34d399":"#6b7280"};font-weight:${filtro===k?600:400}" onclick="setFiltro('${k}')">${l}</button>`
+  ).join("");
 
-  // Zones
-  document.getElementById('zones').innerHTML = ZONAS.map(z =>
-    `<button class="btn" style="border:1px solid ${zona===z?'#4f8ef7':'#2a3047'};background:${zona===z?'rgba(79,142,247,.2)':'transparent'};color:${zona===z?'#4f8ef7':'#6b7280'};font-weight:${zona===z?600:400}" onclick="setZona('${z}')">${z}</button>`
-  ).join('');
+  let lista=PISOS.filter(p=>zona==="Todas"||p.zona===zona);
+  if(filtro==="ambos") lista=lista.filter(p=>V.r[p.id]==="like"&&V.m[p.id]==="like");
+  else if(filtro==="rafa") lista=lista.filter(p=>V.r[p.id]==="like");
+  else if(filtro==="manana") lista=lista.filter(p=>V.m[p.id]==="like");
+  else if(filtro==="sin") lista=lista.filter(p=>!V.r[p.id]&&!V.m[p.id]);
+  lista.sort((a,b)=>(sc(b)??-1)-(sc(a)??-1));
 
-  // Filters
-  const fs=[['todos','Todos'],['both-like','💚 Ambos gustan'],['likes','👍 Me gustan'],['pendientes','⏳ Sin votar']];
-  document.getElementById('filters').innerHTML = fs.map(([k,l]) =>
-    `<button class="btn" style="border:1px solid ${filtro===k?'#34d399':'#2a3047'};background:${filtro===k?'rgba(52,211,153,.15)':'transparent'};color:${filtro===k?'#34d399':'#6b7280'};font-weight:${filtro===k?600:400}" onclick="setFiltro('${k}')">${l}</button>`
-  ).join('');
-
-  // Cards
-  let lista = PISOS.filter(p => zona==='Todas' || p.zona===zona);
-  if (filtro==='both-like') lista = lista.filter(p=>votos.rafa[p.id]==='like'&&votos.manana[p.id]==='like');
-  else if (filtro==='likes') lista = lista.filter(p=>votos[user][p.id]==='like');
-  else if (filtro==='pendientes') lista = lista.filter(p=>!votos.rafa[p.id]&&!votos.manana[p.id]);
-  lista.sort((a,b)=>(calcScore(b)??-1)-(calcScore(a)??-1));
-
-  document.getElementById('cards').innerHTML = lista.length
-    ? lista.map(renderCard).join('')
-    : '<div class="empty">No hay pisos en esta selección.</div>';
+  document.getElementById("cards").innerHTML=lista.length
+    ?lista.map(card).join("")
+    :'<div class="empty">No hay pisos en esta selección.</div>';
 }
 
-load();
-render();
+function togglePref(k){prefs[k]=!prefs[k];save();render();}
+function setZona(z){zona=z;render();}
+function setFiltro(f){filtro=f;render();}
+
+load();render();
 </script>
 </body>
 </html>
