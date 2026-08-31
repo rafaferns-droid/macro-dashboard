@@ -72,7 +72,7 @@ h1{font-size:1.3rem;font-weight:700;margin-bottom:.2rem}
 <script>
 const B=900000, fmt=n=>n?n.toLocaleString('es-ES')+' €':'—';
 const ZONAS=["Todas","Diagonal Mar","Glòries / 22@","Vila Olímpica","Badalona Puerto","El Gorg","El Masnou","Poblenou"];
-const FILTROS=[["todos","Todos"],["ambos","💚 Ambos"],["rafa","👨 Rafa"],["manana","👩 Manana"],["sin","⏳ Sin votar"]];
+const FILTROS=[["todos","Todos"],["ambos","💚 Ambos"],["rafa","👨 Rafa"],["manana","👩 Manana"],["sin","⏳ Sin votar"],["descartados","🗑️ Descartados"]];
 const PK=[["parking","🅿️ Parking"],["piscina","🏊 Piscina"],["gimnasio","🏋️ Gym"]];
 
 // Promos: cada una tiene metadatos de conjunto + array de unidades
@@ -464,8 +464,13 @@ function promoScore(promo){
   return scores.length ? Math.max(...scores) : null;
 }
 
+function isBothDislike(promo){
+  return promo.unidades.every(u=>V.r[u.id]==="dislike"&&V.m[u.id]==="dislike");
+}
 function promoMatchesFiltro(promo){
   const units = promo.unidades;
+  if(filtro==="descartados") return isBothDislike(promo);
+  if(isBothDislike(promo)) return false; // hide from all other views
   if(filtro==="ambos") return units.some(u=>V.r[u.id]==="like"&&V.m[u.id]==="like");
   if(filtro==="rafa") return units.some(u=>V.r[u.id]==="like");
   if(filtro==="manana") return units.some(u=>V.m[u.id]==="like");
@@ -567,8 +572,9 @@ function render(){
   const rL=Object.values(V.r).filter(v=>v==="like").length;
   const mL=Object.values(V.m).filter(v=>v==="like").length;
   const both=allUnits.filter(u=>V.r[u.id]==="like"&&V.m[u.id]==="like").length;
+  const descartadas=PROMOS.filter(p=>isBothDislike(p)).length;
   document.getElementById("stats").innerHTML=
-    `${PROMOS.length} promociones · ${allUnits.length} unidades · <span style="color:#4f8ef7">Rafa ${rL}👍</span> · <span style="color:#a78bfa">Manana ${mL}👍</span> · <span style="color:#34d399">${both} coinciden 💚</span>`;
+    `${PROMOS.length} promociones · <span style="color:#4f8ef7">Rafa ${rL}👍</span> · <span style="color:#a78bfa">Manana ${mL}👍</span> · <span style="color:#34d399">${both} 💚</span>`+(descartadas?` · <span style="color:#f87171">${descartadas} 🗑️</span>`:"");
 
   document.getElementById("prefs").innerHTML=PK.map(([k,l])=>
     `<button class="btn" style="border:1px solid ${prefs[k]?"#4f8ef7":"#2a3047"};background:${prefs[k]?"rgba(79,142,247,.2)":"transparent"};color:${prefs[k]?"#4f8ef7":"#6b7280"};font-weight:${prefs[k]?600:400}" onclick="togglePref('${k}')">${l}</button>`
@@ -578,9 +584,12 @@ function render(){
     `<button class="btn" style="border:1px solid ${zona===z?"#4f8ef7":"#2a3047"};background:${zona===z?"rgba(79,142,247,.2)":"transparent"};color:${zona===z?"#4f8ef7":"#6b7280"};font-weight:${zona===z?600:400}" onclick="setZona('${z}')">${z}</button>`
   ).join("");
 
-  document.getElementById("filtros").innerHTML=FILTROS.map(([k,l])=>
-    `<button class="btn" style="border:1px solid ${filtro===k?"#34d399":"#2a3047"};background:${filtro===k?"rgba(52,211,153,.15)":"transparent"};color:${filtro===k?"#34d399":"#6b7280"};font-weight:${filtro===k?600:400}" onclick="setFiltro('${k}')">${l}</button>`
-  ).join("");
+  document.getElementById("filtros").innerHTML=FILTROS.map(([k,l])=>{
+    const isDesc=k==="descartados";
+    const activeCol=isDesc?"#f87171":"#34d399";
+    const activeBg=isDesc?"rgba(248,113,113,.15)":"rgba(52,211,153,.15)";
+    return`<button class="btn" style="border:1px solid ${filtro===k?activeCol:"#2a3047"};background:${filtro===k?activeBg:"transparent"};color:${filtro===k?activeCol:"#6b7280"};font-weight:${filtro===k?600:400}" onclick="setFiltro('${k}')">${l}</button>`;
+  }).join("");
 
   let lista=PROMOS
     .filter(p=>zona==="Todas"||p.zona===zona)
