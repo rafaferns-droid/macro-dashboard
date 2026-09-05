@@ -52,6 +52,7 @@ h1{font-size:1.3rem;font-weight:700;margin-bottom:.2rem}
 .b-both{background:rgba(52,211,153,.15);color:#34d399;border-color:rgba(52,211,153,.4)}
 .b-div{background:rgba(251,191,36,.12);color:#fbbf24;border-color:rgba(251,191,36,.3)}
 .b-none{background:rgba(248,113,113,.12);color:#f87171;border-color:rgba(248,113,113,.3)}
+.b-new{background:rgba(91,127,255,.18);color:#5b7fff;border-color:rgba(91,127,255,.45);font-size:.54rem;letter-spacing:.06em;padding:1px 6px;vertical-align:middle}
 .notas{font-size:.65rem;color:#9ca3af;line-height:1.5;margin-bottom:.35rem;border-left:2px solid #2a3047;padding-left:.45rem}
 .empty{text-align:center;color:#6b7280;padding:2rem;font-size:.83rem}
 .sobre{font-size:.56rem;color:#fbbf24}
@@ -67,6 +68,7 @@ h1{font-size:1.3rem;font-weight:700;margin-bottom:.2rem}
 </div>
 <div class="row" id="zonas" style="margin-bottom:.5rem"></div>
 <div class="row" id="filtros" style="margin-bottom:.85rem"></div>
+<div class="row" id="orden-btns" style="margin-bottom:.85rem"></div>
 <div id="cards"></div>
 
 <script>
@@ -78,7 +80,7 @@ const PK=[["parking","🅿️ Parking"],["piscina","🏊 Piscina"],["gimnasio","
 // Promos: cada una tiene metadatos de conjunto + array de unidades
 const PROMOS = [
   {
-    id:"p-somniamare", zona:"Badalona",
+    id:"p-somniamare", added:1, zona:"Badalona",
     nombre:"Somnia Mare · Realia/Portum",
     desc:"Primera línea puerto · Obra nueva entregada · Piscina + gym + coworking · Parking incl.",
     amenities:{parking:true,piscina:true,gimnasio:true},
@@ -91,7 +93,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-somniavera", zona:"Badalona",
+    id:"p-somniavera", added:2, zona:"Badalona",
     nombre:"Somnia Vera · Realia/Portum",
     desc:"EN CONSTRUCCIÓN · Rambla del Gorg 8 · Misma promotora que Somnia Mare · Precio 4 hab pendiente",
     amenities:{parking:true,piscina:true,gimnasio:true},
@@ -103,7 +105,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-marenostrum", zona:"Badalona",
+    id:"p-marenostrum", added:3, zona:"Badalona",
     nombre:"Residencial Marenostrum · Lucas Fox",
     desc:"Junto al canal del puerto · 3km BCN · 2 piscinas · Aerotermia · No primera línea playa",
     amenities:{parking:true,piscina:true,gimnasio:false},
@@ -114,7 +116,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-torner", zona:"Badalona",
+    id:"p-torner", added:4, zona:"Badalona",
     nombre:"Living Badalona Torner II",
     desc:"Obra nueva · Corazón de Badalona · Parking + trastero incl. · No primera línea mar",
     amenities:{parking:true,piscina:false,gimnasio:false},
@@ -125,7 +127,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-gorg", zona:"Badalona",
+    id:"p-gorg", added:5, zona:"Badalona",
     nombre:"Residencial Gorg · Coldwell Banker",
     desc:"Obra nueva entregada 2024 · 3km BCN · Piscina · Aerotermia · Parking incl.",
     amenities:{parking:true,piscina:true,gimnasio:false},
@@ -137,7 +139,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-auras", zona:"El Masnou",
+    id:"p-auras", added:6, zona:"El Masnou",
     nombre:"AURAS · Lucas Fox · Primera línea mar",
     desc:"Primera línea mar · 15 min BCN · Piscina ext+int · Spa · Sauna · Gym · Simulador golf · Entrega Q4 2028",
     amenities:{parking:true,piscina:true,gimnasio:true},
@@ -151,7 +153,7 @@ const PROMOS = [
   },
 
   {
-    id:"p-gloriesbcn", zona:"Glòries / 22@",
+    id:"p-gloriesbcn", added:13, zona:"Glòries / 22@",
     nombre:"Glòries BCN · Realia",
     desc:"47 pisos · 2-3-4 hab · todos con terraza · Piscina cubierta + solarium · Suelo radiante · Porcelanosa · ⚠️ Pocas unidades disponibles",
     amenities:{parking:false,piscina:true,gimnasio:false},
@@ -164,7 +166,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-gloriesaelca", zona:"Glòries / 22@",
+    id:"p-gloriesaelca", added:14, zona:"Glòries / 22@",
     nombre:"Residencial Glòries · Aelca",
     desc:"Calle Ávila · 71 viviendas · Piscina cubierta + solarium + gimnasio + lobby gastronómico + conserjería · Dúplex en pl 8-9 con terrazas grandes",
     amenities:{parking:true,piscina:true,gimnasio:true},
@@ -176,7 +178,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-plazaglorias", zona:"Glòries / 22@",
+    id:"p-plazaglorias", added:15, zona:"Glòries / 22@",
     nombre:"Plaza Glòries · Cornex Capital · 2 torres",
     desc:"2 torres (14+11 plantas) · 94 unidades 1-5 hab · Spa: piscina climatizada + jacuzzi + sauna + hammam · Gym + yoga · Kids club · Piscina infinity rooftop 360° · Acabados LUV Studio · Certificación Breeam",
     amenities:{parking:true,piscina:true,gimnasio:true},
@@ -195,7 +197,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-dmtower", zona:"Diagonal Mar",
+    id:"p-dmtower", added:16, zona:"Diagonal Mar",
     nombre:"Diagonal Mar Tower · 27 plantas · lujo",
     desc:"Torre 27 plantas · 88 residencias 100-227m² + terrazas hasta 160m² · Piscina infinita rooftop 360º · Seguridad 24h · Restaurante · A un paso de la playa",
     amenities:{parking:true,piscina:true,gimnasio:true},
@@ -207,7 +209,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-dmcoldwell", zona:"Diagonal Mar",
+    id:"p-dmcoldwell", added:17, zona:"Diagonal Mar",
     nombre:"Diagonal Mar · 21 viviendas · piscina azotea · Coldwell Banker",
     desc:"21 viviendas · 5 plantas + ático · 67-217m² · Todas con balcón · Piscina en azotea · 4 hab disponibles en algunas plantas",
     amenities:{parking:false,piscina:true,gimnasio:false},
@@ -218,9 +220,33 @@ const PROMOS = [
       {id:"dm-08",titulo:"Ático · 2 hab · terraza 92m² · azotea piscina",precio:null,m2:null,terraza:92,hab:2,planta:"Ático",url:"https://www.aproperties.es/barcelona/diagonal-mar/espectacular-obra-nueva-de-lujo-frente-al-mar"},
     ]
   },
+  {
+    id:"p-progres179", added:32, zona:"Badalona",
+    nombre:"Progrés 179-181 · Gestoria Montserrat",
+    desc:"12 viviendas · 3 y 4 hab · Dos áticos dúplex con terraza · Parking · A 2 min de la playa del Coco y 4 min del Canal de Badalona · 8 min metro Pep Ventura",
+    amenities:{parking:true,piscina:false,gimnasio:false},
+    notas:"Zona correcta (Canal - playa) · 3-4 hab de 395.000 a 719.000 € · áticos desde 649.000 € + impuestos · obra en curso con licencia aprobada",
+    url_promo:"https://www.idealista.com/obra-nueva/107555493/",
+    unidades:[
+      {id:"bad-14",titulo:"3-4 hab · primera altura · 2 baños",precio:395000,m2:null,hab:4,planta:"1ª",url:"https://www.idealista.com/obra-nueva/107555493/"},
+      {id:"bad-15",titulo:"Ático dúplex con terraza · 121m²",precio:649000,m2:121,terraza:null,hab:3,planta:"Ático",url:"https://www.idealista.com/obra-nueva/107555493/"},
+      {id:"bad-16",titulo:"Último dúplex disponible",precio:589000,m2:null,hab:3,planta:"Dúplex",url:"https://www.idealista.com/obra-nueva/107555493/"},
+    ]
+  },
+  {
+    id:"p-dmvistasmar", added:33, zona:"Diagonal Mar",
+    nombre:"Diagonal Mar · 140m² terraza Lumón · Coldwell Banker",
+    desc:"140m² · 3 hab (1 suite) · Terraza acristalable Lumón con vistas al mar y ciudad · 2 piscinas · 2 pistas de pádel · Gimnasio · Conserjería y seguridad 24h",
+    amenities:{parking:true,piscina:true,gimnasio:true},
+    notas:"⚠️ Alquilada hasta mayo 2026 · Parking opcional 33.000 €/plaza (2 disponibles) · A/A y calefacción por conductos",
+    url_promo:"https://www.coldwellbanker.es/barcelona/diagonal-mar-el-front-maritim-del-poblenou/piso-de-obra-nueva-en-venta-con-vistas-al-mar",
+    unidades:[
+      {id:"dm-09",titulo:"3 hab · 140m² · terraza Lumón · 4ª planta",precio:null,m2:140,terraza:null,hab:3,planta:"4ª",url:"https://www.coldwellbanker.es/barcelona/diagonal-mar-el-front-maritim-del-poblenou/piso-de-obra-nueva-en-venta-con-vistas-al-mar"},
+    ]
+  },
   // GLÒRIES - nueva promoción grande
   {
-    id:"p-gloriadiag", zona:"Glòries / 22@",
+    id:"p-gloriadiag", added:18, zona:"Glòries / 22@",
     nombre:"Gloria Diagonal · Lucas Fox · OAB Studio · 2 torres",
     desc:"2 torres · 94 unidades 1-5 hab · Spa + piscina infinita rooftop + gym + kids club · Frente Parc Gran Clariana · Entrega Q1 2028 · Certificación Breeam · 10 unidades disponibles",
     amenities:{parking:true,piscina:true,gimnasio:true},
@@ -233,7 +259,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-gloriapark", zona:"Glòries / 22@",
+    id:"p-gloriapark", added:19, zona:"Glòries / 22@",
     nombre:"Gloria Park · Lucas Fox · Parc de la Ciutadella",
     desc:"Junto al Parc de la Ciutadella · Piscina infinity rooftop · Spa: jacuzzi + sauna + hammam · Gym + yoga · Kids club · Terrazas con vistas al mar · Entrega finales 2027",
     amenities:{parking:true,piscina:true,gimnasio:true},
@@ -244,7 +270,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-selvaresidencial", zona:"Glòries / 22@",
+    id:"p-selvaresidencial", added:20, zona:"Glòries / 22@",
     nombre:"Selva Residencial · 22@ Poblenou",
     desc:"EN CONSTRUCCIÓN · 22@ Barcelona · Viviendas 1-3 hab · cocina equipada · zona tranquila con todos los servicios · metros 22@",
     amenities:{parking:false,piscina:false,gimnasio:false},
@@ -257,7 +283,7 @@ const PROMOS = [
 
   // VILA OLÍMPICA
   {
-    id:"p-thebridge", zona:"Vila Olímpica",
+    id:"p-thebridge", added:21, zona:"Vila Olímpica",
     nombre:"THE BRIDGE · Lucas Fox · Batlleiroig",
     desc:"20 viviendas · 47-131m² + terrazas hasta 76m² · Piscina azotea con vistas al mar · Gym · Parking AA · Calle Joan Miró · Entrega Q2 2027",
     amenities:{parking:true,piscina:true,gimnasio:true},
@@ -271,7 +297,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-illallum", zona:"Vila Olímpica",
+    id:"p-illallum", added:22, zona:"Vila Olímpica",
     nombre:"Illa de la Llum · primera línea mar",
     desc:"Primera línea del mar · 192m² · 4 hab (1 suite) · Terraza perimetral · 2 piscinas · Pádel · Conserjería · Vigilancia 24h",
     amenities:{parking:true,piscina:true,gimnasio:false},
@@ -283,7 +309,7 @@ const PROMOS = [
   },
   // POBLENOU - NUEVAS
   {
-    id:"p-juanaustria", zona:"Poblenou",
+    id:"p-juanaustria", added:23, zona:"Poblenou",
     nombre:"Joan d'Austria 101 · Durán Carasso",
     desc:"15 viviendas · 3 hab + balcón/terraza 10-20m² · Ático exclusivo con terraza 60m² · Diseño contemporáneo · 22@ · Cerca Ciutadella",
     amenities:{parking:false,piscina:false,gimnasio:false},
@@ -296,7 +322,7 @@ const PROMOS = [
   },
   // GLÒRIES - Mandarin Oriental (bonus encontrado)
   {
-    id:"p-mandarin", zona:"Glòries / 22@",
+    id:"p-mandarin", added:24, zona:"Glòries / 22@",
     nombre:"Mandarin Oriental Residences · Eixample Dreta",
     desc:"3 unidades disponibles · 235m²+ · 2-3 hab · Ultra lujo · Mandarin Oriental brand · Eixample junto Glòries",
     amenities:{parking:true,piscina:true,gimnasio:true},
@@ -307,7 +333,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-gorgresidencial", zona:"Badalona",
+    id:"p-gorgresidencial", added:31, zona:"Badalona",
     nombre:"Gorg Badalona Residencial · obra nueva 2024 · ⚠️ ALQUILER",
     desc:"ALQUILER (no venta) · 2-3-4 hab · Parking + trastero incluido · Piscina + zona infantil · Aerotermia · Cocinas Bosch · desde 1.782€/mes",
     amenities:{parking:true,piscina:true,gimnasio:false},
@@ -318,7 +344,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-illallac", zona:"Diagonal Mar",
+    id:"p-illallac", added:7, zona:"Diagonal Mar",
     nombre:"Illa del Llac · Diagonal Mar",
     desc:"Segunda mano · Piscina + gimnasio + pádel + conserjería 24h · 5 min playa",
     amenities:{parking:true,piscina:true,gimnasio:true},
@@ -329,7 +355,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-illadelmar", zona:"Diagonal Mar",
+    id:"p-illadelmar", added:8, zona:"Diagonal Mar",
     nombre:"Illa del Mar · Diagonal Mar",
     desc:"Segunda mano · Piscina + gimnasio + sauna · Vistas directas al mar · Parking incl.",
     amenities:{parking:true,piscina:true,gimnasio:true},
@@ -341,7 +367,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-antares", zona:"Diagonal Mar",
+    id:"p-antares", added:9, zona:"Diagonal Mar",
     nombre:"ANTARES · Odile Decq · Obra nueva",
     desc:"Arquitectura icónica · Piscina infinita pl 27 · Gym 1.000m² · Jacuzzi · Restaurante · Conserjería",
     amenities:{parking:true,piscina:true,gimnasio:true},
@@ -352,7 +378,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-ramonturro290", zona:"Poblenou",
+    id:"p-ramonturro290", added:25, zona:"Poblenou",
     nombre:"Ramón Turró 290 · Metrovacesa · ⚠️ ÚLTIMA VIVIENDA",
     desc:"Última vivienda disponible + local · 1-3 hab · piscina comunitaria · terrazas · Certificado A · junto Jardins Gandhi y playas Bogatell/Mar Bella",
     amenities:{parking:true,piscina:true,gimnasio:false},
@@ -363,7 +389,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-ramonturro294", zona:"Poblenou",
+    id:"p-ramonturro294", added:26, zona:"Poblenou",
     nombre:"Ramón Turró 294 · Metrovacesa · 18 plantas",
     desc:"18 plantas + áticos · 1-3 hab · parking + trastero + local comercial · acabados alta calidad · Certificado A · Av. Diagonal 131",
     amenities:{parking:true,piscina:false,gimnasio:false},
@@ -374,7 +400,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-bacroda81", zona:"Poblenou",
+    id:"p-bacroda81", added:27, zona:"Poblenou",
     nombre:"Bac de Roda 81 · Cornex Capital · Poblenou",
     desc:"Rehabilitació 2018 · 6 plantes · 2-3 hab · Piscina en coberta + solàrium + trastero · Calificació energética B · Prop Rambla Poblenou i Av. Diagonal",
     amenities:{parking:false,piscina:true,gimnasio:false},
@@ -385,7 +411,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-bacroda95", zona:"Poblenou",
+    id:"p-bacroda95", added:28, zona:"Poblenou",
     nombre:"Bac de Roda 95 · Dúplex 2019 · Poblenou",
     desc:"Construcció 2019 · Dúplex planta baixa · 2 hab · Piscina cubierta · Parking + trastero inclosos · Aerotèrmia + sòl radiant · Prop Front Marítim",
     amenities:{parking:true,piscina:true,gimnasio:false},
@@ -396,7 +422,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-portabcn2", zona:"Poblenou",
+    id:"p-portabcn2", added:29, zona:"Poblenou",
     nombre:"Porta Barcelona II · Corp Promotores · Sant Martí",
     desc:"Obra nueva Sant Martí · 2-3 hab · Piscina + gym + coworking + sala multiusos + área relax + recepción + conserje · Todas con terraza · Muy luminosas",
     amenities:{parking:true,piscina:true,gimnasio:true},
@@ -407,7 +433,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-factoryhomes", zona:"Poblenou",
+    id:"p-factoryhomes", added:30, zona:"Poblenou",
     nombre:"La Factory Homes · Gabriel y Galán 5-11 · El Clot",
     desc:"22 viviendas · 2-4 hab · Diseño contemporáneo · Zona céntrica Sant Martí · Entrega Q2 2027 · desde 535.625€",
     amenities:{parking:false,piscina:false,gimnasio:false},
@@ -419,7 +445,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-llull", zona:"Poblenou",
+    id:"p-llull", added:10, zona:"Poblenou",
     nombre:"Calle Llull · Poblenou",
     desc:"Segunda mano · 5ª planta exterior · Zona corazón Poblenou",
     amenities:{parking:false,piscina:false,gimnasio:false},
@@ -430,7 +456,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-ramblap", zona:"Poblenou",
+    id:"p-ramblap", added:11, zona:"Poblenou",
     nombre:"Ático Rambla del Poblenou",
     desc:"Segunda mano · Terraza brutal 155m² · En la mismísima Rambla",
     amenities:{parking:false,piscina:false,gimnasio:false},
@@ -441,7 +467,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-canricart", zona:"Poblenou",
+    id:"p-canricart", added:12, zona:"Poblenou",
     nombre:"Can Ricart Lofts · 22@ · Bonavista",
     desc:"Obra nueva · Naves industriales s.XIX rehabilitadas · Terrazas privadas · Jardín",
     amenities:{parking:false,piscina:false,gimnasio:false},
@@ -454,17 +480,20 @@ const PROMOS = [
 ];
 
 // Flatten all units for scoring/filtering
+const MAX_ADDED = Math.max(...PROMOS.map(p=>p.added||0));
 const ALL_UNITS = PROMOS.flatMap(p => p.unidades.map(u => ({...u, promoId:p.id, zona:p.zona, amenities:p.amenities})));
 
 let V={r:{},m:{}}, prefs={parking:true,piscina:false,gimnasio:false}, zona="Todas", filtro="todos";
 let expanded = {}; // which promos are expanded
+let orden = "recientes"; // recientes | score
 
-function save(){try{localStorage.setItem("rpv4",JSON.stringify({V,prefs,expanded}))}catch(e){}}
+function save(){try{localStorage.setItem("rpv4",JSON.stringify({V,prefs,expanded,orden}))}catch(e){}}
 function load(){try{
   const d=JSON.parse(localStorage.getItem("rpv4")||"{}");
   if(d.V){V=d.V;if(!V.r)V.r={};if(!V.m)V.m={}}
   if(d.prefs)prefs=d.prefs;
   if(d.expanded)expanded=d.expanded;
+  if(d.orden)orden=d.orden;
 }catch(e){}}
 
 function sc(u){
@@ -565,7 +594,7 @@ function renderPromo(promo){
     <div class="promo-header" onclick="toggleExpand('${promo.id}')">
       <div class="promo-top">
         <div>
-          <div class="promo-name">${promo.zona}</div>
+          <div class="promo-name">${promo.zona}${(MAX_ADDED - (promo.added||0)) < 3 ? ' <span class="badge b-new">NUEVO</span>' : ""}</div>
           <div class="promo-title">${promo.nombre}</div>
           <div class="promo-meta">${promo.desc}</div>
           ${promo.notas?`<div class="promo-meta" style="color:#6b7280;margin-top:.2rem;font-size:.65rem">${promo.notas}</div>`:""}
@@ -623,10 +652,15 @@ function render(){
     return`<button class="btn" style="border:1px solid ${filtro===k?activeCol:"#2a3047"};background:${filtro===k?activeBg:"transparent"};color:${filtro===k?activeCol:"#6b7280"};font-weight:${filtro===k?600:400}" onclick="setFiltro('${k}')">${l}</button>`;
   }).join("");
 
+  const ORD=[["recientes","🆕 Recientes"],["score","⭐ Mejor score"]];
+  document.getElementById("orden-btns").innerHTML=ORD.map(([k,l])=>
+    `<button class="btn" style="border:1px solid ${orden===k?"#9d7ff5":"#2a3050"};background:${orden===k?"rgba(157,127,245,.15)":"transparent"};color:${orden===k?"#9d7ff5":"#6b748a"};font-weight:${orden===k?600:400}" onclick="setOrden('${k}')">${l}</button>`
+  ).join("");
+
   let lista=PROMOS
     .filter(p=>zona==="Todas"||p.zona===zona)
     .filter(p=>promoMatchesFiltro(p))
-    .sort((a,b)=>(promoScore(b)??-1)-(promoScore(a)??-1));
+    .sort((a,b)=> orden==="recientes" ? (b.added||0)-(a.added||0) : (promoScore(b)??-1)-(promoScore(a)??-1));
 
   document.getElementById("cards").innerHTML=lista.length
     ?lista.map(renderPromo).join("")
@@ -634,6 +668,7 @@ function render(){
 }
 
 function togglePref(k){prefs[k]=!prefs[k];save();render();}
+function setOrden(o){orden=o;save();render();}
 function setZona(z){zona=z;render();}
 function setFiltro(f){filtro=f;render();}
 
