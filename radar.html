@@ -71,14 +71,14 @@ h1{font-size:1.3rem;font-weight:700;margin-bottom:.2rem}
 
 <script>
 const B=900000, fmt=n=>n?n.toLocaleString('es-ES')+' €':'—';
-const ZONAS=["Todas","Diagonal Mar","Glòries / 22@","Vila Olímpica","Badalona Puerto","El Gorg","El Masnou","Poblenou"];
+const ZONAS=["Todas","Diagonal Mar","Glòries / 22@","Vila Olímpica","Badalona","El Masnou","Poblenou"];
 const FILTROS=[["todos","Todos"],["ambos","💚 Ambos"],["rafa","👨 Rafa"],["manana","👩 Manana"],["sin","⏳ Sin votar"],["descartados","🗑️ Descartados"]];
 const PK=[["parking","🅿️ Parking"],["piscina","🏊 Piscina"],["gimnasio","🏋️ Gym"]];
 
 // Promos: cada una tiene metadatos de conjunto + array de unidades
 const PROMOS = [
   {
-    id:"p-somniamare", zona:"Badalona Puerto",
+    id:"p-somniamare", zona:"Badalona",
     nombre:"Somnia Mare · Realia/Portum",
     desc:"Primera línea puerto · Obra nueva entregada · Piscina + gym + coworking · Parking incl.",
     amenities:{parking:true,piscina:true,gimnasio:true},
@@ -91,7 +91,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-somniavera", zona:"Badalona Puerto",
+    id:"p-somniavera", zona:"Badalona",
     nombre:"Somnia Vera · Realia/Portum",
     desc:"EN CONSTRUCCIÓN · Rambla del Gorg 8 · Misma promotora que Somnia Mare · Precio 4 hab pendiente",
     amenities:{parking:true,piscina:true,gimnasio:true},
@@ -103,7 +103,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-marenostrum", zona:"Badalona Puerto",
+    id:"p-marenostrum", zona:"Badalona",
     nombre:"Residencial Marenostrum · Lucas Fox",
     desc:"Junto al canal del puerto · 3km BCN · 2 piscinas · Aerotermia · No primera línea playa",
     amenities:{parking:true,piscina:true,gimnasio:false},
@@ -114,7 +114,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-torner", zona:"Badalona Puerto",
+    id:"p-torner", zona:"Badalona",
     nombre:"Living Badalona Torner II",
     desc:"Obra nueva · Corazón de Badalona · Parking + trastero incl. · No primera línea mar",
     amenities:{parking:true,piscina:false,gimnasio:false},
@@ -125,7 +125,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-gorg", zona:"El Gorg",
+    id:"p-gorg", zona:"Badalona",
     nombre:"Residencial Gorg · Coldwell Banker",
     desc:"Obra nueva entregada 2024 · 3km BCN · Piscina · Aerotermia · Parking incl.",
     amenities:{parking:true,piscina:true,gimnasio:false},
@@ -307,7 +307,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-gorgresidencial", zona:"El Gorg",
+    id:"p-gorgresidencial", zona:"Badalona",
     nombre:"Gorg Badalona Residencial · obra nueva 2024 · ⚠️ ALQUILER",
     desc:"ALQUILER (no venta) · 2-3-4 hab · Parking + trastero incluido · Piscina + zona infantil · Aerotermia · Cocinas Bosch · desde 1.782€/mes",
     amenities:{parking:true,piscina:true,gimnasio:false},
@@ -419,7 +419,7 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-mesmer", zona:"Badalona Puerto",
+    id:"p-mesmer", zona:"Badalona",
     nombre:"Mesmer · Aedas Homes · Badalona · ⚠️ ÚLTIMAS UNIDADES",
     desc:"Entrega inmediata · Últimas viviendas · Piscina + zona comunitaria · Grandes terrazas · Vistas al Parque de Montigalá · Aerotermia · Eficiencia energética A",
     amenities:{parking:true,piscina:true,gimnasio:false},
