@@ -52,6 +52,12 @@ h1{font-size:1.3rem;font-weight:700;margin-bottom:.2rem}
 .b-both{background:rgba(52,211,153,.15);color:#34d399;border-color:rgba(52,211,153,.4)}
 .b-div{background:rgba(251,191,36,.12);color:#fbbf24;border-color:rgba(251,191,36,.3)}
 .b-none{background:rgba(248,113,113,.12);color:#f87171;border-color:rgba(248,113,113,.3)}
+.srch{background:#13161f;border:1px solid #2a3050;border-radius:12px;padding:.75rem .9rem;margin-bottom:.9rem}
+.srch-h{display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none}
+.srch-t{font-size:.72rem;font-weight:700;color:#dde0f0}
+.srch-s{font-size:.64rem;color:#6b748a;margin-top:.15rem}
+.srch-z{font-size:.6rem;font-weight:700;color:#9d7ff5;letter-spacing:.05em;margin:.6rem 0 .3rem}
+.srch-l{display:inline-block;font-size:.66rem;color:#5b7fff;text-decoration:none;border:1px solid rgba(91,127,255,.3);border-radius:6px;padding:2px 8px;margin:0 .25rem .25rem 0}
 .b-new{background:rgba(91,127,255,.18);color:#5b7fff;border-color:rgba(91,127,255,.45);font-size:.54rem;letter-spacing:.06em;padding:1px 6px;vertical-align:middle}
 .notas{font-size:.65rem;color:#9ca3af;line-height:1.5;margin-bottom:.35rem;border-left:2px solid #2a3047;padding-left:.45rem}
 .empty{text-align:center;color:#6b7280;padding:2rem;font-size:.83rem}
@@ -68,6 +74,7 @@ h1{font-size:1.3rem;font-weight:700;margin-bottom:.2rem}
 </div>
 <div class="row" id="zonas" style="margin-bottom:.5rem"></div>
 <div class="row" id="filtros" style="margin-bottom:.85rem"></div>
+<div class="srch"><div class="srch-h" onclick="toggleSrch()"><div><div class="srch-t">Búsquedas filtradas por zona</div><div class="srch-s">Segunda mano · filtros ya puestos (4+ hab, terraza)</div></div><span id="srch-ar" style="color:#5b7fff;font-size:.8rem">&#9660;</span></div><div id="srch-body" style="display:none"></div></div>
 <div class="row" id="orden-btns" style="margin-bottom:.85rem"></div>
 <div id="cards"></div>
 
@@ -152,19 +159,6 @@ const PROMOS = [
     ]
   },
 
-  {
-    id:"p-gloriesbcn", added:13, zona:"Glòries / 22@",
-    nombre:"Glòries BCN · Realia",
-    desc:"47 pisos · 2-3-4 hab · todos con terraza · Piscina cubierta + solarium · Suelo radiante · Porcelanosa · ⚠️ Pocas unidades disponibles",
-    amenities:{parking:false,piscina:true,gimnasio:false},
-    notas:"Parking NO incluido · últimas unidades · confirmar disponibilidad en realia.es · 4min metro L1 Glòries",
-    url_promo:"https://www.realia.es/en/glories-bcn",
-    unidades:[
-      {id:"glor-01",titulo:"4 hab · 158m² · sin terraza · 1ª planta",precio:613500,m2:158,hab:4,planta:"1ª",url:"https://www.realia.es/en/glories-bcn"},
-      {id:"glor-02",titulo:"4 hab · 170m² · terraza · 1ª planta",precio:713500,m2:170,hab:4,planta:"1ª",url:"https://www.realia.es/en/glories-bcn"},
-      {id:"glor-03",titulo:"3 hab · 124m² · terraza · 2ª planta",precio:609400,m2:124,hab:3,planta:"2ª",url:"https://www.realia.es/en/glories-bcn"},
-    ]
-  },
   {
     id:"p-gloriesaelca", added:14, zona:"Glòries / 22@",
     nombre:"Residencial Glòries · Aelca",
@@ -667,6 +661,47 @@ function render(){
 }
 
 function togglePref(k){prefs[k]=!prefs[k];save();render();}
+
+const BUSQUEDAS = [
+ ["Poblenou", [
+   ["Idealista 4+ hab","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/el-poblenou/con-de-cuatro-cinco-habitaciones-o-mas/"],
+   ["Idealista terraza","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/el-poblenou/con-terraza/"],
+   ["Fotocasa terraza","https://www.fotocasa.es/es/comprar/pisos/barcelona-capital/el-poblenou/terraza/l"],
+   ["aProperties","https://www.aproperties.es/search?type=14&mod=sale&area=1&loc=1&dis=15"],
+   ["Coldwell Banker","https://www.coldwellbanker.es/en/flats-for-sale-in-el-poblenou-barcelona"],
+ ]],
+ ["Diagonal Mar", [
+   ["Idealista 4+ hab","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/diagonal-mar-i-el-front-maritim-del-poblenou/con-de-cuatro-cinco-habitaciones-o-mas/"],
+   ["Idealista vistas mar","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/diagonal-mar-i-el-front-maritim-del-poblenou/con-solo-pisos,vistas-al-mar/"],
+   ["Coldwell Banker","https://www.coldwellbanker.es/en/flats-for-sale-in-diagonal-mar-el-front-maritim-del-poblenou-barcelona"],
+   ["Diagonal Mar BCN","https://www.diagonalmarbarcelona.com/en/flats-sale-poblenou"],
+ ]],
+ ["Vila Olímpica", [
+   ["Idealista terraza","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/la-vila-olimpica-del-poblenou/con-terraza/"],
+   ["Idealista pisos","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/la-vila-olimpica-del-poblenou/con-pisos/"],
+   ["Yaencontre","https://www.yaencontre.com/venta/pisos/barcelona/barrio-la-vila-olimpica-del-poblenou"],
+ ]],
+ ["Badalona", [
+   ["Idealista Port vistas mar","https://www.idealista.com/venta-viviendas/badalona/port/con-solo-pisos,vistas-al-mar/"],
+   ["Idealista Port","https://www.idealista.com/venta-viviendas/badalona/port/"],
+   ["Idealista Gorg 4+ hab","https://www.idealista.com/venta-viviendas/badalona/gorg-progres/con-de-tres-dormitorios/"],
+   ["Obra nueva Badalona","https://www.idealista.com/venta-obranueva/badalona-barcelona/"],
+ ]],
+ ["Glòries / 22@", [
+   ["Idealista 22@","https://www.idealista.com/geo/venta-viviendas/22/"],
+   ["Obra nueva 22@","https://www.idealista.com/geo/venta-obranueva/22/"],
+ ]],
+];
+let srchOpen=false;
+function toggleSrch(){
+  srchOpen=!srchOpen;
+  document.getElementById("srch-body").style.display=srchOpen?"block":"none";
+  document.getElementById("srch-ar").innerHTML=srchOpen?"&#9650;":"&#9660;";
+  if(srchOpen) document.getElementById("srch-body").innerHTML=BUSQUEDAS.map(([z,ls])=>
+    `<div class="srch-z">${z}</div>`+ls.map(([n,u])=>`<a class="srch-l" href="${u}" target="_blank">${n}</a>`).join("")
+  ).join("");
+}
+
 function setOrden(o){orden=o;save();render();}
 function setZona(z){zona=z;render();}
 function setFiltro(f){filtro=f;render();}
