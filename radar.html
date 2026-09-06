@@ -320,6 +320,17 @@ const PROMOS = [
     ]
   },
   {
+    id:"p-marinaramonturro", added:39, zona:"Vila Olímpica",
+    nombre:"Marina RamonTurró · Lucas Fox",
+    desc:"Obra nueva en Vila Olímpica · junto al Port Olímpic y la playa",
+    amenities:{parking:false,piscina:false,gimnasio:false},
+    notas:"Recién detectada · confirmar tipologías, precios y fecha de entrega",
+    url_promo:"https://www.lucasfox.com/new-development/marina-ramonturro.html",
+    unidades:[
+      {id:"vo-06",titulo:"Ver tipologías disponibles",precio:null,m2:null,hab:null,planta:"Varias",url:"https://www.lucasfox.com/new-development/marina-ramonturro.html"},
+    ]
+  },
+  {
     id:"p-thebridge", added:21, zona:"Vila Olímpica",
     nombre:"THE BRIDGE · Bonavista · Batlleiroig",
     desc:"20 viviendas · 47-131m² + terrazas hasta 76m² · Piscina azotea con vistas al mar · Gym · Parking AA · Calle Joan Miró · Entrega Q2 2027",
@@ -594,7 +605,7 @@ function renderUnit(u, promo){
     <div class="unit-footer">
       <div class="unit-left">
         ${s!==null?`<span class="sc" style="color:${sc2};border:1px solid ${sc2};background:${sc2}18">⭐ ${s}%</span>`:""}
-        <a class="lnk" href="${u.url}" target="_blank">🔗 Ficha</a>
+        <a class="lnk" href="${u.url}" target="_blank" rel="noopener">🔗 Ficha</a>
       </div>
       <div class="votes">
         <div class="vrow">
@@ -648,7 +659,9 @@ function renderPromo(promo){
             ${mLikes>0?`<span style="font-size:.6rem;color:#a78bfa">Manana ${mLikes}👍</span>`:""}
             ${bothLike>0?`<span style="font-size:.6rem;color:#34d399">${bothLike}💚</span>`:""}
           </div>
-          <a class="lnk" href="${promo.url_promo}" target="_blank" onclick="event.stopPropagation()">🔗 Promoción</a>
+          <a class="lnk" href="${promo.url_promo}" target="_blank" rel="noopener" onclick="event.stopPropagation()">🔗 Promoción</a>
+          <a class="lnk" style="border-color:rgba(157,127,245,.35);color:#9d7ff5" target="_blank" rel="noopener" onclick="event.stopPropagation()"
+             href="https://www.google.com/search?q=${encodeURIComponent(promo.nombre.replace(/[·⚠️]/g,' ') + ' ' + promo.zona)}">🔎 Si no abre</a>
         </div>
       </div>
       <button class="expand-btn">${isExp?"▲ Ocultar":"▼ Ver"} ${nUnits} unidad${nUnits>1?"es":""}</button>
