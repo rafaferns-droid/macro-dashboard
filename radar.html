@@ -80,7 +80,7 @@ h1{font-size:1.3rem;font-weight:700;margin-bottom:.2rem}
 
 <script>
 const B=900000, fmt=n=>n?n.toLocaleString('es-ES')+' €':'—';
-const ZONAS=["Todas","Diagonal Mar","Glòries / 22@","Vila Olímpica","Badalona","El Masnou","Poblenou"];
+const ZONAS=["Todas","Diagonal Mar","Glòries / 22@","Vila Olímpica","Sant Adrià","Badalona","El Masnou","Poblenou"];
 const FILTROS=[["todos","Todos"],["ambos","💚 Ambos"],["rafa","👨 Rafa"],["manana","👩 Manana"],["sin","⏳ Sin votar"],["descartados","🗑️ Descartados"]];
 const PK=[["parking","🅿️ Parking"],["piscina","🏊 Piscina"],["gimnasio","🏋️ Gym"]];
 
@@ -236,6 +236,75 @@ const PROMOS = [
     url_promo:"https://www.coldwellbanker.es/barcelona/diagonal-mar-el-front-maritim-del-poblenou/piso-de-obra-nueva-en-venta-con-vistas-al-mar",
     unidades:[
       {id:"dm-09",titulo:"3 hab · 140m² · terraza Lumón · 4ª planta",precio:null,m2:140,terraza:null,hab:3,planta:"4ª",url:"https://www.coldwellbanker.es/barcelona/diagonal-mar-el-front-maritim-del-poblenou/piso-de-obra-nueva-en-venta-con-vistas-al-mar"},
+    ]
+  },
+  {
+    id:"p-portforum5", added:38, zona:"Sant Adrià",
+    nombre:"Port Fòrum Homes V · Neinor Homes",
+    desc:"Pisos de 3 y 4 habitaciones · Entrega inmediata · Quinta fase de Port Fòrum Homes · Edificio a distintas alturas · Junto al Port Fòrum y la playa",
+    amenities:{parking:true,piscina:false,gimnasio:false},
+    notas:"Desde 285.000 € · la única de Sant Adrià con 4 habitaciones · Neinor Homes (promotora cotizada) · visita virtual disponible",
+    url_promo:"https://www.idealista.com/obra-nueva/86127026/",
+    unidades:[
+      {id:"sa-01",titulo:"4 hab · entrega inmediata",precio:285000,m2:null,hab:4,planta:"Varias",url:"https://www.idealista.com/obra-nueva/86127026/"},
+      {id:"sa-02",titulo:"3 hab · entrega inmediata",precio:285000,m2:null,hab:3,planta:"Varias",url:"https://www.idealista.com/obra-nueva/86127026/"},
+    ]
+  },
+  {
+    id:"p-portforum4", added:37, zona:"Sant Adrià",
+    nombre:"Port Fòrum Homes IV · Neinor Homes",
+    desc:"4ª fase · 2 y 3 dormitorios · Edificio a distintas alturas en paralelo al Parc fluvial del Besòs · Rodeado de zonas verdes públicas · Entrega inmediata · Piso piloto visitable",
+    amenities:{parking:true,piscina:false,gimnasio:false},
+    notas:"⚠️ Parking y trastero NO incluidos en el precio · máximo 3 dorm · Av. La Catalana 110 · Neinor Store: L-V 10-13:30 y 16-19:30, sáb 10-13:30, con cita · Tel 900 11 00 22",
+    url_promo:"https://www.neinorhomes.com/promocion/port-forum-homes-iv/",
+    unidades:[
+      {id:"sa-03",titulo:"2-3 dorm · entrega inmediata · parking aparte",precio:null,m2:null,hab:null,planta:"Varias",url:"https://www.neinorhomes.com/promocion/port-forum-homes-iv/"},
+    ]
+  },
+  {
+    id:"p-largarbi", added:36, zona:"Sant Adrià",
+    nombre:"LarGarbí · Balmis · zona Fòrum · ⚠️ 90% VENDIDO",
+    desc:"75 viviendas en 3 bloques · 1, 2 y 3 dorm · Terrazas privativas · Cocinas totalmente equipadas · Armarios empotrados · Obra finalizada, entrega inmediata",
+    amenities:{parking:true,piscina:false,gimnasio:false},
+    notas:"⚠️ 90% vendido, últimas viviendas · máximo 3 dorm (no hay de 4) · zona Fòrum, junto al mar",
+    url_promo:"https://www.idealista.com/obra-nueva/107015602/",
+    unidades:[
+      {id:"sa-04",titulo:"1-3 dorm · terraza privativa · últimas unidades",precio:null,m2:null,terraza:null,hab:3,planta:"Varias",url:"https://www.idealista.com/obra-nueva/107015602/"},
+      {id:"sa-05",titulo:"Bloque Balmis Properties · 4 pisos disponibles",precio:null,m2:null,hab:3,planta:"Varias",url:"https://www.idealista.com/obra-nueva/108367903/"},
+    ]
+  },
+  {
+    id:"p-lacatalana", added:35, zona:"Sant Adrià",
+    nombre:"La Catalana Residencial · POR CONSTRUIR",
+    desc:"27 viviendas de 2 y 3 dorm · Terrazas amplias · Vistas despejadas · Arquitectura contemporánea · Barrio de La Catalana, junto al frente marítimo",
+    amenities:{parking:true,piscina:false,gimnasio:false},
+    notas:"Promoción nueva en zona de expansión · máximo 3 dorm · confirmar fecha de entrega y precios",
+    url_promo:"https://www.idealista.com/venta-obranueva/sant-adria-de-besos-barcelona/",
+    unidades:[
+      {id:"sa-06",titulo:"2-3 dorm · terrazas amplias · vistas despejadas",precio:null,m2:null,terraza:null,hab:3,planta:"Varias",url:"https://www.idealista.com/venta-obranueva/sant-adria-de-besos-barcelona/"},
+    ]
+  },
+  {
+    id:"p-alnasantadria", added:34.5, zona:"Sant Adrià",
+    nombre:"Alna Sant Adrià · Aelca",
+    desc:"73 viviendas en 2 edificios · 2 y 3 dorm · Balcones y áticos con amplias terrazas · Garaje + trastero + cocina amueblada incluidos · Vistas al mar · Acabados personalizables",
+    amenities:{parking:true,piscina:false,gimnasio:false},
+    notas:"Desde 303.000 € · entrega inmediata · Ramon Llull con Rosalía de Castro · máximo 3 dorm · garaje y trastero INCLUIDOS en precio",
+    url_promo:"https://www.aelca.es/es/proyectos/alna-sant-adria-r1/",
+    unidades:[
+      {id:"sa-07",titulo:"3 dorm · balcón · garaje + trastero incl.",precio:303000,m2:null,hab:3,planta:"Varias",url:"https://www.aelca.es/es/proyectos/alna-sant-adria-r1/"},
+      {id:"sa-08",titulo:"Ático · amplias terrazas · garaje + trastero incl.",precio:null,m2:null,terraza:null,hab:3,planta:"Ático",url:"https://www.aelca.es/es/proyectos/alna-sant-adria-r1/"},
+    ]
+  },
+  {
+    id:"p-urbemarcatalana", added:34.2, zona:"Sant Adrià",
+    nombre:"Av. de la Catalana · Urbemar · PRÓXIMA CONSTRUCCIÓN",
+    desc:"Viviendas libres en el nuevo barrio de Sant Adrià · Grandes espacios · Pegado a Barcelona · Aún en fase de captación de interesados",
+    amenities:{parking:false,piscina:false,gimnasio:false},
+    notas:"⚠️ Aún no comercializa: solo registro de interesados · sin precios ni tipologías publicadas · apuntarse da prioridad en la preventa",
+    url_promo:"https://www.urbemar.com/es/promociones/av-de-la-catalana",
+    unidades:[
+      {id:"sa-09",titulo:"Registro de interesados · sin tipologías publicadas",precio:null,m2:null,hab:null,planta:"Varias",url:"https://www.urbemar.com/es/promociones/av-de-la-catalana"},
     ]
   },
   // GLÒRIES - nueva promoción grande
