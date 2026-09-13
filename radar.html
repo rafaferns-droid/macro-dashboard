@@ -80,7 +80,7 @@ h1{font-size:1.3rem;font-weight:700;margin-bottom:.2rem}
 
 <script>
 const B=900000, fmt=n=>n?n.toLocaleString('es-ES')+' €':'—';
-const ZONAS=["Todas","Diagonal Mar","Glòries / 22@","Vila Olímpica","Sant Adrià","Badalona","El Masnou","Poblenou"];
+const ZONAS=["Todas","Diagonal Mar","Glòries / 22@","Vila Olímpica","Sant Adrià","Badalona","El Masnou","Poblenou","Cerdanyola"];
 const FILTROS=[["todos","Todos"],["ambos","💚 Ambos"],["rafa","👨 Rafa"],["manana","👩 Manana"],["sin","⏳ Sin votar"],["descartados","🗑️ Descartados"]];
 const PK=[["parking","🅿️ Parking"],["piscina","🏊 Piscina"],["gimnasio","🏋️ Gym"]];
 
@@ -235,6 +235,84 @@ const PROMOS = [
     url_promo:"https://www.coldwellbanker.es/barcelona/diagonal-mar-el-front-maritim-del-poblenou/piso-de-obra-nueva-en-venta-con-vistas-al-mar",
     unidades:[
       {id:"dm-09",titulo:"3 hab · 140m² · terraza Lumón · 4ª planta",precio:null,m2:140,terraza:null,hab:3,planta:"4ª",url:"https://www.coldwellbanker.es/barcelona/diagonal-mar-el-front-maritim-del-poblenou/piso-de-obra-nueva-en-venta-con-vistas-al-mar"},
+    ]
+  },
+  // ================= CERDANYOLA DEL VALLÈS =================
+  {
+    id:"p-oasiscerdanyola", added:46, zona:"Cerdanyola",
+    nombre:"OASIS Cerdanyola · LOVHOMS · ⚠️ ÚLTIMAS 5",
+    desc:"28 viviendas · Entrega 3T 2026 · Parking y trastero incluidos · Certificación energética A · Aerotermia · A 5 min del centro · Hay un bajo exterior (primero real) de 4 dormitorios",
+    amenities:{parking:true,piscina:false,gimnasio:false},
+    notas:"Venta directa del promotor, sin comisión de agencia · gastos de comunidad muy bajos, 35-65 €/mes confirmados por el promotor · 4 dorm: 161,40m² construidos + terraza 21,19m²",
+    url_promo:"https://www.idealista.com/venta-viviendas/cerdanyola-del-valles-barcelona/con-obra-nueva/",
+    unidades:[
+      {id:"cer-01",titulo:"4 dorm · 161,40m² const. + terraza 21,19m² · bajo exterior",precio:null,m2:161,terraza:21,hab:4,planta:"Bajo",url:"https://www.idealista.com/venta-viviendas/cerdanyola-del-valles-barcelona/con-obra-nueva/"},
+    ]
+  },
+  {
+    id:"p-culmiamistral", added:45, zona:"Cerdanyola",
+    nombre:"Culmia Mistral · Parc de l'Alba",
+    desc:"102 viviendas de 2, 3 y 4 dormitorios · Muchas con amplias terrazas · Piscina comunitaria rodeada de zonas ajardinadas · Salón social polivalente · Parking y trastero · Entre Sant Cugat y Cerdanyola",
+    amenities:{parking:true,piscina:true,gimnasio:false},
+    notas:"Lanzada en noviembre 2025 · a pocos minutos del Sincrotrón ALBA, la UAB y el Parc del Coneixement · al pie de Collserola · Parc de l'Alba prevé más de 5.000 viviendas",
+    url_promo:"https://www.culmia.com/es/blog/culmia-lanza-culmia-mistral-parc-de-lalba/",
+    unidades:[
+      {id:"cer-02",titulo:"4 dorm · amplias terrazas · parking + trastero",precio:null,m2:null,terraza:null,hab:4,planta:"Varias",url:"https://www.idealista.com/pro/culmia/venta-obranueva/cerdanyola-del-valles-barcelona/"},
+    ]
+  },
+  {
+    id:"p-culmiaxaloc", added:44, zona:"Cerdanyola",
+    nombre:"Culmia Xaloc · Parc de l'Alba",
+    desc:"66 viviendas en dos torres de planta baja más cinco alturas · 1, 2, 3 y 4 dormitorios · Todas con amplias terrazas · Primera promoción lanzada en Parc de l'Alba",
+    amenities:{parking:true,piscina:false,gimnasio:false},
+    notas:"Fue la primera del desarrollo, así que puede ir más avanzada de obra y de ventas que Mistral · confirmar stock de 4 dorm",
+    url_promo:"https://www.idealista.com/pro/culmia/venta-obranueva/cerdanyola-del-valles-barcelona/",
+    unidades:[
+      {id:"cer-03",titulo:"4 dorm · amplia terraza · torre PB+5",precio:null,m2:null,terraza:null,hab:4,planta:"Varias",url:"https://www.idealista.com/pro/culmia/venta-obranueva/cerdanyola-del-valles-barcelona/"},
+    ]
+  },
+  {
+    id:"p-cerdanyolacentre", added:43, zona:"Cerdanyola",
+    nombre:"Cerdanyola Centre · Corp Promotores",
+    desc:"Zonas comunes con piscina, gimnasio y sala multiusos · A 1 minuto de la estación de tren · Parte del proyecto que conecta la Renfe con el Mercat de Les Fontetes por una zona verde · Bloque III en comercialización",
+    amenities:{parking:true,piscina:true,gimnasio:true},
+    notas:"La mejor combinación de zonas comunes de Cerdanyola: piscina + gimnasio + sala multiusos · a 1 min de Renfe, clave si vais a Barcelona a diario",
+    url_promo:"https://www.idealista.com/geo/venta-obranueva/codigo-postal-08290/",
+    unidades:[
+      {id:"cer-04",titulo:"Bloque III · piscina + gym + sala multiusos · junto a Renfe",precio:null,m2:null,hab:null,planta:"Varias",url:"https://www.idealista.com/geo/venta-obranueva/codigo-postal-08290/"},
+    ]
+  },
+  {
+    id:"p-serragalliners", added:42, zona:"Cerdanyola",
+    nombre:"Serra de Galliners 12 · alto standing",
+    desc:"12 viviendas de alto standing · Piscina comunitaria · Grandes terrazas · Jardines privados · Parking y trasteros · Vistas panorámicas despejadas a la Serra de Collserola",
+    amenities:{parking:true,piscina:true,gimnasio:false},
+    notas:"Promoción pequeña y exclusiva · jardines privados, algo muy poco habitual · confirmar tipologías de 4 dorm y precios",
+    url_promo:"https://english.habitaclia.com/new_building-cerdanyola_del_valles.htm",
+    unidades:[
+      {id:"cer-05",titulo:"Alto standing · jardín privado + gran terraza · piscina",precio:null,m2:null,terraza:null,hab:null,planta:"Varias",url:"https://english.habitaclia.com/new_building-cerdanyola_del_valles.htm"},
+    ]
+  },
+  {
+    id:"p-jardinscastell", added:41, zona:"Cerdanyola",
+    nombre:"Jardins del Castell · Parc de l'Alba",
+    desc:"Promoción en el Parc de l'Alba · Entorno vinculado a la UAB, el Sincrotró ALBA y el Parc del Coneixement",
+    amenities:{parking:false,piscina:false,gimnasio:false},
+    notas:"Pendiente de confirmar tipologías, precios y fecha de entrega",
+    url_promo:"https://www.idealista.com/en/venta-obranueva/cerdanyola-del-valles/parc-d-alba/",
+    unidades:[
+      {id:"cer-06",titulo:"Ver tipologías disponibles",precio:null,m2:null,hab:null,planta:"Varias",url:"https://www.idealista.com/en/venta-obranueva/cerdanyola-del-valles/parc-d-alba/"},
+    ]
+  },
+  {
+    id:"p-godart", added:40, zona:"Cerdanyola",
+    nombre:"Godart · Parc de l'Alba",
+    desc:"Vivir en la naturaleza al lado de Sant Cugat · Rodeado por la Serra de Collserola, entre Sant Cugat y Cerdanyola",
+    amenities:{parking:false,piscina:false,gimnasio:false},
+    notas:"Pendiente de confirmar tipologías, precios y fecha de entrega",
+    url_promo:"https://www.yaencontre.com/promocion/obra-nueva/cerdanyola-del-valles",
+    unidades:[
+      {id:"cer-07",titulo:"Ver tipologías disponibles",precio:null,m2:null,hab:null,planta:"Varias",url:"https://www.yaencontre.com/promocion/obra-nueva/cerdanyola-del-valles"},
     ]
   },
   {
@@ -742,6 +820,13 @@ const BUSQUEDAS = [
    ["Idealista Port","https://www.idealista.com/venta-viviendas/badalona/port/"],
    ["Idealista Gorg 4+ hab","https://www.idealista.com/venta-viviendas/badalona/gorg-progres/con-de-tres-dormitorios/"],
    ["Obra nueva Badalona","https://www.idealista.com/venta-obranueva/badalona-barcelona/"],
+ ]],
+ ["Cerdanyola", [
+   ["Obra nueva Cerdanyola","https://www.idealista.com/venta-obranueva/cerdanyola-del-valles-barcelona/"],
+   ["Parc de l'Alba","https://www.idealista.com/en/venta-obranueva/cerdanyola-del-valles/parc-d-alba/"],
+   ["Culmia (2 promos)","https://www.idealista.com/pro/culmia/venta-obranueva/cerdanyola-del-valles-barcelona/"],
+   ["Yaencontre (9 promos)","https://www.yaencontre.com/promocion/obra-nueva/cerdanyola-del-valles"],
+   ["Habitaclia obra nueva","https://english.habitaclia.com/new_building-cerdanyola_del_valles.htm"],
  ]],
  ["Glòries / 22@", [
    ["Idealista 22@","https://www.idealista.com/geo/venta-viviendas/22/"],
