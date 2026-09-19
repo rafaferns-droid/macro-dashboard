@@ -239,6 +239,29 @@ const PROMOS = [
   },
   // ================= CERDANYOLA DEL VALLÈS =================
   {
+    id:"p-cordelles", added:50, zona:"Cerdanyola",
+    nombre:"CORDELLES · en el centro de Cerdanyola",
+    desc:"Promoción de obra nueva en el corazón de la ciudad · Jornadas de puertas abiertas con visita concertada",
+    amenities:{parking:false,piscina:false,gimnasio:false},
+    notas:"Hacen Open Days con cita previa, buena forma de ver acabados · pendiente de confirmar tipologías, precios y entrega",
+    url_promo:"https://www.idealista.com/en/venta-obranueva/cerdanyola-del-valles-barcelona/con-tipo-de-casa-pisos/?ordenado-por=precios-asc",
+    unidades:[
+      {id:"cer-12",titulo:"Ver tipologías y reservar visita",precio:null,m2:null,hab:null,planta:"Varias",url:"https://www.idealista.com/en/venta-obranueva/cerdanyola-del-valles-barcelona/con-tipo-de-casa-pisos/?ordenado-por=precios-asc"},
+    ]
+  },
+  {
+    id:"p-canamelia", added:51, zona:"Cerdanyola", casa:true,
+    nombre:"Can Amelia · 2 casas de alto standing",
+    desc:"Solo 2 viviendas unifamiliares de obra nueva de alto standing · Arquitectura contemporánea · Privacidad · Cerdanyola del Vallès",
+    amenities:{parking:true,piscina:false,gimnasio:false},
+    notas:"Promoción mínima, 2 unidades · pendiente de confirmar metros, dormitorios y precio",
+    url_promo:"https://www.idealista.com/en/venta-obranueva/cerdanyola-del-valles-barcelona/",
+    unidades:[
+      {id:"cer-13",titulo:"Casa unifamiliar alto standing · 1 de 2",precio:null,m2:null,hab:null,planta:"Varias",url:"https://www.idealista.com/en/venta-obranueva/cerdanyola-del-valles-barcelona/"},
+    ]
+  },
+
+  {
     id:"p-diversoalba", added:49, zona:"Cerdanyola",
     nombre:"Diverso Parc de l'Alba · Gesbró · VPO · ⚠️ ÚLTIMAS",
     desc:"VPO en régimen de cooperativa · Cinco alturas · 2, 3 y 4 dormitorios con terraza · Bajos y áticos con patio privado y amplias terrazas · Zonas comunes · Garaje",
@@ -310,9 +333,9 @@ const PROMOS = [
   {
     id:"p-cerdanyolacentre", added:43, zona:"Cerdanyola",
     nombre:"Cerdanyola Centre · Corp Promotores",
-    desc:"Zonas comunes con piscina, gimnasio y sala multiusos · A 1 minuto de la estación de tren · Parte del proyecto que conecta la Renfe con el Mercat de Les Fontetes por una zona verde · Bloque III en comercialización",
+    desc:"Piscina, gimnasio, zona de relax, coworking, taquillas inteligentes y sala multiusos · A 1 minuto de la estación de tren · Conecta la Renfe con el Mercat de Les Fontetes por una zona verde · Bloque III en comercialización",
     amenities:{parking:true,piscina:true,gimnasio:true},
-    notas:"La mejor combinación de zonas comunes de Cerdanyola: piscina + gimnasio + sala multiusos · a 1 min de Renfe, clave si vais a Barcelona a diario",
+    notas:"La mejor dotación de zonas comunes de Cerdanyola · gastos de comunidad estimados: 70 € (1 dorm), 100 € (2 dorm), 130 € (3 dorm) · ⚠️ parking OPCIONAL, no incluido · a 1 min de Renfe",
     url_promo:"https://www.idealista.com/geo/venta-obranueva/codigo-postal-08290/",
     unidades:[
       {id:"cer-04",titulo:"Bloque III · piscina + gym + sala multiusos · junto a Renfe",precio:null,m2:null,hab:null,planta:"Varias",url:"https://www.idealista.com/geo/venta-obranueva/codigo-postal-08290/"},
@@ -331,13 +354,13 @@ const PROMOS = [
   },
   {
     id:"p-jardinscastell", added:41, zona:"Cerdanyola",
-    nombre:"Jardins del Castell · Parc de l'Alba",
-    desc:"Promoción en el Parc de l'Alba · Entorno vinculado a la UAB, el Sincrotró ALBA y el Parc del Coneixement",
-    amenities:{parking:false,piscina:false,gimnasio:false},
-    notas:"Pendiente de confirmar tipologías, precios y fecha de entrega",
-    url_promo:"https://www.idealista.com/en/venta-obranueva/cerdanyola-del-valles/parc-d-alba/",
+    nombre:"Jardins del Castell · Adequa · Parc de l'Alba",
+    desc:"99 viviendas de 2, 3 y 4 dormitorios con terraza · Plaza de garaje y trastero incluidos · Piscina, área infantil y zona ajardinada · Garita de seguridad y SmartBox · Justo delante del Castell de Sant Marçal, del siglo XII",
+    amenities:{parking:true,piscina:true,gimnasio:false},
+    notas:"La obra empieza próximamente, así que se entra sobre plano · acabados interiores personalizables · FGC Bellaterra y Renfe Cerdanyola Universitat cerca · Túneles de Vallvidrera para Barcelona · visitas en Cerdanyola y en Barcelona",
+    url_promo:"https://jardinsdelcastell.com/",
     unidades:[
-      {id:"cer-06",titulo:"Ver tipologías disponibles",precio:null,m2:null,hab:null,planta:"Varias",url:"https://www.idealista.com/en/venta-obranueva/cerdanyola-del-valles/parc-d-alba/"},
+      {id:"cer-06",titulo:"4 dorm · terraza · garaje + trastero incluidos",precio:null,m2:null,terraza:null,hab:4,planta:"Varias",url:"https://www.idealista.com/en/obra-nueva/109216343/"},
     ]
   },
   {
@@ -345,7 +368,7 @@ const PROMOS = [
     nombre:"Godart · Parc de l'Alba",
     desc:"Vivir en la naturaleza al lado de Sant Cugat · Rodeado por la Serra de Collserola, entre Sant Cugat y Cerdanyola",
     amenities:{parking:false,piscina:false,gimnasio:false},
-    notas:"Pendiente de confirmar tipologías, precios y fecha de entrega",
+    notas:"⚠️ No tiene web propia localizable: el enlace abre el listado de las 9 promociones de Cerdanyola en Yaencontre, donde figura · pendiente de confirmar tipologías, precios y entrega",
     url_promo:"https://www.yaencontre.com/promocion/obra-nueva/cerdanyola-del-valles",
     unidades:[
       {id:"cer-07",titulo:"Ver tipologías disponibles",precio:null,m2:null,hab:null,planta:"Varias",url:"https://www.yaencontre.com/promocion/obra-nueva/cerdanyola-del-valles"},
