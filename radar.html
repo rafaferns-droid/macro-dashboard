@@ -81,7 +81,7 @@ h1{font-size:1.3rem;font-weight:700;margin-bottom:.2rem}
 <script>
 const B=900000, fmt=n=>n?n.toLocaleString('es-ES')+' €':'—';
 const ZONAS=["Todas","Diagonal Mar","Glòries / 22@","Vila Olímpica","Sant Adrià","Badalona","El Masnou","Poblenou","Cerdanyola"];
-const FILTROS=[["todos","Todos"],["ambos","💚 Ambos"],["rafa","👨 Rafa"],["manana","👩 Manana"],["sin","⏳ Sin votar"],["descartados","🗑️ Descartados"]];
+const FILTROS=[["todos","Todos"],["ambos","💚 Ambos"],["rafa","👨 Rafa"],["manana","👩 Manana"],["sin","⏳ Sin votar"],["casas","🏡 Casas"],["descartados","🗑️ Descartados"]];
 const PK=[["parking","🅿️ Parking"],["piscina","🏊 Piscina"],["gimnasio","🏋️ Gym"]];
 
 // Promos: cada una tiene metadatos de conjunto + array de unidades
@@ -238,6 +238,18 @@ const PROMOS = [
     ]
   },
   // ================= CERDANYOLA DEL VALLÈS =================
+  {
+    id:"p-canllobet", added:47, zona:"Cerdanyola", casa:true,
+    nombre:"9 casas Can Llobet · Bellaterra · ⚠️ FASE FINAL",
+    desc:"9 casas semiadosadas de obra nueva en 3 parcelas de más de 3.100m² · 340m² construidos en 4 plantas · 4 dormitorios · 3 baños · Jardín privado con PISCINA PROPIA y terraza · Garaje para 2 coches + trastero + lavadero · Aerotermia y suelo radiante",
+    amenities:{parking:true,piscina:true,gimnasio:false},
+    notas:"Entrega en 1-2 meses · piscina y jardín PRIVADOS, no comunitarios · a 5 min de Sant Cugat y 20 km de Barcelona · estación de FGC cerca",
+    url_promo:"https://www.aproperties.es/en/new-developments-for-sale-in-cerdanyola-del-valles",
+    unidades:[
+      {id:"cer-08",titulo:"Casa semiadosada · 4 dorm · 340m² · jardín + piscina privada · garaje 2 coches",precio:null,m2:340,terraza:null,hab:4,planta:"4 plantas",url:"https://www.aproperties.es/en/bellaterra/bellaterra/new-build-with-terrace-parking-pool-and-views-for-sale-in-bellaterra-bellaterra"},
+    ]
+  },
+
   {
     id:"p-oasiscerdanyola", added:46, zona:"Cerdanyola",
     nombre:"OASIS Cerdanyola · LOVHOMS · ⚠️ ÚLTIMAS 5",
@@ -656,6 +668,7 @@ function isBothDislike(promo){
 function promoMatchesFiltro(promo){
   const units = promo.unidades;
   if(filtro==="descartados") return isBothDislike(promo);
+  if(filtro==="casas") return !isBothDislike(promo) && promo.casa===true;
   if(isBothDislike(promo)) return false; // hide from all other views
   if(filtro==="ambos") return units.some(u=>V.r[u.id]==="like"&&V.m[u.id]==="like");
   if(filtro==="rafa") return units.some(u=>V.r[u.id]==="like");
@@ -719,7 +732,7 @@ function renderPromo(promo){
     <div class="promo-header" onclick="toggleExpand('${promo.id}')">
       <div class="promo-top">
         <div>
-          <div class="promo-name">${promo.zona}${(MAX_ADDED - (promo.added||0)) < 3 ? ' <span class="badge b-new">NUEVO</span>' : ""}</div>
+          <div class="promo-name">${promo.casa?"🏡 ":""}${promo.zona}${(MAX_ADDED - (promo.added||0)) < 3 ? ' <span class="badge b-new">NUEVO</span>' : ""}</div>
           <div class="promo-title">${promo.nombre}</div>
           <div class="promo-meta">${promo.desc}</div>
           ${promo.notas?`<div class="promo-meta" style="color:#6b7280;margin-top:.2rem;font-size:.65rem">${promo.notas}</div>`:""}
@@ -820,6 +833,13 @@ const BUSQUEDAS = [
    ["Idealista Port","https://www.idealista.com/venta-viviendas/badalona/port/"],
    ["Idealista Gorg 4+ hab","https://www.idealista.com/venta-viviendas/badalona/gorg-progres/con-de-tres-dormitorios/"],
    ["Obra nueva Badalona","https://www.idealista.com/venta-obranueva/badalona-barcelona/"],
+ ]],
+ ["Casas (todas las zonas)", [
+   ["Casas Bellaterra 4+ hab","https://www.idealista.com/venta-viviendas/cerdanyola-del-valles/bellaterra/con-de-cuatro-cinco-habitaciones-o-mas/"],
+   ["Casas Bellaterra con jardin","https://www.idealista.com/venta-viviendas/cerdanyola-del-valles/bellaterra/con-jardin/"],
+   ["Casas Cerdanyola","https://www.idealista.com/en/venta-viviendas/cerdanyola-del-valles-barcelona/"],
+   ["Casas lujo Bellaterra","https://www.yaencontre.com/venta/casas/cerdanyola-del-valles/distrito-bellaterra/e-lujo"],
+   ["Obra nueva aProperties","https://www.aproperties.es/en/new-developments-for-sale-in-cerdanyola-del-valles"],
  ]],
  ["Cerdanyola", [
    ["Obra nueva Cerdanyola","https://www.idealista.com/venta-obranueva/cerdanyola-del-valles-barcelona/"],
