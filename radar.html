@@ -17,7 +17,8 @@ h1{font-size:1.3rem;font-weight:700;margin-bottom:.2rem}
 
 /* Promo card */
 .promo{background:#1e2333;border:1px solid #2a3047;border-radius:14px;margin-bottom:.75rem;overflow:hidden}
-.promo-header{padding:.85rem;cursor:pointer;user-select:none}
+.promo-header{padding:.85rem}
+.expand-btn{min-height:34px;cursor:pointer}
 .promo-top{display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem;margin-bottom:.4rem}
 .promo-name{font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;margin-bottom:2px}
 .promo-title{font-size:.9rem;font-weight:700;color:#e8eaf0}
@@ -834,7 +835,7 @@ function renderPromo(promo){
   const over = minP && minP > B;
 
   return`<div class="promo" id="promo-${promo.id}">
-    <div class="promo-header" onclick="toggleExpand('${promo.id}')">
+    <div class="promo-header">
       <div class="promo-top">
         <div>
           <div class="promo-name">${promo.casa?"🏡 ":""}${promo.zona}${(MAX_ADDED - (promo.added||0)) < 3 ? ' <span class="badge b-new">NUEVO</span>' : ""}</div>
@@ -860,7 +861,7 @@ function renderPromo(promo){
              href="https://www.google.com/search?q=${encodeURIComponent(promo.nombre.replace(/[·⚠️]/g,' ') + ' ' + promo.zona)}">🔎 Si no abre</a>
         </div>
       </div>
-      <button class="expand-btn">${isExp?"▲ Ocultar":"▼ Ver"} ${nUnits} unidad${nUnits>1?"es":""}</button>
+      <button class="expand-btn" onclick="toggleExpand('${promo.id}')">${isExp?"▲ Ocultar":"▼ Ver"} ${nUnits} unidad${nUnits>1?"es":""}</button>
     </div>
     ${isExp?`<div class="promo-units">${promo.unidades.map(u=>renderUnit(u,promo)).join("")}</div>`:""}
   </div>`;
