@@ -81,7 +81,7 @@ h1{font-size:1.3rem;font-weight:700;margin-bottom:.2rem}
 
 <script>
 const B=900000, fmt=n=>n?n.toLocaleString('es-ES')+' €':'—';
-const ZONAS=["Todas","Diagonal Mar","Glòries / 22@","Vila Olímpica","Sant Adrià","Badalona","El Masnou","Poblenou","Cerdanyola"];
+const ZONAS=["Todas","Diagonal Mar","Glòries / 22@","Vila Olímpica","Badalona","El Masnou","Poblenou","Cerdanyola"];
 const FILTROS=[["todos","Todos"],["ambos","💚 Ambos"],["rafa","👨 Rafa"],["manana","👩 Manana"],["sin","⏳ Sin votar"],["casas","🏡 Casas"],["descartados","🗑️ Descartados"]];
 const PK=[["parking","🅿️ Parking"],["piscina","🏊 Piscina"],["gimnasio","🏋️ Gym"]];
 
@@ -372,7 +372,7 @@ const PROMOS = [
     nombre:"Cerdanyola Centre · Corp Promotores",
     desc:"Piscina, gimnasio, zona de relax, coworking, taquillas inteligentes y sala multiusos · A 1 minuto de la estación de tren · Conecta la Renfe con el Mercat de Les Fontetes por una zona verde · Bloque III en comercialización",
     amenities:{parking:true,piscina:true,gimnasio:true},
-    notas:"⚠️ SOLO 1, 2 y 3 dormitorios: no hay de 4 · comunidad estimada 70/100/130 € según dormitorios · parking opcional · electrodomésticos instalados y calificación A · piso piloto visitable · se proyectan el Hospital del Vallès y un parque urbano frente a la estación",
+    notas:"⚠️ SOLO 1, 2 y 3 dormitorios: no hay de 4 · obra acaba a finales de 2026 y entrega a principios de 2027 · comunidad estimada 70/100/130 € según dormitorios · parking opcional · electrodomésticos instalados y calificación A · piso piloto visitable · se proyectan el Hospital del Vallès y un parque urbano frente a la estación",
     url_promo:"https://www.aproperties.es/en/cerdanyola-del-valles/new-build-with-terrace-parking-pool-and-views-for-sale-in-cerdanyola-del-valles",
     unidades:[
       {id:"cer-04",titulo:"Bloque III · piscina + gym + sala multiusos · junto a Renfe",precio:null,m2:null,hab:null,planta:"Varias",url:"https://www.aproperties.es/en/cerdanyola-del-valles/new-build-with-terrace-parking-pool-and-views-for-sale-in-cerdanyola-del-valles"},
@@ -412,63 +412,6 @@ const PROMOS = [
     ]
   },
   {
-    id:"p-portforum5", added:38, zona:"Sant Adrià",
-    nombre:"Port Fòrum Homes V · Neinor Homes",
-    desc:"Pisos de 3 y 4 habitaciones · Entrega inmediata · Quinta fase de Port Fòrum Homes · Edificio a distintas alturas · Junto al Port Fòrum y la playa",
-    amenities:{parking:true,piscina:false,gimnasio:false},
-    notas:"Desde 285.000 € · la única de Sant Adrià con 4 habitaciones · Neinor Homes (promotora cotizada) · visita virtual disponible",
-    url_promo:"https://www.idealista.com/obra-nueva/86127026/",
-    unidades:[
-      {id:"sa-01",titulo:"4 hab · entrega inmediata",precio:285000,m2:null,hab:4,planta:"Varias",url:"https://www.idealista.com/obra-nueva/86127026/"},
-      {id:"sa-02",titulo:"3 hab · entrega inmediata",precio:285000,m2:null,hab:3,planta:"Varias",url:"https://www.idealista.com/obra-nueva/86127026/"},
-    ]
-  },
-  {
-    id:"p-portforum4", added:37, zona:"Sant Adrià",
-    nombre:"Port Fòrum Homes IV · Neinor Homes",
-    desc:"4ª fase · 2 y 3 dormitorios · Edificio a distintas alturas en paralelo al Parc fluvial del Besòs · Rodeado de zonas verdes públicas · Entrega inmediata · Piso piloto visitable",
-    amenities:{parking:true,piscina:false,gimnasio:false},
-    notas:"⚠️ Parking y trastero NO incluidos en el precio · máximo 3 dorm · Av. La Catalana 110 · Neinor Store: L-V 10-13:30 y 16-19:30, sáb 10-13:30, con cita · Tel 900 11 00 22",
-    url_promo:"https://www.neinorhomes.com/promocion/port-forum-homes-iv/",
-    unidades:[
-      {id:"sa-03",titulo:"2-3 dorm · entrega inmediata · parking aparte",precio:null,m2:null,hab:null,planta:"Varias",url:"https://www.neinorhomes.com/promocion/port-forum-homes-iv/"},
-    ]
-  },
-  {
-    id:"p-lacatalana", added:35, zona:"Sant Adrià",
-    nombre:"La Catalana Residencial · POR CONSTRUIR",
-    desc:"27 viviendas de 2 y 3 dorm · Terrazas amplias · Vistas despejadas · Arquitectura contemporánea · Barrio de La Catalana, junto al frente marítimo",
-    amenities:{parking:true,piscina:false,gimnasio:false},
-    notas:"⚠️ Sin web propia todavía: el enlace lleva al barrio de La Catalana en Idealista, donde aparece la promoción · máximo 3 dorm · barrio junto al mar, lado Badalona",
-    url_promo:"https://www.idealista.com/venta-viviendas/sant-adria-de-besos/la-catalana/con-pisos,terraza/",
-    unidades:[
-      {id:"sa-06",titulo:"2-3 dorm · terrazas amplias · vistas despejadas",precio:null,m2:null,terraza:null,hab:3,planta:"Varias",url:"https://www.idealista.com/venta-viviendas/sant-adria-de-besos/la-catalana/con-pisos,terraza/"},
-    ]
-  },
-  {
-    id:"p-alnasantadria", added:34.5, zona:"Sant Adrià",
-    nombre:"Alna Sant Adrià · Aelca",
-    desc:"73 viviendas en 2 edificios · 2 y 3 dorm · Balcones y áticos con amplias terrazas · Garaje + trastero + cocina amueblada incluidos · Vistas al mar · Acabados personalizables",
-    amenities:{parking:true,piscina:false,gimnasio:false},
-    notas:"⚠️ No es primera línea: está en Sant Adrià Nord, lado Badalona pero tierra adentro · desde 303.000 € · entrega inmediata · máximo 3 dorm · garaje y trastero INCLUIDOS",
-    url_promo:"https://www.aelca.es/es/proyectos/alna-sant-adria-r1/",
-    unidades:[
-      {id:"sa-07",titulo:"3 dorm · balcón · garaje + trastero incl.",precio:303000,m2:null,hab:3,planta:"Varias",url:"https://www.aelca.es/es/proyectos/alna-sant-adria-r1/"},
-      {id:"sa-08",titulo:"Ático · amplias terrazas · garaje + trastero incl.",precio:null,m2:null,terraza:null,hab:3,planta:"Ático",url:"https://www.aelca.es/es/proyectos/alna-sant-adria-r1/"},
-    ]
-  },
-  {
-    id:"p-urbemarcatalana", added:34.2, zona:"Sant Adrià",
-    nombre:"Av. de la Catalana · Urbemar · PRÓXIMA CONSTRUCCIÓN",
-    desc:"Viviendas libres en el nuevo barrio de Sant Adrià · Grandes espacios · Pegado a Barcelona · Aún en fase de captación de interesados",
-    amenities:{parking:false,piscina:false,gimnasio:false},
-    notas:"⚠️ Aún no comercializa: solo registro de interesados · sin precios ni tipologías publicadas · apuntarse da prioridad en la preventa",
-    url_promo:"https://www.urbemar.com/es/promociones/av-de-la-catalana",
-    unidades:[
-      {id:"sa-09",titulo:"Registro de interesados · sin tipologías publicadas",precio:null,m2:null,hab:null,planta:"Varias",url:"https://www.urbemar.com/es/promociones/av-de-la-catalana"},
-    ]
-  },
-  {
     id:"p-illadelbosc", added:54, zona:"Diagonal Mar",
     nombre:"Illa del Bosc · Diagonal Mar",
     desc:"Una de las comunidades mejor valoradas de Diagonal Mar · DOS piscinas · Amplias zonas ajardinadas · DOS pistas de pádel · Gimnasio · Zona infantil · Sala comunitaria · Conserjería y seguridad 24 horas",
@@ -504,7 +447,7 @@ const PROMOS = [
   {
     id:"p-pr6badalona", added:57, zona:"Badalona",
     nombre:"Pr6 Promotors · varias promociones 3 y 4 hab",
-    desc:"Promotora local con obra en marcha: Baldomer Solà 192-200 (12 viviendas 3/4 hab, 24 plazas), Valencia 72-76 (11 viviendas 3/4 hab, 25 plazas), Lleida 15-17 (12 viviendas 3/4 hab, 16 plazas), Arc de Sant Martí 87 (7 viviendas 3/4 hab, 11 plazas) · También Pi i Maragall 9 en Sant Adrià",
+    desc:"Promotora local con obra en marcha: Baldomer Solà 192-200 (12 viviendas 3/4 hab, 24 plazas), Valencia 72-76 (11 viviendas 3/4 hab, 25 plazas), Lleida 15-17 (12 viviendas 3/4 hab, 16 plazas), Arc de Sant Martí 87 (7 viviendas 3/4 hab, 11 plazas)",
     amenities:{parking:true,piscina:false,gimnasio:false},
     notas:"Promociones pequeñas, de 7 a 16 viviendas, con parking propio y terraza individual · calificación energética A · ⚠️ verificar que la calle concreta esté en vuestra franja, algunas son de centro y no de primera línea",
     url_promo:"https://pr6promotors.com/elementor-951/",
@@ -523,6 +466,28 @@ const PROMOS = [
     url_promo:"https://www.idealista.com/en/venta-obranueva/badalona-barcelona/",
     unidades:[
       {id:"bad-22",titulo:"Últimos dúplex de planta baja y áticos",precio:null,m2:null,hab:null,planta:"Bajo/Ático",url:"https://www.idealista.com/en/venta-obranueva/badalona-barcelona/"},
+    ]
+  },
+  {
+    id:"p-luxpoblenou", added:60, zona:"Poblenou", casa:true,
+    nombre:"LUX Poblenou · 6 casas con piscina y jardín privados",
+    desc:"6 casas independientes de obra nueva en pleno Poblenou · PISCINA PRIVADA y JARDÍN propios en cada casa · Cerca de la playa y del distrito 22@",
+    amenities:{parking:true,piscina:true,gimnasio:true},
+    notas:"Casas independientes con piscina propia dentro de Barcelona ciudad, algo casi inexistente · confirmar metros, dormitorios y precio",
+    url_promo:"https://www.idealista.com/en/geo/venta-obranueva/22/",
+    unidades:[
+      {id:"pob-18",titulo:"Casa independiente · piscina y jardín privados · 1 de 6",precio:null,m2:null,hab:null,planta:"Varias",url:"https://www.idealista.com/en/geo/venta-obranueva/22/"},
+    ]
+  },
+  {
+    id:"p-cdc550", added:59, zona:"Glòries / 22@",
+    nombre:"Consell de Cent 550 · CdC550",
+    desc:"Obra nueva en la calle Consell de Cent, junto a la Plaça de les Glòries y a pocos minutos del distrito tecnológico 22@ · Selección cuidada de viviendas",
+    amenities:{parking:false,piscina:false,gimnasio:false},
+    notas:"Recién detectada, pendiente de confirmar tipologías, precios y entrega · ubicación muy buena si os cuadra Glòries",
+    url_promo:"https://spain.estatenearme.com/barcelona/obra-nueva/fil-future-new-construction-promotions",
+    unidades:[
+      {id:"glor-13",titulo:"Ver tipologías y disponibilidad",precio:null,m2:null,hab:null,planta:"Varias",url:"https://spain.estatenearme.com/barcelona/obra-nueva/fil-future-new-construction-promotions"},
     ]
   },
   // GLÒRIES - nueva promoción grande
