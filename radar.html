@@ -535,6 +535,50 @@ const PROMOS = [
       {id:"sm-04",titulo:"Casa · 4 dorm · 249m²",precio:1200000,m2:249,hab:4,planta:"Varias",url:"https://www.idealista.com/venta-viviendas/barcelona/sant-marti/provencals-del-poblenou/"},
     ]
   },
+  {
+    id:"p-hab-terraza825", added:70, zona:"Poblenou",
+    nombre:"Piso con terraza · 104m² · Sant Martí",
+    desc:"104m² · 3 habitaciones · 2 baños · 3ª planta · Con terraza · Marcado como oportunidad en el portal",
+    amenities:{parking:false,piscina:false,gimnasio:false},
+    notas:"✅ FICHA INDIVIDUAL REAL · comercializa SAM Grupo M · 104m² por debajo de vuestro mínimo de 120",
+    url_promo:"https://www.habitaclia.com/i29169000003324.htm",
+    unidades:[
+      {id:"hb-01",titulo:"3 hab · 104m² · terraza · 3ª planta",precio:825000,m2:104,terraza:null,hab:3,planta:"3ª",url:"https://www.habitaclia.com/i29169000003324.htm"},
+    ]
+  },
+  {
+    id:"p-hab-atico990", added:69, zona:"Poblenou",
+    nombre:"Ático · 93m² · 3 baños · Sant Martí",
+    desc:"93m² · 3 habitaciones · 3 baños · 4ª planta · Ático con ascensor · 85 fotos en el anuncio",
+    amenities:{parking:false,piscina:false,gimnasio:false},
+    notas:"✅ FICHA INDIVIDUAL REAL · comercializa Vivendex · 93m² se queda corto, pero es ático y tiene 3 baños",
+    url_promo:"https://www.habitaclia.com/i5311004403254.htm",
+    unidades:[
+      {id:"hb-02",titulo:"Ático · 3 hab · 93m² · 3 baños · 4ª planta",precio:990000,m2:93,hab:3,planta:"4ª",url:"https://www.habitaclia.com/i5311004403254.htm"},
+    ]
+  },
+  {
+    id:"p-hab-lucasfox630", added:68, zona:"Poblenou",
+    nombre:"Piso con terraza · 85m² · DILS Lucas Fox",
+    desc:"85m² · 3 habitaciones · 2 baños · Con terraza · Marcado como oportunidad",
+    amenities:{parking:false,piscina:false,gimnasio:false},
+    notas:"✅ FICHA INDIVIDUAL REAL · comercializa DILS Lucas Fox · 85m², pequeño para vosotros",
+    url_promo:"https://www.habitaclia.com/i58991000002661.htm",
+    unidades:[
+      {id:"hb-03",titulo:"3 hab · 85m² · terraza · 2 baños",precio:630000,m2:85,terraza:null,hab:3,planta:"Varias",url:"https://www.habitaclia.com/i58991000002661.htm"},
+    ]
+  },
+  {
+    id:"p-hab-pallars690", added:67, zona:"Poblenou",
+    nombre:"Piso con terraza · Carrer de Pallars 248",
+    desc:"93m² · 2 habitaciones · 2 baños · 2ª planta · Con terraza · Carrer de Pallars 248",
+    amenities:{parking:false,piscina:false,gimnasio:false},
+    notas:"✅ FICHA INDIVIDUAL REAL · comercializa Barnaquatre · solo 2 hab",
+    url_promo:"https://www.habitaclia.com/i40092000000660.htm",
+    unidades:[
+      {id:"hb-04",titulo:"2 hab · 93m² · terraza · 2ª planta",precio:690000,m2:93,terraza:null,hab:2,planta:"2ª",url:"https://www.habitaclia.com/i40092000000660.htm"},
+    ]
+  },
   // GLÒRIES - nueva promoción grande
   {
     id:"p-gloriadiag", added:18, zona:"Glòries / 22@",
@@ -690,13 +734,14 @@ const PROMOS = [
   },
   {
     id:"p-bacroda81", added:27, zona:"Poblenou",
-    nombre:"Bac de Roda 81 · Cornex Capital · Poblenou",
-    desc:"Rehabilitació 2018 · 6 plantes · 2-3 hab · Piscina en coberta + solàrium + trastero · Calificació energética B · Prop Rambla Poblenou i Av. Diagonal",
+    nombre:"Bac de Roda 81 · Cornex Capital",
+    desc:"Obra nueva · Piscina comunitaria · Cerca de la Rambla del Poblenou y de la Diagonal · Comercializa Cornex Capital",
     amenities:{parking:false,piscina:true,gimnasio:false},
-    notas:"Trastero obligatorio (no incluido en precio) · desde 525.000€ · Jardins Gandhi a 2 min · Cornex Capital promotora",
-    url_promo:"https://www.idealista.com/obra-nueva/111203015/",
+    notas:"✅ Fichas individuales reales por unidad (Habitaclia) · trastero obligatorio no incluido en precio · máximo 3 hab en lo publicado",
+    url_promo:"https://www.habitaclia.com/inmobiliaria/cornex-capital/",
     unidades:[
-      {id:"pob-11",titulo:"2-3 hab · 2 baños · piscina + solarium en cubierta",precio:525000,m2:null,terraza:null,hab:3,planta:"Varias",url:"https://www.idealista.com/obra-nueva/111203015/"},
+      {id:"pob-11",titulo:"3 hab · 84m² · 5ª planta · 2 baños · piscina",precio:610000,m2:84,hab:3,planta:"5ª",url:"https://www.habitaclia.com/i3787004406856.htm"},
+      {id:"pob-19",titulo:"2 hab · 76m² · 1ª planta · 2 baños · piscina",precio:525000,m2:76,hab:2,planta:"1ª",url:"https://www.habitaclia.com/i3787004406843.htm"},
     ]
   },
   {
@@ -961,6 +1006,11 @@ function render(){
 function togglePref(k){prefs[k]=!prefs[k];save();render();}
 
 const BUSQUEDAS = [
+ ["Poblenou · Habitaclia (ficha real)", [
+   ["Poblenou 4 hab","https://www.habitaclia.com/comprar/viviendas/barcelona-provincia/barcelona-capital/sant-marti/el-poblenou/de-4-habitaciones/s"],
+   ["Poblenou con terraza","https://www.habitaclia.com/comprar/viviendas/barcelona-provincia/barcelona-capital/sant-marti/el-poblenou/con-terraza/s"],
+   ["Poblenou con ascensor","https://www.habitaclia.com/comprar/viviendas/barcelona-provincia/barcelona-capital/sant-marti/el-poblenou/con-ascensor/s"],
+ ]],
  ["Poblenou", [
    ["4+ hab (17 pisos)","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/el-poblenou/con-de-cuatro-cinco-habitaciones-o-mas/"],
    ["4+ hab con terraza","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/el-poblenou/con-de-cuatro-cinco-habitaciones-o-mas,terraza/"],
