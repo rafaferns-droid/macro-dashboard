@@ -75,7 +75,7 @@ h1{font-size:1.3rem;font-weight:700;margin-bottom:.2rem}
 </div>
 <div class="row" id="zonas" style="margin-bottom:.5rem"></div>
 <div class="row" id="filtros" style="margin-bottom:.85rem"></div>
-<div class="srch"><div class="srch-h" onclick="toggleSrch()"><div><div class="srch-t">Búsquedas filtradas por zona</div><div class="srch-s">Segunda mano · filtros ya puestos (4+ hab, terraza)</div></div><span id="srch-ar" style="color:#5b7fff;font-size:.8rem">&#9660;</span></div><div id="srch-body" style="display:none"></div></div>
+<div class="srch"><div class="srch-h" onclick="toggleSrch()"><div><div class="srch-t">Búsquedas filtradas por zona</div><div class="srch-s">Segunda mano · solo Poblenou, Diagonal Mar, 22@ y Cerdanyola</div></div><span id="srch-ar" style="color:#5b7fff;font-size:.8rem">&#9660;</span></div><div id="srch-body" style="display:none"></div></div>
 <div class="row" id="orden-btns" style="margin-bottom:.85rem"></div>
 <div id="cards"></div>
 
@@ -488,6 +488,51 @@ const PROMOS = [
     url_promo:"https://www.idealista.com/geo/venta-obranueva/carrer-consell-de-cent-cont-barcelona-barcelona/",
     unidades:[
       {id:"glor-13",titulo:"Ático dúplex 4 dorm · SIN anuncio ni planos publicados",precio:null,m2:null,hab:null,planta:"Varias",url:"https://www.idealista.com/geo/venta-obranueva/carrer-consell-de-cent-cont-barcelona-barcelona/"},
+    ]
+  },
+  // ===== SEGUNDA MANO (vistos en Idealista, sin ficha individual accesible) =====
+  {
+    id:"p-2m-colomer", added:64, zona:"Poblenou", casa:true,
+    nombre:"Casa adosada · Passatge de Colomer · Poblenou",
+    desc:"Casa distribuida en varias plantas · Terraza y solarium · DOS plazas de parking · Calle peatonal tranquila · A cinco minutos de la playa",
+    amenities:{parking:true,piscina:false,gimnasio:false},
+    notas:"⚠️ Segunda mano: Idealista no permite enlazar el anuncio concreto, el enlace abre casas y bajos de Poblenou donde figura · comercializa Destinocasa · confirmar metros y precio",
+    url_promo:"https://www.idealista.com/venta-viviendas/barcelona/sant-marti/el-poblenou/con-solo-bajos/",
+    unidades:[
+      {id:"sm-01",titulo:"Casa · varias plantas · terraza + solarium + 2 parkings",precio:null,m2:null,terraza:null,hab:null,planta:"Varias",url:"https://www.idealista.com/venta-viviendas/barcelona/sant-marti/el-poblenou/con-solo-bajos/"},
+    ]
+  },
+  {
+    id:"p-2m-casapiscina", added:63, zona:"Poblenou", casa:true,
+    nombre:"Casa de 4 plantas con jardín y piscina · Poblenou",
+    desc:"Edificio original de 1936 completamente reformado · Cuatro plantas · Jardín y PISCINA privados · Entorno industrial con galerías de arte",
+    amenities:{parking:false,piscina:true,gimnasio:false},
+    notas:"⚠️ Segunda mano sin ficha enlazable · comercializa ATIPIKA Lifestyle Properties · casa con piscina dentro de Barcelona, muy escaso · confirmar metros y precio",
+    url_promo:"https://www.idealista.com/venta-viviendas/barcelona/sant-marti/el-poblenou/con-de-cuatro-cinco-habitaciones-o-mas/",
+    unidades:[
+      {id:"sm-02",titulo:"Casa 4 plantas · jardín + piscina privados · reformada",precio:null,m2:null,hab:4,planta:"4 plantas",url:"https://www.idealista.com/venta-viviendas/barcelona/sant-marti/el-poblenou/con-de-cuatro-cinco-habitaciones-o-mas/"},
+    ]
+  },
+  {
+    id:"p-2m-boveda", added:62, zona:"Poblenou",
+    nombre:"Piso bohemio con bóvedas catalanas · Poblenou",
+    desc:"104m² interiores · 4 dormitorios · Techos altos abovedados · Pared original de vidrio a la entrada · Estilo ecléctico",
+    amenities:{parking:false,piscina:false,gimnasio:false},
+    notas:"⚠️ Segunda mano sin ficha enlazable · 104m² se queda algo corto frente a vuestro mínimo de 120 · mucho carácter",
+    url_promo:"https://www.idealista.com/venta-viviendas/barcelona/sant-marti/el-poblenou/con-de-cuatro-cinco-habitaciones-o-mas/",
+    unidades:[
+      {id:"sm-03",titulo:"4 dorm · 104m² · bóvedas catalanas",precio:null,m2:104,hab:4,planta:"Varias",url:"https://www.idealista.com/venta-viviendas/barcelona/sant-marti/el-poblenou/con-de-cuatro-cinco-habitaciones-o-mas/"},
+    ]
+  },
+  {
+    id:"p-2m-provencals", added:61, zona:"Poblenou", casa:true,
+    nombre:"Casa unifamiliar · 249m² · Provençals del Poblenou",
+    desc:"Casa independiente de 249m² · 4 dormitorios · Zona 22@ / Provençals",
+    amenities:{parking:false,piscina:false,gimnasio:false},
+    notas:"⚠️ Segunda mano sin ficha enlazable · 1.200.000 €, muy por encima de vuestro techo · la dejo como referencia de mercado · comercializa Lasose Real Estate",
+    url_promo:"https://www.idealista.com/venta-viviendas/barcelona/sant-marti/provencals-del-poblenou/",
+    unidades:[
+      {id:"sm-04",titulo:"Casa · 4 dorm · 249m²",precio:1200000,m2:249,hab:4,planta:"Varias",url:"https://www.idealista.com/venta-viviendas/barcelona/sant-marti/provencals-del-poblenou/"},
     ]
   },
   // GLÒRIES - nueva promoción grande
@@ -917,47 +962,28 @@ function togglePref(k){prefs[k]=!prefs[k];save();render();}
 
 const BUSQUEDAS = [
  ["Poblenou", [
-   ["Idealista 4+ hab","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/el-poblenou/con-de-cuatro-cinco-habitaciones-o-mas/"],
-   ["Idealista terraza","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/el-poblenou/con-terraza/"],
-   ["Fotocasa terraza","https://www.fotocasa.es/es/comprar/pisos/barcelona-capital/el-poblenou/terraza/l"],
-   ["aProperties","https://www.aproperties.es/search?type=14&mod=sale&area=1&loc=1&dis=15"],
-   ["Coldwell Banker","https://www.coldwellbanker.es/en/flats-for-sale-in-el-poblenou-barcelona"],
+   ["4+ hab (17 pisos)","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/el-poblenou/con-de-cuatro-cinco-habitaciones-o-mas/"],
+   ["4+ hab con terraza","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/el-poblenou/con-de-cuatro-cinco-habitaciones-o-mas,terraza/"],
+   ["4+ hab con parking","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/el-poblenou/con-de-cuatro-cinco-habitaciones-o-mas,garaje/"],
+   ["Casas y bajos","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/el-poblenou/con-solo-bajos/"],
+   ["Todo Poblenou (metro)","https://www.idealista.com/geo/venta-viviendas/metro-poblenou/"],
  ]],
  ["Diagonal Mar", [
-   ["Idealista 4+ hab","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/diagonal-mar-i-el-front-maritim-del-poblenou/con-de-cuatro-cinco-habitaciones-o-mas/"],
-   ["Idealista vistas mar","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/diagonal-mar-i-el-front-maritim-del-poblenou/con-solo-pisos,vistas-al-mar/"],
-   ["Coldwell Banker","https://www.coldwellbanker.es/en/flats-for-sale-in-diagonal-mar-el-front-maritim-del-poblenou-barcelona"],
-   ["Diagonal Mar BCN","https://www.diagonalmarbarcelona.com/en/flats-sale-poblenou"],
+   ["Todo (218 pisos)","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/diagonal-mar-i-el-front-maritim-del-poblenou/"],
+   ["4+ hab","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/diagonal-mar-i-el-front-maritim-del-poblenou/con-de-cuatro-cinco-habitaciones-o-mas/"],
+   ["4+ hab con terraza","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/diagonal-mar-i-el-front-maritim-del-poblenou/con-de-cuatro-cinco-habitaciones-o-mas,terraza/"],
+   ["Con vistas al mar","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/diagonal-mar-i-el-front-maritim-del-poblenou/con-vistas-al-mar/"],
  ]],
- ["Vila Olímpica", [
-   ["Idealista terraza","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/la-vila-olimpica-del-poblenou/con-terraza/"],
-   ["Idealista pisos","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/la-vila-olimpica-del-poblenou/con-pisos/"],
-   ["Yaencontre","https://www.yaencontre.com/venta/pisos/barcelona/barrio-la-vila-olimpica-del-poblenou"],
+ ["22@ / Provençals", [
+   ["Provençals del Poblenou","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/provencals-del-poblenou/"],
+   ["Provençals 4+ hab","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/provencals-del-poblenou/con-de-cuatro-cinco-habitaciones-o-mas/"],
+   ["Parc i Llacuna 4+ hab","https://www.idealista.com/venta-viviendas/barcelona/sant-marti/el-parc-i-la-llacuna-del-poblenou/con-de-cuatro-cinco-habitaciones-o-mas/"],
  ]],
- ["Badalona", [
-   ["Idealista Port vistas mar","https://www.idealista.com/venta-viviendas/badalona/port/con-solo-pisos,vistas-al-mar/"],
-   ["Idealista Port","https://www.idealista.com/venta-viviendas/badalona/port/"],
-   ["Idealista Gorg 4+ hab","https://www.idealista.com/venta-viviendas/badalona/gorg-progres/con-de-tres-dormitorios/"],
-   ["Obra nueva Badalona","https://www.idealista.com/venta-obranueva/badalona-barcelona/"],
- ]],
- ["Casas (todas las zonas)", [
-   ["Casas Bellaterra 4+ hab","https://www.idealista.com/venta-viviendas/cerdanyola-del-valles/bellaterra/con-de-cuatro-cinco-habitaciones-o-mas/"],
-   ["Casas Bellaterra con jardin","https://www.idealista.com/venta-viviendas/cerdanyola-del-valles/bellaterra/con-jardin/"],
-   ["Casas Cerdanyola","https://www.idealista.com/en/venta-viviendas/cerdanyola-del-valles-barcelona/"],
-   ["Casas lujo Bellaterra","https://www.yaencontre.com/venta/casas/cerdanyola-del-valles/distrito-bellaterra/e-lujo"],
-   ["Obra nueva aProperties","https://www.aproperties.es/en/new-developments-for-sale-in-cerdanyola-del-valles"],
- ]],
- ["Cerdanyola", [
-   ["Obra nueva Cerdanyola","https://www.idealista.com/venta-obranueva/cerdanyola-del-valles-barcelona/"],
-   ["Parc de l'Alba","https://www.idealista.com/en/venta-obranueva/cerdanyola-del-valles/parc-d-alba/"],
-   ["Culmia (2 promos)","https://www.idealista.com/pro/culmia/venta-obranueva/cerdanyola-del-valles-barcelona/"],
-   ["Yaencontre (9 promos)","https://www.yaencontre.com/promocion/obra-nueva/cerdanyola-del-valles"],
-   ["Habitaclia obra nueva","https://english.habitaclia.com/new_building-cerdanyola_del_valles.htm"],
-   ["VPO Cerdanyola","https://www.idealista.com/en/venta-obranueva/cerdanyola-del-valles-barcelona/con-vpo/"],
- ]],
- ["Glòries / 22@", [
-   ["Idealista 22@","https://www.idealista.com/geo/venta-viviendas/22/"],
-   ["Obra nueva 22@","https://www.idealista.com/geo/venta-obranueva/22/"],
+ ["Cerdanyola · Martinica-Ateneu", [
+   ["Martinica-Ateneu","https://www.idealista.com/venta-viviendas/cerdanyola-del-valles/martinica-ateneu/"],
+   ["Centre-Cordelles","https://www.idealista.com/venta-viviendas/cerdanyola-del-valles/centre-cordelles/"],
+   ["Todo Cerdanyola pisos","https://www.idealista.com/venta-viviendas/cerdanyola-del-valles-barcelona/con-pisos/"],
+   ["Mapa por barrios","https://www.idealista.com/venta-viviendas/cerdanyola-del-valles-barcelona/mapa"],
  ]],
 ];
 let srchOpen=false;
